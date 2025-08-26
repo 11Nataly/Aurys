@@ -1,0 +1,11 @@
+
+
+/* footer.css */
+.footer {
+  background-color: #716aff;
+  color: rgb(0, 0, 0);
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  font-family: Arial, sans-serif;
+}
