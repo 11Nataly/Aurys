@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     CLOUDINARY_API_KEY: str
     CLOUDINARY_API_SECRET: str
 
+    #Esto le indica a Pydantic que busque las variables en .env.
     class Config:
         env_file = ".env"
 

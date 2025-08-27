@@ -7,6 +7,7 @@ from app.controllers import rol_controllers #importar el controlador de rol
 from app.controllers import envio_correo_contrasena
 from app.controllers import tecnica_controller
 from app.controllers import video_controller  # Importa el controlador de video
+from app.core.config import settings
 
 
 app = FastAPI()
@@ -33,3 +34,5 @@ app.include_router(video_controller.router)
 def read_root():
     """Endpoint de prueba para verificar que la app está funcionando."""
     return {"message": "¡Servidor FastAPI funcionando!"}
+
+

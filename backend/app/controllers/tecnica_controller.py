@@ -2,12 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
 from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.dtos.tecnica_dto import TecnicaCreateDTO, TecnicaUpdateDTO, TecnicaResponseDTO, TecnicaUpdateVideoDTO
-from app.services.subir_tecnica import crear_tecnica, actualizar_tecnica, obtener_tecnica_por_id, eliminar_tecnica
+from app.services.subir_tecnica import crear_tecnica, actualizar_tecnica, obtener_tecnica_por_id, eliminar_tecnica, simplificar_duracion
 from app.models.tecnicaafrontamiento import TecnicaAfrontamiento
 from app.services.cloudinary_service import upload_video
-
-
-
 
 
 
@@ -30,6 +27,7 @@ async def actualizar_tecnica_endpoint(tecnica_id: int, tecnica_dto: TecnicaUpdat
         "nombre": tecnica.nombre,
         "descripcion": tecnica.descripcion,
         "instruccion": tecnica.instruccion,
+        "duracion": simplificar_duracion(tecnica.duracion_video) if tecnica.duracion_video else None,
         "mensaje": "Técnica actualizada exitosamente"
     }
 
@@ -49,11 +47,21 @@ def obtener_tecnica_endpoint(tecnica_id: int, db: Session = Depends(get_db)):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Técnica no encontrada"
         )
-    return tecnica
+    
+    # Transformar duración antes de responder
+    duracion_simplificada = simplificar_duracion(tecnica.duracion_video) if tecnica.duracion_video else None
 
-
-
-
+    return TecnicaResponseDTO(
+    id=tecnica.id,
+    usuario_id=tecnica.usuario_id,
+    nombre=tecnica.nombre,
+    descripcion=tecnica.descripcion,
+    video=tecnica.video,
+    instruccion=tecnica.instruccion,
+    calificacion=tecnica.calificacion,
+    duracion_user=simplificar_duracion(tecnica.duracion_video) if tecnica.duracion_video else None,
+    activo=tecnica.activo
+    )
 
 @router.put("/tecnica_update_video/{tecnica_id}")
 async def actualizar_video(
@@ -76,10 +84,6 @@ async def actualizar_video(
         return {"message": "Video actualizado correctamente", "video_url": video_url}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error actualizando video: {str(e)}")
-
-
-
-
 
 
 @router.delete("/eliminar_tecnica/{tecnica_id}", status_code=status.HTTP_200_OK)

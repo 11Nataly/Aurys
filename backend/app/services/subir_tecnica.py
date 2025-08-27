@@ -11,6 +11,7 @@ def crear_tecnica(db: Session, tecnica_dto: TecnicaCreateDTO):
         nombre=tecnica_dto.nombre,
         descripcion=tecnica_dto.descripcion,
         instruccion=tecnica_dto.instruccion,
+        duracion_video=tecnica_dto.horas * 3600 + tecnica_dto.minutos * 60 + tecnica_dto.segundos
     )
     db.add(tecnica)
     db.commit()
@@ -33,6 +34,12 @@ def actualizar_tecnica(db: Session, tecnica_id: int, tecnica_dto: TecnicaUpdateD
         tecnica.descripcion = tecnica_dto.descripcion
     if tecnica_dto.instruccion is not None:
         tecnica.instruccion = tecnica_dto.instruccion
+    if tecnica_dto.horas is not None or tecnica_dto.minutos is not None or tecnica_dto.segundos is not None:
+        h = tecnica_dto.horas or 0
+        m = tecnica_dto.minutos or 0
+        s = tecnica_dto.segundos or 0
+        tecnica.duracion_video = h * 3600 + m * 60 + s
+
 
     db.commit()
     db.refresh(tecnica)
@@ -74,3 +81,15 @@ def eliminar_tecnica(db: Session, tecnica_id: int):
     db.commit()
 
     return {"message": "Técnica eliminada correctamente"}
+
+
+# Utilidad: convertir segundos → formato simplificado
+def simplificar_duracion(segundos: int) -> str:
+    if segundos >= 3600:
+        horas = round(segundos / 3600)
+        return f"{horas} hora{'s' if horas > 1 else ''}"
+    elif segundos >= 60:
+        minutos = round(segundos / 60)
+        return f"{minutos} minuto{'s' if minutos > 1 else ''}"
+    else:
+        return f"{segundos} segundo{'s' if segundos > 1 else ''}"
