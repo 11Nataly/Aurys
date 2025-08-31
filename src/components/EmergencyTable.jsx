@@ -1,6 +1,6 @@
 // src/components/EmergencyTable.jsx
 import "../styles/table.css";
-
+//estos son los componenetes de kit de emegerncia
 const EmergencyTable = () => {
   const data = [
     { agencia: "Secretaría de salud", telefono: "106", horario: "24/7" },

@@ -1,0 +1,159 @@
+/* components/Admin/AddGuideModal.css */
+
+/* Fondo semitransparente */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+/* Contenedor del modal */
+.modal-dialog {
+  max-width: 650px;
+  width: 90%;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Caja */
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.modal-header {
+  background: linear-gradient(135deg, #848ddb, #4840c2);
+  color: white;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Quitar la X */
+button.close {
+  display: none !important;
+}
+
+/* Cuerpo */
+.modal-body {
+  padding: 1.5rem;
+  text-align: left; /* ✅ todo alineado a la izquierda */
+}
+
+/* Formulario */
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #4840c2;
+  text-align: left; /* ✅ labels a la izquierda */
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  font-size: 0.95rem;
+  transition: border 0.2s ease-in-out, box-shadow 0.2s;
+  text-align: right; /* ✅ inputs a la derecha */
+}
+
+.form-control:focus {
+  border-color: #848ddb;
+  box-shadow: 0 0 0 0.2rem rgba(72, 64, 194, 0.25);
+  outline: none;
+}
+
+/* Inputs duración */
+.duration-input {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* ✅ a la derecha */
+  gap: 0.5rem;
+}
+
+.duration-input .form-control {
+  width: 70px;
+  text-align: center;
+}
+
+.duration-separator {
+  font-weight: bold;
+  color: #4840c2;
+  font-size: 1.1rem;
+}
+
+/* Footer */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #dee2e6;
+}
+
+/* Botones */
+.btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+.btn-primary {
+  background-color: #4840c2;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #848ddb;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
