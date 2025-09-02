@@ -30,6 +30,11 @@ class TecnicaUpdateDTO(BaseModel):
     horas: Optional[int] = None
     minutos: Optional[int] = None
     segundos: Optional[int] = None
+    video: Optional[str] = None
+    duracion: Optional[str] = None
+    horas: Optional[int] = None
+    minutos: Optional[int] = None
+    segundos: Optional[int] = None
 
     class Config:
         from_attributes = True

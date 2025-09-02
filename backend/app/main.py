@@ -35,3 +35,5 @@ app.include_router(diario_controllers.router)
 def read_root():
     """Endpoint de prueba para verificar que la app está funcionando."""
     return {"message": "¡Servidor FastAPI funcionando!"}
+
+

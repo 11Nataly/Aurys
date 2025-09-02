@@ -1,0 +1,22 @@
+meta {
+  name: subir_video
+  type: http
+  seq: 3
+}
+
+put {
+  url: http://127.0.0.1:8000/tecnica_update_video/1
+  body: multipartForm
+  auth: inherit
+}
+
+body:json {
+  {
+    "video_url": "https://www.youtube.com/watch?v=abcd1234"
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+}
