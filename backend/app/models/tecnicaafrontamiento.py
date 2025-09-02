@@ -15,7 +15,14 @@ class TecnicaAfrontamiento(Base):
     descripcion = Column(Text, nullable=True)
     video = Column(String(255), nullable=True)
     instruccion = Column(Text, nullable=True)
-    calificacion = Column(DECIMAL(2,1), nullable=True) # Usar DECIMAL para decimal(2,1)
+    calificacion = Column(Integer, nullable=True) 
+    duracion_video = Column(Integer, nullable=False)  # duración total en segundos
+
+    
+    # ^
+    # El admin puede subir un video con duración (horas, minutos, segundos) además de título, descripción, etc.
+    # La BD debe almacenar la duración en segundos totales (campo nuevo duration_seconds).
+    # El usuario solo recibe la duración como texto legible → "1 hora", "5 minutos".
     activo = Column(Boolean, default=True)
 
     # Relaciones

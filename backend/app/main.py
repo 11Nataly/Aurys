@@ -7,6 +7,7 @@ from app.controllers import rol_controllers #importar el controlador de rol
 from app.controllers import envio_correo_contrasena
 from app.controllers import tecnica_controller
 from app.controllers import video_controller  # Importa el controlador de video
+from app.controllers import diario_controllers
 
 
 app = FastAPI()
@@ -27,6 +28,7 @@ app.include_router(rol_controllers.router)
 app.include_router(envio_correo_contrasena.router)
 app.include_router(tecnica_controller.router)
 app.include_router(video_controller.router)
+app.include_router(diario_controllers.router)
 
 
 @app.get("/")
