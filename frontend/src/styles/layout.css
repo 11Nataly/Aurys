@@ -1,0 +1,65 @@
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.layout-body {
+  display: flex;
+  flex: 1;
+  margin-top: 60px; /* Compensa el header fijo */
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #fff;
+  margin-left: 250px;
+  transition: margin-left 0.3s ease;
+  /* Eliminamos padding-bottom ya que el footer ya no es fijo */
+}
+
+.main-content.sidebar-collapsed {
+  margin-left: 70px;
+}
+
+/* Estilos para el layout de autenticación */
+.auth-layout {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4a3fb0 0%, #6a62c7 100%);
+  padding: 20px;
+}
+
+.auth-container {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: 15px;
+    /* Eliminamos padding-bottom para móviles */
+  }
+  
+  .main-content.sidebar-collapsed {
+    margin-left: 0;
+  }
+  
+  .auth-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .layout-body {
+    margin-top: 55px;
+  }
+}
