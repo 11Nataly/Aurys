@@ -8,6 +8,7 @@ import Admin from './pages/Admin';
 import RecuperarContrasena from './pages/RecuperarContrasena';
 import Perfil from './pages/Perfil';
 import Diario from './pages/Diario';
+import KitEmergencia from './pages/KitEmergencia';
 import Home from './pages/Home';
 import './App.css';
 
@@ -45,6 +46,12 @@ function App() {
       <Route path="/diario" element={
         <MainLayout>
           <Diario />
+        </MainLayout>
+      } />
+
+      <Route path="/kit" element={
+        <MainLayout>
+          <KitEmergencia />
         </MainLayout>
       } />
       
