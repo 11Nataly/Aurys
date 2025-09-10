@@ -1,3 +1,4 @@
+//la parte de arriva del diario
 const DiarioHeader = ({ vistaActual, onCambiarVista }) => {
   return (
     <div className="diario-header">
