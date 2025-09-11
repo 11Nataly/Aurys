@@ -1,5 +1,4 @@
 // src/pages/Home.jsx
-import EmergencyTable from "../components/EmergencyTable";
 // import "../styles/home.css";
 
 
