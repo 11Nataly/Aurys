@@ -10,3 +10,4 @@ from .promesa import Promesa
 from .fallos import Fallo
 from .emocion import Emocion 
 from .tipo_emocion import TipoEmocion# Renombrado a singular para el modelo
+from .tecnicaFavorita import TecnicaFavorita  # Nuevo modelo importado

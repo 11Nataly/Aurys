@@ -18,7 +18,8 @@ from app.models import (
     tecnicaafrontamiento,
     promesa,
     fallos,
-    tipo_emocion
+    tipo_emocion, 
+    tecnicaFavorita  # Nuevo modelo importado
 )
 
 # Carga la configuración de Alembic

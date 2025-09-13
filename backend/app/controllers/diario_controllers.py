@@ -13,8 +13,6 @@ from app.services.diario_service import (
 
 )
 
-
-
 router = APIRouter(
     prefix="/diario",
     tags=["Diario"]
