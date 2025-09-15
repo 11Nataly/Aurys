@@ -1,20 +1,18 @@
+from app.core.deps import get_current_user # para obtener el usuario del token
+from app.models.usuario import Usuario #para que reconozca el usuario
 from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
 from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.dtos.tecnica_dto import (
     TecnicaCreateDTO,
     TecnicaUpdateDTO,
-    TecnicaResponseDTO,
-    CalificacionCreateDTO,
-    CalificacionResponseDTO
+    TecnicaResponseDTO
 )
 from app.services.subir_tecnica import (
     crear_tecnica,
     actualizar_tecnica,
     obtener_tecnica_por_id,
     eliminar_tecnica,
-    crear_calificacion,
-    calificar_tecnica,
     simplificar_duracion
 )
 from app.models.tecnicaafrontamiento import TecnicaAfrontamiento
@@ -29,9 +27,12 @@ router = APIRouter(
 # Crear técnica
 # -------------------
 @router.post("/crear_tecnica", response_model=TecnicaResponseDTO, status_code=status.HTTP_201_CREATED)
-def crear_tecnica_endpoint(dto: TecnicaCreateDTO, db: Session = Depends(get_db)):
-    return crear_tecnica(db, dto)
-
+def crear_tecnica_endpoint(
+    dto: TecnicaCreateDTO,
+    db: Session = Depends(get_db),
+    current_user: Usuario = Depends(get_current_user)   #  obtenemos el usuario del token
+):
+    return crear_tecnica(db, dto, current_user.id)  #  pasamos el id al service
 # -------------------
 # Obtener técnica por ID
 # -------------------
@@ -47,7 +48,8 @@ def obtener_tecnica_endpoint(tecnica_id: int, db: Session = Depends(get_db)):
         descripcion=tecnica.descripcion,
         video=tecnica.video,
         instruccion=tecnica.instruccion,
-        calificacion=tecnica.calificacion,
+        # fix: se elimina el campo calificacion porque ya no va en este modelo
+        # calificacion=tecnica.calificacion,
         duracion_user=simplificar_duracion(tecnica.duracion_video) if tecnica.duracion_video else None,
         activo=tecnica.activo
     )
@@ -89,16 +91,4 @@ async def actualizar_video_endpoint(tecnica_id: int, file: UploadFile = File(...
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error subiendo video: {str(e)}")
 
-# -------------------
-# Crear calificación
-# -------------------
-@router.post("/crear_calificacion", response_model=CalificacionResponseDTO)
-def crear_calificacion_endpoint(dto: CalificacionCreateDTO, db: Session = Depends(get_db)):
-    return crear_calificacion(db, dto)
-
-# -------------------
-# Calificar técnica por usuario
-# -------------------
-@router.post("/calificar_tecnica", response_model=CalificacionResponseDTO)
-def calificar_endpoint(dto: CalificacionCreateDTO, usuario_id: int, db: Session = Depends(get_db)):
-    return calificar_tecnica(db, usuario_id, dto.tecnica_id, dto)
+#se elimina este endpoint porque ya no se usa (calificación va en otro modulo)

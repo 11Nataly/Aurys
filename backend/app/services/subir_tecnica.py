@@ -3,24 +3,26 @@ from sqlalchemy.orm import Session
 from app.models.tecnicaafrontamiento import TecnicaAfrontamiento
 from app.dtos.tecnica_dto import (
     TecnicaCreateDTO,
-    TecnicaUpdateDTO,
-    CalificacionCreateDTO,
-    CalificacionResponseDTO
+    TecnicaUpdateDTO
 )
 import re
 import cloudinary.uploader
-
 # ==============================
-# CRUD Técnicas
+#   CRUD TÉCNICAS DE AFRONTAMIENTO
 # ==============================
 
-def crear_tecnica(db: Session, dto: TecnicaCreateDTO):
+def crear_tecnica(db: Session, tecnica_dto: TecnicaCreateDTO, usuario_id: int):
+    """
+    Crea una nueva técnica de afrontamiento.
+    El usuario_id ahora viene del token (admin autenticado).
+    Convierte horas/minutos/segundos en duración total (segundos).
+    """
     tecnica = TecnicaAfrontamiento(
-        usuario_id=dto.usuario_id,
-        nombre=dto.nombre,
-        descripcion=dto.descripcion,
-        instruccion=dto.instruccion,
-        duracion_video=dto.horas * 3600 + dto.minutos * 60 + dto.segundos
+        usuario_id=usuario_id,  #  tomado del token
+        nombre=tecnica_dto.nombre,
+        descripcion=tecnica_dto.descripcion,
+        instruccion=tecnica_dto.instruccion,
+        duracion_video=(tecnica_dto.horas * 3600) + (tecnica_dto.minutos * 60) + tecnica_dto.segundos
     )
     db.add(tecnica)
     db.commit()
@@ -79,24 +81,4 @@ def simplificar_duracion(segundos: int) -> str:
     else:
         return f"{segundos} segundo{'s' if segundos > 1 else ''}"
 
-# ==============================
-# Calificaciones
-# ==============================
-
-def crear_calificacion(db: Session, dto: CalificacionCreateDTO) -> CalificacionResponseDTO:
-    tecnica = db.query(TecnicaAfrontamiento).filter(TecnicaAfrontamiento.id == dto.tecnica_id).first()
-    if not tecnica:
-        raise HTTPException(status_code=404, detail="Técnica no encontrada")
-    tecnica.calificacion = dto.estrellas
-    db.commit()
-    db.refresh(tecnica)
-    return CalificacionResponseDTO.model_validate(tecnica)
-
-def calificar_tecnica(db: Session, usuario_id: int, tecnica_id: int, dto: CalificacionCreateDTO):
-    tecnica = db.query(TecnicaAfrontamiento).filter(TecnicaAfrontamiento.id == tecnica_id).first()
-    if not tecnica:
-        raise HTTPException(status_code=404, detail="Técnica no encontrada")
-    tecnica.calificacion = dto.estrellas
-    db.commit()
-    db.refresh(tecnica)
-    return CalificacionResponseDTO.model_validate(tecnica)
+## se elimino la parte de calificaciones porque ya no va en este modelo    

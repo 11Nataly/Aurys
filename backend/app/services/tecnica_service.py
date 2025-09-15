@@ -4,54 +4,11 @@ from app.models.tecnicaafrontamiento import TecnicaAfrontamiento
 from app.dtos.tecnica_dto import (
     TecnicaCreateDTO,
     TecnicaUpdateDTO,
-    CalificacionCreateDTO,
-    CalificacionResponseDTO,
     TecnicaUpdateVideoDTO,
     TecnicaSubirVideoDTO
 )
 import cloudinary.uploader
 import re
-
-
-# ==============================
-#   CALIFICACIONES
-# ==============================
-
-def crear_calificacion(db: Session, calificacion_dto: CalificacionCreateDTO) -> CalificacionResponseDTO:
-    """
-    Crea una calificación para una técnica de afrontamiento.
-    """
-    tecnica = db.query(TecnicaAfrontamiento).filter(
-        TecnicaAfrontamiento.id == calificacion_dto.tecnica_id
-    ).first()
-
-    if not tecnica:
-        raise HTTPException(status_code=404, detail="Técnica de afrontamiento no encontrada")
-
-    # Guardar la calificación (número de estrellas)
-    tecnica.calificacion = calificacion_dto.estrellas
-
-    db.commit()
-    db.refresh(tecnica)
-
-    return CalificacionResponseDTO.model_validate(tecnica)
-
-
-def obtener_calificaciones(db: Session):
-    """
-    Retorna todas las calificaciones (técnicas con calificación).
-    """
-    return db.query(TecnicaAfrontamiento).all()
-
-
-def obtener_calificacion(db: Session, tecnica_id: int):
-    """
-    Retorna una calificación específica por ID de técnica.
-    """
-    return db.query(TecnicaAfrontamiento).filter(
-        TecnicaAfrontamiento.id == tecnica_id
-    ).first()
-
 
 # ==============================
 #   CRUD TÉCNICAS DE AFRONTAMIENTO
@@ -67,7 +24,7 @@ def crear_tecnica(db: Session, tecnica_dto: TecnicaCreateDTO):
         nombre=tecnica_dto.nombre,
         descripcion=tecnica_dto.descripcion,
         instruccion=tecnica_dto.instruccion,
-        duracion_video=tecnica_dto.horas * 3600 + tecnica_dto.minutos * 60 + tecnica_dto.segundos
+        duracion_video=(tecnica_dto.horas * 3600) + (tecnica_dto.minutos * 60) + tecnica_dto.segundos
     )
     db.add(tecnica)
     db.commit()

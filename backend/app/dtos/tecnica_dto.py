@@ -6,7 +6,6 @@ from typing import Optional
 # -------------------------------
 
 class TecnicaCreateDTO(BaseModel):
-    usuario_id: int
     nombre: str
     descripcion: str
     instruccion: str
@@ -30,11 +29,13 @@ class TecnicaUpdateDTO(BaseModel):
     horas: Optional[int] = None
     minutos: Optional[int] = None
     segundos: Optional[int] = None
-    video: Optional[str] = None
-    duracion: Optional[str] = None
-    horas: Optional[int] = None
-    minutos: Optional[int] = None
-    segundos: Optional[int] = None
+    # FIX: se eliminan campos repetidos 
+    
+    # video: Optional[str] = None
+    # duracion: Optional[str] = None
+    # horas: Optional[int] = None
+    # minutos: Optional[int] = None
+    # segundos: Optional[int] = None
 
     class Config:
         from_attributes = True
@@ -47,7 +48,8 @@ class TecnicaResponseDTO(BaseModel):
     descripcion: Optional[str] = None
     video: Optional[str] = None
     instruccion: Optional[str] = None
-    calificacion: Optional[int] = None
+    # fix: se elimina el campo calificacion porque ya no va en este modelo
+    # calificacion: Optional[int] = None
     duracion_user: Optional[str] = None
     activo: Optional[bool]
 
@@ -60,18 +62,4 @@ class TecnicaUpdateVideoDTO(BaseModel):
     video: str
 
 
-# -------------------------------
-# DTOs para Calificación
-# -------------------------------
-
-class CalificacionCreateDTO(BaseModel):
-    tecnica_id: int
-    estrellas: int = Field(..., ge=1, le=5, description="Número de estrellas (1 a 5)")
-
-class CalificacionResponseDTO(BaseModel):
-    id: int
-    nombre: str
-    calificacion: Optional[int] = None
-
-    class Config:
-        from_attributes = True
+# fix: se elimina DTO de calificación porque ya no es necesario en este modelo

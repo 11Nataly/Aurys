@@ -27,7 +27,6 @@ class Promesa(Base):
 
     # Relaciones
     usuario = relationship("Usuario", back_populates="promesas")
-    tecnica_afrontamiento = relationship("TecnicaAfrontamiento", back_populates="promesas")
     fallos = relationship("Fallo", back_populates="promesa", cascade="all, delete-orphan")
 
     def __repr__(self):

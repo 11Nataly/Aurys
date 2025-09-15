@@ -1,3 +1,4 @@
+#loginRegister_service.py 
 from datetime import datetime, timedelta
 from typing import Optional
 import re
@@ -39,13 +40,15 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
         expire = datetime.utcnow() + expires_delta
     else:
         expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    to_encode.update({"exp": expire})
+    # Guardar exp como timestamp entero
+    to_encode.update({"exp": int(expire.timestamp())})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
+
 # --- Funciones de usuario ---
 def registrar_usuario_service(usuario_dto: UsuarioRegistroDTO, db: Session):
-    if not re.match(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$', usuario_dto.contrasena):
+    if not re.match(r'^(?=.[A-Za-z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%*?&]{5,}$', usuario_dto.contrasena):
         raise HTTPException(
             status_code=400,
             detail="La contraseña debe tener mínimo 5 caracteres, incluir letras, números y un caracter especial."
