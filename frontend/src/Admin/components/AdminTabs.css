@@ -1,0 +1,50 @@
+.admin-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    margin-bottom: 1.5rem;
+}
+
+.nav-tabs .nav-item {
+    margin-bottom: -1px;
+}
+
+.nav-tabs .nav-link {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid transparent;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    color: #6c757d;
+    text-decoration: none;
+    transition: all 0.3s;
+    background: none;
+    cursor: pointer;
+}
+
+.nav-tabs .nav-link.active {
+    color: #4a6bdf;
+    background-color: white;
+    border-color: #dee2e6 #dee2e6 white;
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+    border-color: #dee2e6 #dee2e6 #dee2e6;
+}
+
+@media (max-width: 768px) {
+    .nav-tabs {
+        flex-direction: column;
+    }
+    
+    .nav-tabs .nav-link {
+        width: 100%;
+        text-align: center;
+    }
+}

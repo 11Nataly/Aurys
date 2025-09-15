@@ -8,17 +8,18 @@ import {
   FaUser,
   FaSignOutAlt
 } from 'react-icons/fa';
-import '../styles/sidebar.css';
+import './sidebar.css';
 
 const Sidebar = ({ isOpen }) => {
   const location = useLocation();
   
   const menuItems = [
-    { path: '/', icon: <FaHome />, label: 'Inicio' },
-    { path: '/diario', icon: <FaBook />, label: 'Diario' },
-    { path: '/kit', icon: <FaFirstAid />, label: 'Kit de emergencia' },
-    { path: '/promesas', icon: <FaFlag />, label: 'Promesas' },
-    { path: '/papelera', icon: <FaTrash />, label: 'Papelera' },
+    { path: '/joven/home', icon: <FaHome />, label: 'Inicio' },
+    { path: '/joven/diario', icon: <FaBook />, label: 'Diario' },
+    { path: '/joven/afrontamiento', icon: <FaFirstAid />, label: 'Afrontamiento' },
+    { path: '/joven/kit-emergencia', icon: <FaFirstAid />, label: 'Kit de emergencia' },
+    { path: '/joven/promesas', icon: <FaFlag />, label: 'Promesas' },
+    { path: '/joven/perfil', icon: <FaUser />, label: 'Perfil' },
   ];
 
   return (

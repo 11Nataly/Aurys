@@ -1,0 +1,649 @@
+/* ===============================
+   🎨 ESTILOS GLOBALES
+   =============================== */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f5f8ff;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+/* ===============================
+   🔝 HEADER PRINCIPAL
+   =============================== */
+.page-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e6ecf8;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+}
+
+.header-titles {
+  flex: 1;
+}
+
+.header-titles h1 {
+  font-size: 3rem;
+  color: #3c2bbf;
+  font-weight: 700;
+  margin: 0 0 5px 0;
+}
+
+.header-titles h2 {
+  font-size: 2rem;
+  color: #9288dd;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* ===============================
+   🔘 BOTÓN DE FILTRO DE FAVORITOS
+   =============================== */
+.filtro-favoritos-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border: 2px solid #3c2bbf;
+  background: transparent;
+  color: #3c2bbf;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.filtro-favoritos-btn:hover {
+  background: #f3f0ff;
+  transform: translateY(-2px);
+}
+
+.filtro-favoritos-btn.active {
+  background: #3c2bbf;
+  color: white;
+}
+
+.filtro-favoritos-btn.active:hover {
+  background: #2a1e8f;
+  border-color: #2a1e8f;
+}
+
+.heart-icon {
+  color: #ff5a5f;
+}
+
+/* ===============================
+   🏷️ INDICADOR DE FILTRO ACTIVO
+   =============================== */
+.filtro-activo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 20px;
+  background: #fff8f8;
+  border: 2px solid #ff5a5f;
+  border-radius: 12px;
+  color: #ff5a5f;
+  font-weight: 600;
+  margin-bottom: 20px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   📦 CONTENEDOR PRINCIPAL
+   =============================== */
+.page-content {
+  padding: 20px 0;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ===============================
+   🃏 CONTENEDOR DE TARJETAS
+   =============================== */
+.tecnicas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+/* ===============================
+   🃏 TARJETA INDIVIDUAL
+   =============================== */
+.tecnica-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 25px;
+  min-height: 280px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #e8eefb;
+}
+
+/* ===============================
+   🔘 HEADER DE TARJETA
+   =============================== */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.tecnica-titulo {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #3c2bbf;
+  margin: 0;
+  line-height: 1.3;
+  flex: 1;
+}
+
+.duracion-circulo {
+  border: 2px solid #2ecc71;
+  color: #2ecc71;
+  background: #eafff2;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-left: 15px;
+}
+
+/* ===============================
+   📝 CONTENIDO DE TARJETA
+   =============================== */
+.card-content {
+  margin-bottom: 20px;
+  flex: 1;
+}
+
+.tecnica-descripcion {
+  font-size: 0.95rem;
+  color: #7a7fbb;
+  line-height: 1.6;
+  text-align: right;
+  margin: 0;
+}
+
+/* ===============================
+   ⭐ SISTEMA DE CALIFICACIÓN
+   =============================== */
+.card-footer {
+  border-top: 1px solid #ecf0f1;
+  padding-top: 20px;
+}
+
+.calificacion-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.estrellas {
+  display: flex;
+  gap: 6px;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  color: #d6c645;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.star-btn.active {
+  color: #f39c12;
+}
+
+/* ===============================
+   ❤️ BOTÓN FAVORITO
+   =============================== */
+.favorito-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #ccc;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.favorito-btn.active {
+  color: #ff5a5f;
+}
+
+/* ===============================
+   🔘 BOTONES DE ACCIÓN
+   =============================== */
+.acciones-container {
+  display: flex;
+  gap: 14px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 500;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: none;
+  flex: 1;
+}
+
+.btn-reproducir {
+  background: #3c2bbf;
+  color: #fff;
+  border-color: #3c2bbf;
+}
+
+.btn-detalles {
+  background: transparent;
+  color: #3c2bbf;
+  border-color: #3c2bbf;
+}
+
+/* ===============================
+   🎭 MODAL OVERLAY (FONDO SEMITRANSPARENTE)
+   =============================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7); /* Fondo semitransparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+/* ===============================
+   📋 MODAL DE DETALLES
+   =============================== */
+.modal {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid #e8eefb;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 15px;
+}
+
+.modal-header h2 {
+  color: #3c2bbf;
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.modal-header button {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #7f8c8d;
+}
+
+.modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.modal-pasos {
+  text-align: left;
+}
+
+.modal-pasos h3 {
+  color: #3c2bbf;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.lista-pasos {
+  color: #5d6d7e;
+  line-height: 1.6;
+  padding-left: 20px;
+  margin: 0;
+}
+
+.lista-pasos li {
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+
+.modal-video {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-preview {
+  text-align: center;
+  background: #f8f9ff;
+  padding: 25px;
+  border-radius: 15px;
+  width: 100%;
+}
+
+.video-preview h3 {
+  color: #3c2bbf;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+}
+
+.btn-ver-video {
+  padding: 15px 25px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+/* ===============================
+   🎥 REPRODUCTOR DE VIDEO EN MODAL
+   =============================== */
+.video-modal {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.video-container {
+  width: 100%;
+}
+
+.video-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.video-header h3 {
+  color: #3c2bbf;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.btn-cerrar {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #7f8c8d;
+  padding: 5px;
+}
+
+.video-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #27ae60;
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+/* ===============================
+   🚫 ESTADOS DE ERROR DEL VIDEO
+   =============================== */
+.video-error {
+  text-align: center;
+  padding: 40px;
+  color: #333;
+}
+
+.video-error h3 {
+  color: #e74c3c;
+  margin: 20px 0 10px 0;
+  font-size: 1.3rem;
+}
+
+.video-error p {
+  color: #7f8c8d;
+  margin-bottom: 20px;
+}
+
+.btn-reintentar {
+  padding: 12px 24px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 10px;
+  font-weight: 500;
+}
+
+/* ===============================
+   ⚡ ESTADOS Y UTILIDADES
+   =============================== */
+.loading, .error, .empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 1.1rem;
+  color: #7a7fbb;
+}
+
+.error {
+  color: #e74c3c;
+  background: #ffeaea;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #ffcccc;
+}
+
+.empty-state {
+  background: #f8f9ff;
+  padding: 40px;
+  border-radius: 15px;
+  border: 2px dashed #d6e4ff;
+}
+
+/* ===============================
+   📱 RESPONSIVE DESIGN
+   =============================== */
+@media (max-width: 768px) {
+  body {
+    padding: 15px;
+  }
+  
+  .page-header,
+  .page-content {
+    max-width: 100%;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .header-titles h1 {
+    font-size: 2.2rem;
+  }
+  
+  .header-titles h2 {
+    font-size: 1.5rem;
+  }
+  
+  .filtro-favoritos-btn {
+    align-self: stretch;
+    justify-content: center;
+  }
+  
+  .tecnicas-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .card-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .duracion-circulo {
+    margin-left: 0;
+    align-self: center;
+  }
+  
+  .tecnica-descripcion {
+    text-align: center;
+  }
+  
+  .calificacion-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .acciones-container {
+    flex-direction: column;
+  }
+  
+  .modal-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .modal,
+  .video-modal {
+    margin: 10px;
+    padding: 20px;
+  }
+  
+  .modal-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .video-header h3 {
+    font-size: 1.3rem;
+  }
+  
+  .react-player {
+    height: 300px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-titles h1 {
+    font-size: 1.8rem;
+  }
+  
+  .header-titles h2 {
+    font-size: 1.2rem;
+  }
+  
+  .filtro-favoritos-btn {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+  
+  .tecnica-card {
+    padding: 20px;
+    min-height: 250px;
+  }
+  
+  .tecnica-titulo {
+    font-size: 1.1rem;
+  }
+  
+  .duracion-circulo {
+    width: 50px;
+    height: 50px;
+    font-size: 0.7rem;
+  }
+  
+  .btn {
+    padding: 10px 15px;
+    font-size: 0.85rem;
+  }
+  
+  .video-modal {
+    padding: 15px;
+  }
+  
+  .video-header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  .react-player {
+    height: 250px !important;
+  }
+}

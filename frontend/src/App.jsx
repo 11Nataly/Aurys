@@ -2,23 +2,26 @@ import JovenLayout from "./Joven/JovenLayout";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./InicioSesion/InicioSesion";
 import Register from "./Registro/Registro";
-import Home from "./Joven/pages/Home";
-import PrivateRoute from "./InicioSesion/Privaterouter";
+import LandingPage from "./LandingPage/LandingPage";
+import Admin from "./Admin/pages/Admin";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Landing pública */}
-        <Route path="/home" element={<Home />} />
-        <Route index element={<Navigate to="/home" replace />} />
-        {/* Login */}
-        <Route path="/login" element={<Login />} />
-        {/* Rutas protegidas / app del paciente */}
-        <Route path="/register" element={<Register />} />
-        {/* PacienteLayout ya NO debe incluir BrowserRouter */}
+        {/* Landing Page como página principal */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/home" element={<LandingPage />} />
         
-        <Route path="/usuario/*" element={<PrivateRoute rol="usuario"> <JovenLayout /> </PrivateRoute>} />
+        {/* Login y Registro */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        
+        {/* Admin */}
+        <Route path="/admin" element={<Admin />} />
+        
+        {/* Layout Joven con todas sus rutas internas */}
+        <Route path="/joven/*" element={<JovenLayout />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,4 +1,4 @@
-// src/components/Diario/AgregarEntrada.jsx
+// src/Joven/components/Diario/AgregarEntrada.jsx
 import { useState, useEffect } from 'react';
 import BotonesAccion from './BotonesAccion';
 

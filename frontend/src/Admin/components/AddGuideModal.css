@@ -1,0 +1,287 @@
+/* components/Admin/AddGuideModal.css */
+
+/* Fondo semitransparente */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+/* Contenedor del modal */
+.modal-dialog {
+  max-width: 650px;
+  width: 90%;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Caja */
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.modal-header {
+  background: linear-gradient(135deg, #848ddb, #4840c2);
+  color: white;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Botón close */
+.close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.8;
+}
+
+.close:hover {
+  opacity: 1;
+}
+
+/* Cuerpo */
+.modal-body {
+  padding: 1.5rem;
+  text-align: left;
+}
+
+/* Formulario */
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #4840c2;
+  text-align: left;
+}
+
+/* INPUTS CON TEXTO EN NEGRO Y ALINEADO A LA IZQUIERDA */
+.form-control {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  background-color: #fff;
+  font-size: 0.95rem;
+  transition: border 0.2s ease-in-out, box-shadow 0.2s;
+  text-align: left; /* ✅ TEXTO A LA IZQUIERDA */
+  color: #000000; /* ✅ TEXTO EN NEGRO */
+}
+
+.form-control::placeholder {
+  color: #6c757d; /* Placeholder en gris */
+  text-align: left; /* Placeholder también a la izquierda */
+}
+
+.form-control:focus {
+  border-color: #848ddb;
+  box-shadow: 0 0 0 0.2rem rgba(72, 64, 194, 0.25);
+  outline: none;
+  color: #000000; /* ✅ Mantener texto negro al enfocar */
+}
+
+/* Inputs duración - ALINEADOS A LA IZQUIERDA */
+.duration-input {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* ✅ A LA IZQUIERDA */
+  gap: 0.5rem;
+}
+
+.duration-input .form-control {
+  width: 70px;
+  text-align: center; /* Los números centrados en inputs de duración */
+  color: #000000; /* ✅ Texto en negro */
+}
+
+.duration-separator {
+  font-weight: bold;
+  color: #4840c2;
+  font-size: 1.1rem;
+}
+
+/* FOOTER - BOTONES CON MISMO TAMAÑO Y ALINEADOS A LA IZQUIERDA */
+.modal-footer {
+  display: flex;
+  justify-content: flex-start; /* ✅ BOTONES A LA IZQUIERDA */
+  gap: 12px;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #dee2e6;
+  align-items: center;
+}
+
+/* BOTONES CON EXACTAMENTE EL MISMO TAMAÑO */
+.modal-footer .btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-align: center;
+  font-size: 14px;
+  min-width: 120px;
+  width: 120px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Botón Cancelar - AZUL */
+.modal-footer .btn-secondary {
+  background: #848ddb; 
+  color: white;
+  box-shadow: 0 2px 4px rgba(132, 141, 219, 0.3);
+  border: none;
+}
+
+.modal-footer .btn-secondary:hover {
+  background: #4840c2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(72, 64, 194, 0.4);
+}
+
+/* Botón Guardar - MORADO */
+.modal-footer .btn-primary {
+  background: linear-gradient(135deg, #4840c2, #848ddb);
+  color: white;
+  box-shadow: 0 2px 4px rgba(72, 64, 194, 0.3);
+  border: none;
+}
+
+.modal-footer .btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #5a52d4, #969ee8);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(72, 64, 194, 0.4);
+}
+
+/* Botón deshabilitado */
+.modal-footer .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Estilos para validación */
+.form-control.is-invalid {
+  border-color: #e74c3c;
+  background-color: #fff5f5;
+  color: #000000; /* ✅ Texto negro incluso en errores */
+}
+
+.form-control.is-invalid:focus {
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
+  color: #000000; /* ✅ Texto negro al enfocar */
+}
+
+.invalid-feedback {
+  display: block;
+  color: #e74c3c;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+  text-align: left;
+}
+
+.form-text {
+  color: #6c757d;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  text-align: left;
+}
+
+/* TEXTAREA también con texto negro */
+textarea.form-control {
+  color: #000000; /* ✅ Texto en negro */
+  text-align: left; /* ✅ Texto a la izquierda */
+  resize: vertical;
+}
+
+textarea.form-control::placeholder {
+  color: #6c757d;
+  text-align: left;
+}
+
+/* FILE INPUT también con estilo consistente */
+input[type="file"].form-control {
+  color: #6c757d; /* Color del texto del file input */
+  padding: 0.5rem 0.8rem;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .modal-dialog {
+    width: 95%;
+    margin: 0.5rem;
+  }
+  
+  .modal-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  
+  .modal-footer .btn {
+    width: 100%;
+    min-width: auto;
+    max-width: none;
+  }
+  
+  .duration-input {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .duration-input .form-control {
+    width: 60px;
+  }
+}
+
+/* ✅ GARANTIZAR que TODO el texto sea negro */

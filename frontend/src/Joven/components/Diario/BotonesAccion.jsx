@@ -1,4 +1,4 @@
-// src/components/Diario/BotonesAccion.jsx
+// src/Joven/components/Diario/BotonesAccion.jsx
 const BotonesAccion = ({ onCancelar, onGuardar, guardarHabilitado = true }) => {
   return (
     <div className="botones-accion">

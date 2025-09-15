@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FaUser } from 'react-icons/fa';
-import '../styles/header.css';
+import './header.css';
 
 const Header = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -26,7 +26,6 @@ const Header = () => {
           {isProfileOpen && (
             <div className="profile-dropdown">
               <a href="/perfil">Mi Perfil</a>
-              {/* Quitamos Configuración */}
               <a href="/logout">Cerrar Sesión</a>
             </div>
           )}
