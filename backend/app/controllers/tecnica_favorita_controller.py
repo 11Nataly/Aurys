@@ -1,3 +1,5 @@
+from app.core.deps import get_current_user # para obtener el usuario del token
+from app.models.usuario import Usuario #para que reconozca el usuario
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List
@@ -16,15 +18,23 @@ router = APIRouter(
 )
 
 @router.post("/", response_model=TecnicaFavoritaResponse)
-def agregar_favorito(favorita: TecnicaFavoritaCreate, db: Session = Depends(get_db)):
-    return marcar_favorita(db, favorita)
+def agregar_favorito(favorita: TecnicaFavoritaCreate, db: Session = Depends(get_db),
+                     current_user: Usuario = Depends(get_current_user)):
+    return marcar_favorita(db, favorita, current_user.id)
 
 
-@router.delete("/{usuario_id}/{tecnica_id}")
-def eliminar_favorito(usuario_id: int, tecnica_id: int, db: Session = Depends(get_db)):
-    return quitar_favorita(db, usuario_id, tecnica_id)
+@router.delete("/{tecnica_id}")
+def eliminar_favorito(
+    tecnica_id: int,
+    db: Session = Depends(get_db),
+    current_user: Usuario = Depends(get_current_user)
+):
+    return quitar_favorita(db, current_user.id, tecnica_id)
 
 
-@router.get("/{usuario_id}", response_model=List[TecnicaFavoritaResponse])
-def obtener_favoritos(usuario_id: int, db: Session = Depends(get_db)):
-    return listar_favoritas(db, usuario_id)
+@router.get("/", response_model=List[TecnicaFavoritaResponse])
+def obtener_favoritos(
+    db: Session = Depends(get_db),
+    current_user: Usuario = Depends(get_current_user)
+):
+    return listar_favoritas(db, current_user.id)

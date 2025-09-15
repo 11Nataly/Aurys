@@ -1,16 +1,21 @@
 from pydantic import BaseModel
 from datetime import datetime
+from typing import Optional
 
-class TecnicaFavoritaBase(BaseModel):
-    usuario_id: int
+class TecnicaFavoritaCreate(BaseModel):
     tecnica_id: int
 
-class TecnicaFavoritaCreate(TecnicaFavoritaBase):
-    pass
-
-class TecnicaFavoritaResponse(TecnicaFavoritaBase):
-    created_at: datetime
-    updated_at: datetime
+class TecnicaFavoritaResponse(BaseModel):
+    id: int
+    usuario_id: int
+    nombre: str
+    descripcion: Optional[str] = None
+    video: Optional[str] = None
+    instruccion: Optional[str] = None
+    # fix: se elimina el campo calificacion porque ya no va en este modelo
+    # calificacion: Optional[int] = None
+    duracion_user: Optional[str] = None
+    activo: Optional[bool]
 
     class Config:
-        orm_mode = True
+        from_attributes = True

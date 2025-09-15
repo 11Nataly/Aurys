@@ -3,10 +3,10 @@ from fastapi import HTTPException, status
 from app.models.tecnicaFavorita import TecnicaFavorita
 from app.dtos.tecnica_favorita_dto import TecnicaFavoritaCreate
 
-def marcar_favorita(db: Session, favorita: TecnicaFavoritaCreate):
+def marcar_favorita(db: Session, favorita: TecnicaFavoritaCreate, usuario_id: int):
     # Validar si ya existe
     existe = db.query(TecnicaFavorita).filter_by(
-        usuario_id=favorita.usuario_id,
+        usuario_id=usuario_id, #toma el id del usuario del token
         tecnica_id=favorita.tecnica_id
     ).first()
     if existe:
@@ -16,7 +16,7 @@ def marcar_favorita(db: Session, favorita: TecnicaFavoritaCreate):
         )
     
     nueva = TecnicaFavorita(
-        usuario_id=favorita.usuario_id,
+        usuario_id=usuario_id,
         tecnica_id=favorita.tecnica_id
     )
     db.add(nueva)
