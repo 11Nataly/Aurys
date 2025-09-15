@@ -1,3 +1,4 @@
+// src/App.jsx
 import JovenLayout from "./Joven/JovenLayout";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./InicioSesion/InicioSesion";
@@ -9,8 +10,10 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Landing Page como página principal */}
-        <Route path="/" element={<LandingPage />} />
+        {/* Redirección automática de / a /home */}
+        <Route path="/" element={<Navigate to="/home" replace />} />
+        
+        {/* Landing Page */}
         <Route path="/home" element={<LandingPage />} />
         
         {/* Login y Registro */}

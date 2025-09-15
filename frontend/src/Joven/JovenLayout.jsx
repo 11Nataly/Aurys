@@ -1,3 +1,4 @@
+// src/Joven/JovenLayout.jsx
 import { useState } from "react";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { Routes, Route } from "react-router-dom";
@@ -7,10 +8,8 @@ import Footer from "./components/Footer/Footer";
 // Rutas internas del layout Joven
 import Home from "./pages/Home";
 import Diario from "./pages/Diario";
-import Afrontamiento from "./pages/Afrontamiento";
 import KitEmergencia from "./pages/KitEmergencia";
 import Promesas from "./pages/Promesas";
-import Perfil from "./pages/Perfil";
 
 export default function JovenLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -31,10 +30,8 @@ export default function JovenLayout() {
             <Route index element={<Home />} />
             <Route path="home" element={<Home />} />
             <Route path="diario" element={<Diario />} />
-            <Route path="afrontamiento" element={<Afrontamiento />} />
             <Route path="kit-emergencia" element={<KitEmergencia />} />
             <Route path="promesas" element={<Promesas />} />
-            <Route path="perfil" element={<Perfil />} />
           </Routes>
         </main>
       </div>

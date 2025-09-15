@@ -1,12 +1,10 @@
+// src/Joven/components/Sidebar/Sidebar.jsx
 import { Link, useLocation } from 'react-router-dom';
 import { 
   FaHome, 
   FaBook, 
   FaFirstAid, 
-  FaFlag, 
-  FaTrash,
-  FaUser,
-  FaSignOutAlt
+  FaFlag
 } from 'react-icons/fa';
 import './sidebar.css';
 
@@ -16,10 +14,8 @@ const Sidebar = ({ isOpen }) => {
   const menuItems = [
     { path: '/joven/home', icon: <FaHome />, label: 'Inicio' },
     { path: '/joven/diario', icon: <FaBook />, label: 'Diario' },
-    { path: '/joven/afrontamiento', icon: <FaFirstAid />, label: 'Afrontamiento' },
     { path: '/joven/kit-emergencia', icon: <FaFirstAid />, label: 'Kit de emergencia' },
-    { path: '/joven/promesas', icon: <FaFlag />, label: 'Promesas' },
-    { path: '/joven/perfil', icon: <FaUser />, label: 'Perfil' },
+    { path: '/joven/promesas', icon: <FaFlag />, label: 'Promesas' }
   ];
 
   return (
