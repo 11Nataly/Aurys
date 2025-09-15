@@ -1,40 +1,9 @@
-import '../components/KitEmergencia/kitemergencias.css';
-import '../components/KitEmergencia/EmergencyKit';
+import EmergencyKit from "../components/KitEmergencia/EmergencyKit";
 
-
-
-const EmergencyTable = () => {
-  const data = [
-    { agencia: "Secretaría de salud", telefono: "106", horario: "24/7" },
-    { agencia: "Línea única de emergencias Nacional", telefono: "123", horario: "24/7" },
-    { agencia: "Línea 'porque quiero estar bien'", telefono: "3330333588", horario: "24/7" },
-    { agencia: "Policía Nacional", telefono: "018000111488", horario: "24/7" },
-    { agencia: "Ministerio de la Protección Social", telefono: "018000113113", horario: "24/7" },
-  ];
-
+export default function KitEmergencia() {
   return (
-    <section className="emergency">
-      <h2>Líneas de emergencia</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Agencia</th>
-            <th>Número telefónico</th>
-            <th>Horario de atención</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, i) => (
-            <tr key={i}>
-              <td>{item.agencia}</td>
-              <td>{item.telefono}</td>
-              <td>{item.horario}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </section>
+    <div className="page-inner">
+      <EmergencyKit />
+    </div>
   );
-};
-
-export default EmergencyTable;
+}

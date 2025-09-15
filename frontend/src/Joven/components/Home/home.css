@@ -2,9 +2,6 @@
    🎯 CARTA DE BIENVENIDA
    =================================== */
 
-.home {
-  margin-top: 6rem;
-}
 .welcome-card {
   width: 100%;
   max-width: 1200px; /* ← más ancha */
