@@ -1,4 +1,3 @@
-//src/Joven/pages/Diario.jsx
 import { useState, useEffect } from 'react';
 import DiarioHeader from '../components/Diario/DiarioHeader';
 import EditorDiario from '../components/Diario/EditorDiario';
@@ -108,14 +107,12 @@ const Diario = () => {
   };
 
   return (
-    <div className="diario-page">
-      <div className="diario-container">
-        <DiarioHeader 
-          vistaActual={vistaActual}
-          onCambiarVista={setVistaActual}
-        />
-        {renderVista()}
-      </div>
+    <div className="diario-container">
+      <DiarioHeader 
+        vistaActual={vistaActual}
+        onCambiarVista={setVistaActual}
+      />
+      {renderVista()}
     </div>
   );
 };

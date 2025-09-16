@@ -1,19 +1,25 @@
 /* =========================================
-   ESTILOS GENERALES DEL DIARIO
+   ESTILOS GENERALES
    ========================================= */
 
-.diario-page {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    background: #ffffff; /* Fondo blanco solicitado */
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .diario-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding-top: 100px;
-  position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 100px;
+    position: relative;
 }
 
 /* =========================================
@@ -21,83 +27,83 @@
    ========================================= */
 
 .diario-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  background: transparent;
-  color: #000000;
-  padding: 0;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-  gap: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: transparent;
+    color: #000000;
+    padding: 0;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
 .diario-titulo {
-  flex: 1 1 auto;
+    flex: 1 1 auto;
 }
 
 .diario-titulo h1 {
-  font-size: 3.2rem;
-  font-weight: 700;
-  margin: 0;
-  color: #000000;
+    font-size: 3.2rem;
+    font-weight: 700;
+    margin: 0;
+    color: #000000;
 }
 
 .diario-titulo p {
-  margin: 8px 0 0;
-  font-size: 1.4rem;
-  color: #4840c2;
+    margin: 8px 0 0;
+    font-size: 1.4rem;
+    color: #4840c2;
 }
 
 .diario-botones-header {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  flex-shrink: 0;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    flex-shrink: 0;
 }
 
 .btn-agregar,
 .btn-historial {
-  padding: 12px 24px;
-  border-radius: 20px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 1rem;
-  border: 2px solid #4840c2;
-  background: #ffffff;
-  color: #4840c2;
-  white-space: nowrap;
+    padding: 12px 24px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    border: 2px solid #4840c2;
+    background: #ffffff;
+    color: #4840c2;
+    white-space: nowrap;
 }
 
 .btn-agregar:hover:not(:disabled),
 .btn-historial:hover {
-  background: #4840c2;
-  color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(72, 64, 194, 0.2);
+    background: #4840c2;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(72, 64, 194, 0.2);
 }
 
 .btn-agregar:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .btn-historial.activo {
-  background: #4840c2;
-  color: #ffffff;
+    background: #4840c2;
+    color: #ffffff;
 }
 
 /* =========================================
-   CONTENIDO: bloque blanco, separado del header
+   CONTENIDO: bloque con sombreado
    ========================================= */
 
 .diario-contenido {
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  padding: 50px;
-  margin-top: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Sombreado aplicado */
+    padding: 50px;
+    margin-top: 20px;
 }
 
 /* =========================================
@@ -105,68 +111,68 @@
    ========================================= */
 
 .agregar-entrada-componente {
-  display: flex;
-  flex-direction: column;
-  min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    min-height: 60vh;
 }
 
 .componente-header h2 {
-  color: #2c3e50;
-  margin-top: 0;
-  font-size: 2.2rem;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 15px;
+    color: #2c3e50;
+    margin-top: 0;
+    font-size: 2.2rem;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 15px;
 }
 
 .componente-body {
-  margin: 30px 0;
-  flex: 1;
+    margin: 30px 0;
+    flex: 1;
 }
 
 .input-titulo {
-  width: 100%;
-  padding: 20px;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 25px;
-  transition: border-color 0.3s;
+    width: 100%;
+    padding: 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    transition: border-color 0.3s;
 }
 
 .input-titulo:focus {
-  border-color: #6a11cb;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+    border-color: #6a11cb;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
 }
 
 .textarea-contenido {
-  width: 100%;
-  padding: 25px;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 1.2rem;
-  line-height: 1.7;
-  color: #2c3e50;
-  resize: vertical;
-  min-height: 400px;
-  font-family: inherit;
-  transition: border-color 0.3s;
+    width: 100%;
+    padding: 25px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    color: #2c3e50;
+    resize: vertical;
+    min-height: 400px;
+    font-family: inherit;
+    transition: border-color 0.3s;
 }
 
 .textarea-contenido:focus {
-  border-color: #6a11cb;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+    border-color: #6a11cb;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
 }
 
 .componente-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 20px;
-  padding-top: 25px;
-  border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    padding-top: 25px;
+    border-top: 1px solid #f0f0f0;
 }
 
 /* =========================================
@@ -174,47 +180,47 @@
    ========================================= */
 
 .botones-accion {
-  display: flex;
-  justify-content: flex-end;
-  gap: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
 }
 
 .btn-cancelar,
 .btn-guardar {
-  padding: 14px 30px;
-  border-radius: 25px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 1.1rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 14px 30px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-cancelar {
-  background-color: white;
-  color: #e74c3c;
-  border: 1px solid #e74c3c;
+    background-color: white;
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
 }
 
 .btn-cancelar:hover {
-  background-color: #fef0ef;
+    background-color: #fef0ef;
 }
 
 .btn-guardar {
-  background-color: #6a11cb;
-  color: white;
-  border: none;
+    background-color: #6a11cb;
+    color: white;
+    border: none;
 }
 
 .btn-guardar:hover:not(:disabled) {
-  background-color: #5a0fb8;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background-color: #5a0fb8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .btn-guardar:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* =========================================
@@ -222,102 +228,114 @@
    ========================================= */
 
 .editor-diario-vacio {
-  padding: 80px 40px;
-  text-align: center;
-  color: #7f8c8d;
+    padding: 80px 40px;
+    text-align: center;
+    color: #7f8c8d;
 }
 
 .mensaje-bienvenida h2 {
-  color: #2c3e50;
-  font-size: 2.4rem;
-  margin-bottom: 20px;
+    color: #2c3e50;
+    font-size: 2.4rem;
+    margin-bottom: 20px;
 }
 
 .mensaje-bienvenida p {
-  font-size: 1.2rem;
-  max-width: 700px;
-  margin: 0 auto 40px;
-  line-height: 1.6;
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
 }
 
 .btn-comenzar {
-  padding: 16px 40px;
-  background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
-  color: white;
-  border: none;
-  border-radius: 25px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 1.1rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 16px 40px;
+    background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-comenzar:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .entrada-diario-editor {
-  padding: 0;
+    padding: 0;
 }
 
 .editor-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 30px;
-  position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    position: relative;
 }
 
 .entrada-titulo {
-  color: #2c3e50;
-  font-size: 2.4rem;
-  margin: 0 0 15px 0;
-  font-weight: 700;
-  flex: 1;
-  padding-right: 60px;
+    color: #2c3e50;
+    font-size: 2.4rem;
+    margin: 0 0 15px 0;
+    font-weight: 700;
+    flex: 1;
+    padding-right: 60px;
 }
 
 .editor-fecha {
-  color: #7f8c8d;
-  font-style: italic;
-  margin-bottom: 20px;
-  font-size: 1.1rem;
+    color: #7f8c8d;
+    font-style: italic;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
 }
 
 .entrada-acciones {
-  position: absolute;
-  top: 0;
-  right: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 .btn-editar {
-  background: #f8f9fa;
-  border: 1px solid #e0e0e0;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s;
-  color: #6a11cb;
-  font-size: 1.2rem;
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: #6a11cb;
+    font-size: 1.2rem;
 }
 
 .btn-editar:hover {
-  background: #6a11cb;
-  color: white;
-  transform: scale(1.05);
+    background: #6a11cb;
+    color: white;
+    transform: scale(1.05);
 }
 
 .editor-contenido {
-  line-height: 1.8;
-  color: #2c3e50;
-  font-size: 1.15rem;
-  text-align: justify;
+    line-height: 1.8;
+    color: #2c3e50;
+    font-size: 1.15rem;
+    text-align: justify;
+}
+
+/* =========================================
+   DIV ENTRADA-DIARIO CON SOMBRA (NUEVO ESTILO)
+   ========================================= */
+
+.entrada-diario {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Sombreado aplicado */
+    padding: 40px;
+    margin-bottom: 30px;
 }
 
 /* =========================================
@@ -325,10 +343,10 @@
    ========================================= */
 
 .entrada-texto {
-  white-space: pre-line;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  max-width: 100%;
+    white-space: pre-line;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
 }
 
 /* =========================================
@@ -336,132 +354,132 @@
    ========================================= */
 
 .historial-entradas {
-  padding: 40px;
+    padding: 40px;
 }
 
 .historial-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
 }
 
 .historial-header h2 {
-  color: #2c3e50;
-  margin: 0;
-  font-size: 2rem;
+    color: #2c3e50;
+    margin: 0;
+    font-size: 2rem;
 }
 
 .btn-volver {
-  padding: 12px 25px;
-  background: #f8f9fa;
-  border: 1px solid #e0e0e0;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.3s;
-  color: #6a11cb;
-  font-weight: 500;
-  font-size: 1rem;
+    padding: 12px 25px;
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: #6a11cb;
+    font-weight: 500;
+    font-size: 1rem;
 }
 
 .btn-volver:hover {
-  background: #6a11cb;
-  color: white;
+    background: #6a11cb;
+    color: white;
 }
 
 .sin-entradas {
-  text-align: center;
-  color: #7f8c8d;
-  font-style: italic;
-  padding: 60px 0;
-  font-size: 1.2rem;
+    text-align: center;
+    color: #7f8c8d;
+    font-style: italic;
+    padding: 60px 0;
+    font-size: 1.2rem;
 }
 
 .lista-entradas {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
-  gap: 25px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    gap: 25px;
 }
 
 .entrada-historial {
-  background-color: white;
-  border-radius: 8px;
-  padding: 25px;
-  border-left: 4px solid #6a11cb;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s, box-shadow 0.3s;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: fit-content;
+    background-color: white;
+    border-radius: 8px;
+    padding: 25px;
+    border-left: 4px solid #6a11cb;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
 }
 
 .entrada-historial:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
 }
 
 .entrada-historial-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
 }
 
 .entrada-historial-header h3 {
-  color: #2c3e50;
-  margin: 0;
-  font-size: 1.4rem;
-  flex: 1;
-  padding-right: 50px;
+    color: #2c3e50;
+    margin: 0;
+    font-size: 1.4rem;
+    flex: 1;
+    padding-right: 50px;
 }
 
 .entrada-historial-header span {
-  color: #7f8c8d;
-  font-size: 0.95rem;
-  white-space: nowrap;
+    color: #7f8c8d;
+    font-size: 0.95rem;
+    white-space: nowrap;
 }
 
 .entrada-historial-acciones {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  display: flex;
-  gap: 12px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 12px;
 }
 
 .entrada-historial-acciones button {
-  background: #f8f9fa;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s;
-  color: #6a11cb;
-  font-size: 1.1rem;
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: #6a11cb;
+    font-size: 1.1rem;
 }
 
 .entrada-historial-acciones button:hover {
-  background: #6a11cb;
-  color: white;
-  transform: scale(1.05);
+    background: #6a11cb;
+    color: white;
+    transform: scale(1.05);
 }
 
 .entrada-historial-contenido {
-  flex: 1;
+    flex: 1;
 }
 
 .entrada-historial-preview {
-  color: #2c3e50;
-  margin: 0;
-  line-height: 1.6;
-  text-align: justify;
+    color: #2c3e50;
+    margin: 0;
+    line-height: 1.6;
+    text-align: justify;
 }
 
 /* =========================================
@@ -469,69 +487,77 @@
    ========================================= */
 
 @media (max-width: 768px) {
-  .diario-header {
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-  }
+    .diario-header {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+    }
 
-  .diario-botones-header {
-    width: 100%;
-    justify-content: center;
-  }
+    .diario-botones-header {
+        width: 100%;
+        justify-content: center;
+    }
 
-  .diario-titulo h1 {
-    font-size: 2.2rem;
-    text-align: center;
-  }
+    .diario-titulo h1 {
+        font-size: 2.2rem;
+        text-align: center;
+    }
 
-  .diario-titulo p {
-    text-align: center;
-  }
+    .diario-titulo p {
+        text-align: center;
+    }
 
-  .diario-contenido {
-    padding: 25px;
-  }
+    .diario-contenido {
+        padding: 25px;
+    }
 
-  .agregar-entrada-componente,
-  .entrada-diario-editor,
-  .historial-entradas {
-    padding: 0;
-  }
+    .agregar-entrada-componente,
+    .entrada-diario-editor,
+    .historial-entradas {
+        padding: 0;
+    }
 
-  .editor-header {
-    flex-direction: column;
-  }
+    .editor-header {
+        flex-direction: column;
+    }
 
-  .entrada-acciones {
-    position: static;
-    margin-top: 20px;
-    align-self: flex-end;
-  }
+    .entrada-acciones {
+        position: static;
+        margin-top: 20px;
+        align-self: flex-end;
+    }
 
-  .entrada-historial-header {
-    flex-direction: column;
-  }
+    .entrada-historial-header {
+        flex-direction: column;
+    }
 
-  .entrada-historial-header span {
-    margin-top: 8px;
-  }
+    .entrada-historial-header span {
+        margin-top: 8px;
+    }
 
-  .componente-footer {
-    flex-direction: column;
-  }
+    .componente-footer {
+        flex-direction: column;
+    }
 
-  .botones-accion {
-    flex-direction: column;
-    width: 100%;
-  }
+    .botones-accion {
+        flex-direction: column;
+        width: 100%;
+    }
 
-  .btn-cancelar,
-  .btn-guardar {
-    width: 100%;
-  }
+    .btn-cancelar,
+    .btn-guardar {
+        width: 100%;
+    }
 
-  .input-titulo {
-    font-size: 1.4rem;
-  }
+    .input-titulo {
+        font-size: 1.4rem;
+    }
+    
+    .lista-entradas {
+        grid-template-columns: 1fr;
+    }
+    
+    .entrada-diario {
+        padding: 25px;
+    }
 }
