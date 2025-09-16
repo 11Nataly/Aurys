@@ -1,10 +1,10 @@
 :root {
   --primary-color: #4840c2;
-  --text-color-light: #f9f9f9;
-  --text-color-dark: #333;
-  --bg-color-light: #eef2f6;
-  --bg-color-dark: #2c3e50;
-  --border-color: #e4e7eb;
+  --text-color-light: #ffffff;
+  --text-color-dark: #000000;
+  --bg-color-light: #ffffff;
+  --bg-color-dark: #000000;
+  --border-color: #848ddb;
   --shadow-color: rgba(0, 0, 0, 0.1);
   --sidebar-width: 250px;
   --sidebar-collapsed-width: 80px;
@@ -55,7 +55,7 @@
 }
 
 .nav-item:hover {
-  background-color: var(--border-color);
+  background-color: rgba(132, 141, 219, 0.2);
   color: var(--primary-color);
   transform: translateX(5px);
 }
@@ -84,13 +84,13 @@
 .sidebar.closed .nav-label {
   opacity: 0;
   transform: translateX(-100%);
-  position: absolute; /* Oculta el texto sin afectar el layout */
+  position: absolute;
   left: 80px;
   pointer-events: none;
 }
 
 .sidebar-bottom {
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid rgba(132, 141, 219, 0.3);
   padding-top: 1rem;
 }
 
@@ -100,11 +100,19 @@
   width: 100%;
   cursor: pointer;
   text-align: left;
+  color: var(--text-color-dark);
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 0.8rem 1rem;
+  margin: 0.5rem 0;
+  border-radius: 12px;
+  transition: all var(--transition-speed) ease;
 }
 
 .logout-btn:hover {
-  color: #d9534f; /* Color rojo para el hover del botón de salir */
-  background-color: var(--border-color);
+  background-color: rgba(132, 141, 219, 0.2);
+  transform: translateX(5px);
 }
 
 /* Media Queries para pantallas pequeñas */

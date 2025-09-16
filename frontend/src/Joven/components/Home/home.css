@@ -2,16 +2,16 @@
    🎯 VARIABLES Y ESTILOS GLOBALES
    =================================== */
 :root {
-  --primary: #6366f1;
-  --primary-dark: #4f46e5;
-  --secondary: #fbbf24;
-  --accent: #ec4899;
-  --light: #f8fafc;
-  --dark: #1e293b;
-  --success: #10b981;
+  --primary: #4840c2;
+  --primary-dark: #4840c2;
+  --secondary: #848ddb;
+  --accent: #848ddb;
+  --light: #ffffff;
+  --dark: #000000;
+  --success: #848ddb;
   --card-bg: #ffffff;
-  --gradient-start: #818cf8;
-  --gradient-end: #c084fc;
+  --gradient-start: #848ddb;
+  --gradient-end: #4840c2;
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
@@ -22,7 +22,7 @@
 
 .home {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
   padding: 2rem 1rem;
 }
 
@@ -114,7 +114,7 @@
   flex-direction: column;
   justify-content: space-between;
   transition: var(--transition);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(132, 141, 219, 0.2);
   backdrop-filter: blur(10px);
   position: relative;
   overflow: hidden;
@@ -154,10 +154,11 @@
 
 .card p {
   font-size: 1.1rem;
-  color: #64748b;
+  color: #000000;
   line-height: 1.7;
   margin-bottom: 2rem;
   font-weight: 400;
+  opacity: 0.8;
 }
 
 .card button {
@@ -257,7 +258,7 @@
 
 .emergency-section .emergency-table-kit.minimal-version td {
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid rgba(132, 141, 219, 0.3);
   font-size: 0.9rem;
   color: var(--dark);
   transition: var(--transition);
@@ -268,11 +269,11 @@
 }
 
 .emergency-section .emergency-table-kit.minimal-version tr:nth-child(even) {
-  background-color: #f8fafc;
+  background-color: rgba(132, 141, 219, 0.1);
 }
 
 .emergency-section .emergency-table-kit.minimal-version tr:hover td {
-  background-color: #f1f5f9;
+  background-color: rgba(132, 141, 219, 0.2);
   transform: scale(1.01);
 }
 
@@ -388,8 +389,8 @@
   width: 100%;
   height: 100%;
   background: 
-    radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+    radial-gradient(circle at 20% 20%, rgba(72, 64, 194, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(132, 141, 219, 0.1) 0%, transparent 50%);
   pointer-events: none;
   z-index: -1;
 }
