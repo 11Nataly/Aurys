@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import './AddGuideModal.css';
-import { useGuideValidation } from './ErroresAdmin/useGuideValidation';
 
-const AddGuideModal = ({ isOpen, onClose }) => {
-  const [guideData, setGuideData] = useState({
+const AddGuideModal = ({ isOpen, onClose, onSave, guideData, mode = "add" }) => {
+  const [formData, setFormData] = useState({
     title: '',
     description: '',
     instructions: '',
@@ -13,72 +13,107 @@ const AddGuideModal = ({ isOpen, onClose }) => {
   });
 
   const [videoFile, setVideoFile] = useState(null);
+  const [errors, setErrors] = useState({});
   const fileInputRef = useRef(null);
+  const modalRef = useRef();
 
-  const {
-    errors,
-    touched,
-    validateForm,
-    handleBlur,
-    getFieldError,
-    isFieldValid,
-    setTouched,
-    clearErrors
-  } = useGuideValidation();
+  // Prevenir scroll del body cuando el modal está abierto
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('agm-modal-open');
+      
+      // Si estamos en modo edición, cargar los datos de la guía
+      if (mode === "edit" && guideData) {
+        setFormData({
+          title: guideData.title || '',
+          description: guideData.description || '',
+          instructions: guideData.instructions || '',
+          durationHours: guideData.durationHours || 0,
+          durationMinutes: guideData.durationMinutes || 0,
+          durationSeconds: guideData.durationSeconds || 0
+        });
+      }
+    } else {
+      document.body.classList.remove('agm-modal-open');
+    }
+    
+    return () => {
+      document.body.classList.remove('agm-modal-open');
+    };
+  }, [isOpen, mode, guideData]);
+
+  // Cerrar modal al hacer clic fuera del contenido
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        handleClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     
-    // Para los campos de duración, convertir a número
     if (name.includes('duration')) {
       const numericValue = value === '' ? 0 : parseInt(value, 10) || 0;
-      setGuideData(prev => ({ ...prev, [name]: numericValue }));
+      setFormData(prev => ({ ...prev, [name]: numericValue }));
     } else {
-      setGuideData(prev => ({ ...prev, [name]: value }));
+      setFormData(prev => ({ ...prev, [name]: value }));
     }
     
     // Limpiar error cuando el usuario empiece a escribir
-    if (touched[name] && errors[name] && errors[name].length > 0) {
-      setTouched(prev => ({ ...prev, [name]: false }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setVideoFile(file);
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
     
-    if (file) {
-      setTouched(prev => ({ ...prev, video: true }));
-      setTimeout(() => {
-        setTouched(prev => ({ ...prev, video: true }));
-      }, 100);
+    if (!formData.title.trim()) {
+      newErrors.title = 'El título es obligatorio';
     }
-  };
-
-  const handleFieldBlur = (e) => {
-    const { name, value } = e.target;
-    handleBlur(name, value);
-  };
-
-  const handleDurationBlur = () => {
-    handleBlur('duration', null, [
-      guideData.durationHours,
-      guideData.durationMinutes,
-      guideData.durationSeconds
-    ]);
+    
+    if (!formData.description.trim()) {
+      newErrors.description = 'La descripción es obligatoria';
+    } else if (formData.description.length > 200) {
+      newErrors.description = 'La descripción no puede tener más de 200 caracteres';
+    }
+    
+    if (!formData.instructions.trim()) {
+      newErrors.instructions = 'Las instrucciones son obligatorias';
+    }
+    
+    if (formData.durationHours === 0 && formData.durationMinutes === 0 && formData.durationSeconds === 0) {
+      newErrors.duration = 'La duración debe ser mayor a 0';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSave = () => {
-    if (validateForm(guideData, videoFile)) {
-      console.log('Guardando guía:', { ...guideData, videoFile });
-      onClose();
-    } else {
-      console.log('Errores de validación:', errors);
+    if (validateForm()) {
+      onSave(formData);
+      handleClose();
     }
   };
 
   const handleClose = () => {
-    setGuideData({
+    setFormData({
       title: '',
       description: '',
       instructions: '',
@@ -87,168 +122,164 @@ const AddGuideModal = ({ isOpen, onClose }) => {
       durationSeconds: 0
     });
     setVideoFile(null);
+    setErrors({});
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
-    clearErrors();
     onClose();
   };
 
   if (!isOpen) return null;
 
-  return (
-    <div className="modal">
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title"><i className="fas fa-plus-circle"></i> Agregar Nueva Guía</h5>
-            <button type="button" className="close" onClick={handleClose}>&times;</button>
+  return createPortal(
+    <div className="agm-modal">
+      <div className="agm-modal-dialog">
+        <div className="agm-modal-content" ref={modalRef}>
+          <div className="agm-modal-header">
+            <h5 className="agm-modal-title">
+              <i className="fas fa-plus-circle"></i> 
+              {mode === "add" ? "Agregar Nueva Guía" : "Editar Guía"}
+            </h5>
+            <button type="button" className="agm-close" onClick={handleClose}>
+              &times;
+            </button>
           </div>
-          <div className="modal-body">
+          <div className="agm-modal-body">
             <form>
               {/* Campo Título */}
-              <div className="form-group">
-                <label htmlFor="guideTitle" className="form-label">Título *</label>
+              <div className="agm-form-group">
+                <label htmlFor="guideTitle" className="agm-form-label">Título *</label>
                 <input 
                   type="text" 
-                  className={`form-control ${touched.title && !isFieldValid('title') ? 'is-invalid' : ''}`}
+                  className={`agm-form-control ${errors.title ? 'agm-is-invalid' : ''}`}
                   id="guideTitle" 
                   name="title"
-                  value={guideData.title}
+                  value={formData.title}
                   onChange={handleChange}
-                  onBlur={handleFieldBlur}
                   required 
                 />
-                {touched.title && !isFieldValid('title') && (
-                  <div className="invalid-feedback">{getFieldError('title')}</div>
+                {errors.title && (
+                  <div className="agm-invalid-feedback">{errors.title}</div>
                 )}
               </div>
 
               {/* Campo Descripción */}
-              <div className="form-group">
-                <label htmlFor="guideContent" className="form-label">Descripción *</label>
+              <div className="agm-form-group">
+                <label htmlFor="guideContent" className="agm-form-label">Descripción *</label>
                 <textarea 
-                  className={`form-control ${touched.description && !isFieldValid('description') ? 'is-invalid' : ''}`}
+                  className={`agm-form-control ${errors.description ? 'agm-is-invalid' : ''}`}
                   id="guideContent" 
                   rows="3" 
                   name="description"
-                  value={guideData.description}
+                  value={formData.description}
                   onChange={handleChange}
-                  onBlur={handleFieldBlur}
                   required
                 ></textarea>
-                {touched.description && !isFieldValid('description') && (
-                  <div className="invalid-feedback">{getFieldError('description')}</div>
+                {errors.description && (
+                  <div className="agm-invalid-feedback">{errors.description}</div>
                 )}
-                <small className="form-text text-muted">
-                  {guideData.description.length}/200 caracteres
+                <small className="agm-form-text">
+                  {formData.description.length}/200 caracteres
                 </small>
               </div>
 
               {/* Campo Instrucciones */}
-              <div className="form-group">
-                <label htmlFor="guideInstructions" className="form-label">Instrucciones *</label>
+              <div className="agm-form-group">
+                <label htmlFor="guideInstructions" className="agm-form-label">Instrucciones *</label>
                 <textarea 
-                  className={`form-control ${touched.instructions && !isFieldValid('instructions') ? 'is-invalid' : ''}`}
+                  className={`agm-form-control ${errors.instructions ? 'agm-is-invalid' : ''}`}
                   id="guideInstructions" 
                   rows="5" 
                   name="instructions"
-                  value={guideData.instructions}
+                  value={formData.instructions}
                   onChange={handleChange}
-                  onBlur={handleFieldBlur}
                   required
                 ></textarea>
-                {touched.instructions && !isFieldValid('instructions') && (
-                  <div className="invalid-feedback">{getFieldError('instructions')}</div>
+                {errors.instructions && (
+                  <div className="agm-invalid-feedback">{errors.instructions}</div>
                 )}
               </div>
 
               {/* Campo Video */}
-              <div className="form-group">
-                <label htmlFor="guideVideo" className="form-label">Subir video *</label>
+              <div className="agm-form-group">
+                <label htmlFor="guideVideo" className="agm-form-label">Subir video</label>
                 <input 
                   type="file" 
-                  className={`form-control ${touched.video && !isFieldValid('video') ? 'is-invalid' : ''}`}
+                  className="agm-form-control"
                   id="guideVideo" 
                   accept="video/mp4,video/webm,video/ogg,video/quicktime"
                   onChange={handleFileChange}
                   ref={fileInputRef}
                 />
-                {touched.video && !isFieldValid('video') && (
-                  <div className="invalid-feedback">{getFieldError('video')}</div>
-                )}
                 {videoFile && (
-                  <small className="form-text text-muted">
+                  <small className="agm-form-text">
                     Archivo seleccionado: {videoFile.name} ({Math.round(videoFile.size / 1024 / 1024)}MB)
                   </small>
                 )}
-                <small className="form-text text-muted">
+                <small className="agm-form-text">
                   Formatos permitidos: MP4, WebM, OGG, MOV - Máximo 50MB
                 </small>
               </div>
 
-              {/* Campo Duración - CON INPUTS NUMBER Y FLECHAS */}
-              <div className="form-group">
-                <label className="form-label">Duración del video *</label>
-                <div className="duration-input">
+              {/* Campo Duración */}
+              <div className="agm-form-group">
+                <label className="agm-form-label">Duración del video *</label>
+                <div className="agm-duration-input">
                   <input 
                     type="number" 
-                    className={`form-control ${touched.duration && !isFieldValid('duration') ? 'is-invalid' : ''}`}
+                    className={`agm-form-control ${errors.duration ? 'agm-is-invalid' : ''}`}
                     min="0" 
                     max="23" 
                     name="durationHours"
-                    value={guideData.durationHours}
+                    value={formData.durationHours}
                     onChange={handleChange}
-                    onBlur={handleDurationBlur}
                   />
-                  <span className="duration-separator">:</span>
+                  <span className="agm-duration-separator">:</span>
                   <input 
                     type="number" 
-                    className={`form-control ${touched.duration && !isFieldValid('duration') ? 'is-invalid' : ''}`}
+                    className={`agm-form-control ${errors.duration ? 'agm-is-invalid' : ''}`}
                     min="0" 
                     max="59" 
                     name="durationMinutes"
-                    value={guideData.durationMinutes}
+                    value={formData.durationMinutes}
                     onChange={handleChange}
-                    onBlur={handleDurationBlur}
                   />
-                  <span className="duration-separator">:</span>
+                  <span className="agm-duration-separator">:</span>
                   <input 
                     type="number" 
-                    className={`form-control ${touched.duration && !isFieldValid('duration') ? 'is-invalid' : ''}`}
+                    className={`agm-form-control ${errors.duration ? 'agm-is-invalid' : ''}`}
                     min="0" 
                     max="59" 
                     name="durationSeconds"
-                    value={guideData.durationSeconds}
+                    value={formData.durationSeconds}
                     onChange={handleChange}
-                    onBlur={handleDurationBlur}
                   />
                 </div>
-                {touched.duration && !isFieldValid('duration') && (
-                  <div className="invalid-feedback">{getFieldError('duration')}</div>
+                {errors.duration && (
+                  <div className="agm-invalid-feedback">{errors.duration}</div>
                 )}
-                <small className="form-text text-muted">
+                <small className="agm-form-text">
                   Formato: Horas (0-23) : Minutos (0-59) : Segundos (0-59)
                 </small>
               </div>
             </form>
           </div>
-          <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={handleClose}>
+          <div className="agm-modal-footer">
+            <button type="button" className="agm-btn agm-btn-secondary" onClick={handleClose}>
               Cancelar
             </button>
             <button 
               type="button" 
-              className="btn btn-primary" 
+              className="agm-btn agm-btn-primary" 
               onClick={handleSave}
-              disabled={Object.values(errors).some(error => error.length > 0) && Object.values(touched).every(t => t)}
             >
-              Guardar
+              {mode === "add" ? "Agregar" : "Guardar Cambios"}
             </button>
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

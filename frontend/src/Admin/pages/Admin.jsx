@@ -1,9 +1,16 @@
-import React from "react";
+import React from 'react';
+import AdminTabs from '../components/AdminTabs';
+import '../../styles/admin.css';
 
-export default function Admin() {
+const Admin = () => {
   return (
-    <div>
-      <h1>Hola administrador</h1>
+    <div className="admin-container">
+      <div className="admin-header">
+        <h1 className="admin-title">Panel de Administración</h1>
+      </div>
+      <AdminTabs />
     </div>
   );
-}
+};
+
+export default Admin;

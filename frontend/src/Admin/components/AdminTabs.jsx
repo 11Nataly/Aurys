@@ -7,7 +7,7 @@ const AdminTabs = () => {
   const [activeTab, setActiveTab] = useState('users');
 
   return (
-    <div className="admin-card">
+    <div className="admin-tabs-wrapper">
       <div className="nav-tabs">
         <div className="nav-item">
           <button 
@@ -27,8 +27,10 @@ const AdminTabs = () => {
         </div>
       </div>
 
-      {activeTab === 'users' && <UserManagement />}
-      {activeTab === 'guides' && <GuideManagement />}
+      <div className="tab-content">
+        {activeTab === 'users' && <UserManagement />}
+        {activeTab === 'guides' && <GuideManagement />}
+      </div>
     </div>
   );
 };

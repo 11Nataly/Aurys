@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
+import './ConfirmModal.css';
 
 const ConfirmModal = ({ 
   isOpen, 
@@ -9,28 +11,61 @@ const ConfirmModal = ({
   message, 
   confirmText = "Confirmar" 
 }) => {
+  const modalRef = useRef();
+
+  // Prevenir scroll del body cuando el modal está abierto
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('cm-modal-open');
+    } else {
+      document.body.classList.remove('cm-modal-open');
+    }
+    
+    return () => {
+      document.body.classList.remove('cm-modal-open');
+    };
+  }, [isOpen]);
+
+  // Cerrar modal al hacer clic fuera del contenido
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
-  return (
-    <div className="modal">
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">
+  return createPortal(
+    <div className="cm-modal">
+      <div className="cm-modal-dialog">
+        <div className="cm-modal-content" ref={modalRef}>
+          <div className="cm-modal-header">
+            <h5 className="cm-modal-title">
               <i className={`fas fa-${icon}`}></i> {title}
             </h5>
-            <button type="button" className="close" onClick={onClose}>&times;</button>
+            <button type="button" className="cm-close" onClick={onClose}>&times;</button>
           </div>
-          <div className="modal-body">
+          <div className="cm-modal-body">
             <p>{message}</p>
           </div>
-          <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={onClose}>Cancelar</button>
-            <button type="button" className="btn btn-danger" onClick={onConfirm}>{confirmText}</button>
+          <div className="cm-modal-footer">
+            <button type="button" className="cm-btn cm-btn-secondary" onClick={onClose}>Cancelar</button>
+            <button type="button" className="cm-btn cm-btn-danger" onClick={onConfirm}>{confirmText}</button>
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

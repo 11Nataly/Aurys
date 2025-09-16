@@ -1,50 +1,70 @@
+/* components/Admin/AdminTabs.css */
 .admin-card {
-    background-color: white;
-    border-radius: 0.5rem;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    padding: 1.5rem;
-    margin-bottom: 2rem;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  overflow: hidden;
 }
 
 .nav-tabs {
-    border-bottom: 1px solid #dee2e6;
-    display: flex;
-    margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  margin-bottom: 2rem;
+  gap: 0.5rem;
 }
 
 .nav-tabs .nav-item {
-    margin-bottom: -1px;
+  margin-bottom: -1px;
 }
 
 .nav-tabs .nav-link {
-    padding: 0.75rem 1.5rem;
-    border: 1px solid transparent;
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
-    color: #6c757d;
-    text-decoration: none;
-    transition: all 0.3s;
-    background: none;
-    cursor: pointer;
+  padding: 1rem 1.5rem;
+  border: 1px solid transparent;
+  border-radius: 8px 8px 0 0;
+  color: #64748b;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
 }
 
 .nav-tabs .nav-link.active {
-    color: #4a6bdf;
-    background-color: white;
-    border-color: #dee2e6 #dee2e6 white;
+  color: #667eea;
+  background-color: white;
+  border-color: #e2e8f0 #e2e8f0 white;
+  border-bottom: 2px solid #667eea;
 }
 
 .nav-tabs .nav-link:hover:not(.active) {
-    border-color: #dee2e6 #dee2e6 #dee2e6;
+  color: #334155;
+  background-color: #f8fafc;
 }
 
 @media (max-width: 768px) {
-    .nav-tabs {
-        flex-direction: column;
-    }
-    
-    .nav-tabs .nav-link {
-        width: 100%;
-        text-align: center;
-    }
+  .admin-card {
+    padding: 1.5rem;
+  }
+  
+  .nav-tabs {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .nav-tabs .nav-link {
+    width: 100%;
+    text-align: center;
+    border-radius: 8px;
+    justify-content: center;
+  }
+  
+  .nav-tabs .nav-link.active {
+    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 2px solid #667eea;
+  }
 }
