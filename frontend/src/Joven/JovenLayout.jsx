@@ -16,7 +16,7 @@ export default function JovenLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
-    <div className="main-layout">
+    <div className={`main-layout ${sidebarOpen ? 'has-sidebar' : 'sidebar-collapsed'}`}>
       {/* HEADER (fijo) */}
       <Header />
 
@@ -25,7 +25,7 @@ export default function JovenLayout() {
         <Sidebar isOpen={sidebarOpen} />
 
         {/* CONTENEDOR PRINCIPAL */}
-        <div className="main-content">
+        <div className={`main-content ${!sidebarOpen ? 'sidebar-collapsed' : ''}`}>
           <main className="page-content">
             <Routes>
               <Route index element={<Home />} />
@@ -36,11 +36,11 @@ export default function JovenLayout() {
               <Route path="promesas" element={<Promesas />} />
             </Routes>
           </main>
-
-          {/* FOOTER DENTRO DEL FLEX */}
-          <Footer />
         </div>
       </div>
+      
+      {/* FOOTER FUERA del flex container para controlar márgenes */}
+      <Footer />
     </div>
   );
 }

@@ -1,57 +1,58 @@
+/* MAIN LAYOUT */
 .main-layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   background: #fff;
+  position: relative;
 }
 
-/* Cuerpo debajo del header */
+/* LAYOUT BODY */
 .layout-body {
   display: flex;
   flex: 1;
-  padding-top: 60px; /* compensa el header fijo */
+  padding-top: 60px;
 }
 
-/* Contenedor principal */
+/* MAIN CONTENT */
 .main-content {
   flex: 1;
-  display: flex;
-  flex-direction: column; /* columna: contenido + footer */
-  margin-left: 250px; /* espacio sidebar */
+  margin-left: 250px;
   transition: margin-left 0.3s ease;
   background: #fff;
+  padding-bottom: 20px; /* Espacio inferior para el contenido */
 }
 
-/* El contenido crece */
+/* PAGE CONTENT */
 .page-content {
-  flex: 1;
   padding: 20px;
   overflow-y: auto;
+  box-sizing: border-box;
+  min-height: calc(100vh - 160px);
 }
 
-/* Footer siempre al fondo */
-footer.footer {
-  margin-top: auto;
-  width: 100%;
-}
-
-/* Cuando sidebar está colapsado */
+/* SIDEBAR COLLAPSED STATES */
 .main-content.sidebar-collapsed {
   margin-left: 70px;
 }
 
-/* Responsive */
+/* RESPONSIVE DESIGN */
 @media (max-width: 768px) {
   .main-content {
     margin-left: 0;
     padding: 15px;
   }
-
+  
+  .layout-body {
+    padding-top: 55px;
+  }
+  
+  .page-content {
+    padding: 15px;
+    min-height: calc(100vh - 140px);
+  }
+  
   .main-content.sidebar-collapsed {
     margin-left: 0;
-  }
-
-  .layout-body {
-    padding-top: 55px; /* header más bajo en móvil */
   }
 }

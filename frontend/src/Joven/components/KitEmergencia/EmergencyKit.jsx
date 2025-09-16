@@ -9,10 +9,10 @@ const EmergencyKit = ({ minimal = false }) => {
     navigate("/joven/afrontamiento");
   };
 
-  // Cuando minimal es true, solo mostramos la tabla
+  // Cuando minimal es true, mostramos la versión compacta
   if (minimal) {
     return (
-      <table className="emergency-table-kit">
+      <table className="emergency-table-kit minimal-version">
         <thead>
           <tr>
             <th>Agencia</th>
@@ -51,9 +51,9 @@ const EmergencyKit = ({ minimal = false }) => {
     );
   }
 
-  // Versión completa por defecto
+  // Versión completa (más grande) para la página propia
   return (
-    <div className="emergency-kit">
+    <div className="emergency-kit full-version">
       <div className="emergency-header">
         <h1 className="titulo">Kit de emergencia</h1>
         <div className="emergency-buttons">
@@ -67,7 +67,7 @@ const EmergencyKit = ({ minimal = false }) => {
         </div>
       </div>
 
-      <table className="emergency-table-kit">
+      <table className="emergency-table-kit full-version">
         <thead>
           <tr>
             <th>Agencia</th>

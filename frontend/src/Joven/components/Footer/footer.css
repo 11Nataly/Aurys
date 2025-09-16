@@ -1,50 +1,13 @@
-/* MAIN LAYOUT */
-.main-layout {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background: #fff;
-  position: relative;
-}
-
-/* LAYOUT BODY */
-.layout-body {
-  display: flex;
-  flex: 1;
-  padding-top: 60px;
-}
-
-/* MAIN CONTENT */
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  margin-left: 250px;
-  transition: margin-left 0.3s ease;
-  background: #fff;
-  padding-bottom: 40px; /* Espacio para el footer */
-}
-
-/* PAGE CONTENT */
-.page-content {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
-  box-sizing: border-box;
-  min-height: calc(100vh - 160px); /* Asegura altura mínima */
-}
-
 /* FOOTER STYLES */
 .footer {
   background-color: #4840c2;
   color: white;
-  padding: 2rem 1.5rem 1rem;
+  padding: 2rem 0 0; /* Sin padding inferior, solo superior y lateral 0 */
   box-sizing: border-box;
-  width: calc(100% - 250px);
-  margin-left: 250px;
+  width: 100%; /* Ocupa todo el ancho disponible */
+  margin: 60px 0 0; /* Solo margen superior, 0 en laterales e inferior */
+  border-top: 3px solid rgba(255, 255, 255, 0.1);
   position: relative;
-  margin-top: 60px; /* Margen superior aumentado */
-  border-top: 3px solid rgba(255, 255, 255, 0.1); /* Línea decorativa */
 }
 
 .footer-content {
@@ -55,6 +18,7 @@
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
+  padding: 0 1.5rem; /* Padding interno para el contenido */
 }
 
 .footer-section {
@@ -100,7 +64,7 @@
 
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.2);
-  padding-top: 1rem;
+  padding: 1rem 1.5rem; /* Padding lateral añadido */
   text-align: center;
   opacity: 0.8;
   max-width: 1200px;
@@ -109,27 +73,20 @@
   font-size: 0.9rem;
 }
 
-/* SIDEBAR COLLAPSED STATES */
-.main-content.sidebar-collapsed {
-  margin-left: 70px;
+/* Cuando está con sidebar (sin margen) */
+.has-sidebar .footer {
+  margin: 0; /* Sin margen superior cuando hay sidebar */
+  padding: 2rem 0 0; /* Mantenemos padding superior pero sin márgenes */
 }
 
+/* SIDEBAR COLLAPSED STATES */
 .main-content.sidebar-collapsed ~ .footer {
-  margin-left: 70px;
-  width: calc(100% - 70px);
+  margin-left: 0;
+  width: 100%;
 }
 
 /* RESPONSIVE DESIGN */
 @media (max-width: 1024px) {
-  .main-content {
-    margin-left: 200px;
-  }
-  
-  .footer {
-    margin-left: 200px;
-    width: calc(100% - 200px);
-  }
-  
   .footer-content {
     gap: 1.5rem;
   }
@@ -140,20 +97,8 @@
 }
 
 @media (max-width: 768px) {
-  .main-content {
-    margin-left: 0;
-    padding: 15px;
-    padding-bottom: 30px;
-  }
-  
-  .layout-body {
-    padding-top: 55px;
-  }
-  
   .footer {
-    margin-left: 0 !important;
-    width: 100% !important;
-    padding: 1.5rem 1rem 1rem;
+    padding: 1.5rem 0 0;
     margin-top: 40px;
   }
   
@@ -161,6 +106,7 @@
     flex-direction: column;
     gap: 1.5rem;
     text-align: center;
+    padding: 0 1rem;
   }
   
   .footer-section {
@@ -172,15 +118,14 @@
     margin-bottom: 0.8rem;
   }
   
-  .page-content {
-    padding: 15px;
-    min-height: calc(100vh - 140px);
+  .footer-bottom {
+    padding: 1rem;
   }
 }
 
 @media (max-width: 480px) {
   .footer {
-    padding: 1.2rem 0.8rem 0.8rem;
+    padding: 1.2rem 0 0;
     margin-top: 30px;
   }
   
@@ -195,16 +140,11 @@
   .footer-bottom {
     font-size: 0.8rem;
   }
-  
-  .main-content {
-    padding-bottom: 25px;
-  }
 }
 
-/* AUTH LAYOUT SPECIFIC */
+/* AUTH LAYOUT SPECIFIC - sin sidebar */
 .auth-layout .footer {
-  margin-left: 0;
-  width: 100%;
+  margin-top: 60px; /* Margen superior para layouts sin sidebar */
 }
 
 /* UTILITY CLASSES */
@@ -243,9 +183,5 @@
 @media print {
   .footer {
     display: none;
-  }
-  
-  .main-content {
-    padding-bottom: 0;
   }
 }
