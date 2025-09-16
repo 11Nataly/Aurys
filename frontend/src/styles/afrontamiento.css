@@ -295,7 +295,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7); /* Fondo semitransparente */
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -318,6 +318,10 @@ body {
   border: 1px solid #e8eefb;
 }
 
+.modal-detalles {
+  max-width: 1000px;
+}
+
 .modal-header {
   display: flex;
   justify-content: space-between;
@@ -334,18 +338,24 @@ body {
   font-weight: 600;
 }
 
-.modal-header button {
+.btn-cerrar {
   background: none;
   border: none;
-  font-size: 2rem;
+  font-size: 1.8rem;
   cursor: pointer;
   color: #7f8c8d;
+  padding: 5px;
+}
+
+.modal-content {
+  padding: 10px 0;
 }
 
 .modal-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 30px;
+  align-items: start;
 }
 
 .modal-pasos {
@@ -373,120 +383,51 @@ body {
 
 .modal-video {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .video-preview {
   text-align: center;
-  background: #f8f9ff;
-  padding: 25px;
-  border-radius: 15px;
-  width: 100%;
 }
 
 .video-preview h3 {
   color: #3c2bbf;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   font-size: 1.2rem;
+  text-align: left;
 }
 
-.btn-ver-video {
-  padding: 15px 25px;
-  background: #e74c3c;
-  color: white;
-  border: none;
+/* ===============================
+   🎥 REPRODUCTOR DE VIDEO INTEGRADO
+   =============================== */
+.video-integrado-container {
+  margin-bottom: 15px;
   border-radius: 12px;
-  cursor: pointer;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* ===============================
-   🎥 REPRODUCTOR DE VIDEO EN MODAL
-   =============================== */
-.video-modal {
-  background: white;
-  border-radius: 20px;
-  padding: 30px;
-  max-width: 800px;
+.video-integrado {
   width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-}
-
-.video-container {
-  width: 100%;
-}
-
-.video-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.video-header h3 {
-  color: #3c2bbf;
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
-.btn-cerrar {
-  background: none;
-  border: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-  color: #7f8c8d;
-  padding: 5px;
-}
-
-.video-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #27ae60;
-  margin-top: 15px;
-  font-size: 0.9rem;
-}
-
-/* ===============================
-   🚫 ESTADOS DE ERROR DEL VIDEO
-   =============================== */
-.video-error {
-  text-align: center;
-  padding: 40px;
-  color: #333;
-}
-
-.video-error h3 {
-  color: #e74c3c;
-  margin: 20px 0 10px 0;
-  font-size: 1.3rem;
-}
-
-.video-error p {
-  color: #7f8c8d;
-  margin-bottom: 20px;
-}
-
-.btn-reintentar {
-  padding: 12px 24px;
-  background: #3498db;
-  color: white;
-  border: none;
+  height: auto;
+  max-height: 250px;
+  background: #000;
+  display: block;
   border-radius: 8px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-right: 10px;
-  font-weight: 500;
+}
+
+.duracion-info {
+  padding: 12px;
+  background: #f8f9ff;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.duracion-info p {
+  margin: 0;
+  color: #5d6d7e;
+  font-size: 0.95rem;
 }
 
 /* ===============================
@@ -512,6 +453,11 @@ body {
   padding: 40px;
   border-radius: 15px;
   border: 2px dashed #d6e4ff;
+}
+
+.empty-state.favoritos {
+  background: #fff8f8;
+  border-color: #ffcccc;
 }
 
 /* ===============================
@@ -581,7 +527,7 @@ body {
   }
   
   .modal,
-  .video-modal {
+  .modal-detalles {
     margin: 10px;
     padding: 20px;
   }
@@ -590,12 +536,8 @@ body {
     font-size: 1.5rem;
   }
   
-  .video-header h3 {
-    font-size: 1.3rem;
-  }
-  
-  .react-player {
-    height: 300px !important;
+  .video-integrado {
+    max-height: 200px;
   }
 }
 
@@ -633,17 +575,17 @@ body {
     font-size: 0.85rem;
   }
   
-  .video-modal {
+  .modal-detalles {
     padding: 15px;
   }
   
-  .video-header {
+  .modal-header {
     flex-direction: column;
     gap: 10px;
     text-align: center;
   }
   
-  .react-player {
-    height: 250px !important;
+  .video-integrado {
+    max-height: 180px;
   }
 }

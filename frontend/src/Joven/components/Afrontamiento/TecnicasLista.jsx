@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TecnicaCard from './TecnicaCard';
 import { afrontamientoService } from '../../../services/afrontamientoService';
+import { FaHeart, FaFilter } from 'react-icons/fa';
 
 const TecnicasLista = ({ onSelectTecnica, onShowVideo, mostrarSoloFavoritos }) => {
   const [tecnicas, setTecnicas] = useState([]);
@@ -23,6 +24,7 @@ const TecnicasLista = ({ onSelectTecnica, onShowVideo, mostrarSoloFavoritos }) =
       setTecnicas(tecnicasConFavoritos);
     } catch (err) {
       setError('Error al cargar las técnicas');
+      console.error('Error:', err);
     } finally {
       setLoading(false);
     }
@@ -48,7 +50,7 @@ const TecnicasLista = ({ onSelectTecnica, onShowVideo, mostrarSoloFavoritos }) =
 
   return (
     <div className="tecnicas-lista">
-      {mostrarSoloFavoritos && (
+      {mostrarSoloFavoritos && tecnicasFiltradas.length > 0 && (
         <div className="filtro-activo">
           <FaHeart /> Mostrando solo técnicas favoritas
         </div>
@@ -67,7 +69,7 @@ const TecnicasLista = ({ onSelectTecnica, onShowVideo, mostrarSoloFavoritos }) =
       </div>
 
       {tecnicasFiltradas.length === 0 && (
-        <div className="empty-state">
+        <div className={`empty-state ${mostrarSoloFavoritos ? 'favoritos' : ''}`}>
           {mostrarSoloFavoritos
             ? 'No tienes técnicas favoritas. ¡Marca algunas con el corazón!'
             : 'No hay técnicas disponibles'}

@@ -15,6 +15,7 @@ const TecnicaCard = ({ tecnica, onSelect, onShowVideo, onToggleFavorito }) => {
     try {
       await afrontamientoService.calificarTecnica(tecnica.id, stars);
       setCalificacionUsuario(stars);
+      localStorage.setItem(`calificacion_${tecnica.id}`, stars.toString());
     } catch (error) {
       console.error('Error al calificar:', error);
     }
@@ -41,6 +42,7 @@ const TecnicaCard = ({ tecnica, onSelect, onShowVideo, onToggleFavorito }) => {
                 key={star}
                 className={`star-btn ${star <= calificacionUsuario ? 'active' : ''}`}
                 onClick={() => handleCalificacion(star)}
+                aria-label={`Calificar con ${star} estrellas`}
               >
                 {star <= calificacionUsuario ? <FaStar /> : <FaRegStar />}
               </button>
@@ -50,6 +52,7 @@ const TecnicaCard = ({ tecnica, onSelect, onShowVideo, onToggleFavorito }) => {
           <button
             className={`favorito-btn ${tecnica.esFavorito ? 'active' : ''}`}
             onClick={handleFavorito}
+            aria-label={tecnica.esFavorito ? 'Quitar de favoritos' : 'Agregar a favoritos'}
           >
             {tecnica.esFavorito ? <FaHeart /> : <FaRegHeart />}
           </button>
@@ -57,14 +60,14 @@ const TecnicaCard = ({ tecnica, onSelect, onShowVideo, onToggleFavorito }) => {
 
         <div className="acciones-container">
           <button 
-            className="btn-reproducir"
+            className="btn btn-reproducir"
             onClick={() => onShowVideo(tecnica)}
           >
             <FaPlay /> Reproducir
           </button>
           
           <button 
-            className="btn-detalles"
+            className="btn btn-detalles"
             onClick={() => onSelect(tecnica)}
           >
             Ver detalles

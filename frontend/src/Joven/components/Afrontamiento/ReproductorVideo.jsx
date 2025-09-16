@@ -61,13 +61,16 @@ const ReproductorVideo = ({ videoUrl, titulo, onClose }) => {
           </button>
         </div>
         
-        <ReactPlayer
-          url={videoUrl}
-          controls
-          width="100%"
-          height="400px"
-          onError={() => setError(true)}
-        />
+        <div className="video-player">
+          <ReactPlayer
+            url={videoUrl}
+            controls
+            width="100%"
+            height="400px"
+            onError={() => setError(true)}
+            playing={true}
+          />
+        </div>
         
         <div className="video-status">
           <FaWifi /> Conectado
