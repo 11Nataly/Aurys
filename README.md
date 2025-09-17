@@ -62,6 +62,7 @@ Está diseñado para brindar a jóvenes que enfrentan desafíos de ansiedad y de
 
 > Asegúrate de tener **HeidiSQL** o un cliente MySQL accesible y un usuario con permisos.  
 > También debes haber creado una base de datos llamada `aurys` antes de continuar.
+> Debes crear dentro de la carpeta `alembic/` una carpeta vacía llamada `versions` para guardar las migraciones.
 
 1. **Archivo `db/database.py`**  
    Dentro de la carpeta `db`, abre `database.py` y verifica/ajusta la cadena de conexión. Ejemplo:
@@ -114,44 +115,47 @@ uvicorn app.main:app --reload
 
 ## Backend
 ```text
-backend/                      # Lógica del servidor y API
-├── __pycache__/              # Archivos compilados de Python (generados automáticamente)
-├── alembic/                  # Migraciones de base de datos con Alembic
-├── app/                      # Código principal de la aplicación backend
-│   ├── __pycache__/          # Archivos compilados de Python dentro de app
-│   ├── controllers/          # Controladores o rutas que gestionan las solicitudes HTTP
-│   ├── db/                   # Conexión y configuración de la base de datos
-│   ├── dtos/                  # Data Transfer Objects: validación y formato de datos
-│   ├── models/               # Modelos de datos (ORM) para interactuar con la base de datos
-│   ├── app.py                # Configuración inicial de la aplicación (FastAPI)
-│   └── main.py               # Punto de entrada principal del backend
-├── tests/                    # Pruebas automáticas del backend
-├── venv/                     # Entorno virtual de Python con dependencias instaladas
-├── .gitignore                # Archivos y carpetas a ignorar en Git
-├── alembic.ini               # Configuración de Alembic para migraciones de BD
-└── requirements.txt          # Lista de dependencias del backend en Python
+├── backend/ # Lógica del servidor (FastAPI)
+│ ├── alembic/ # Migraciones de base de datos con Alembic
+│ ├── app/ # Código principal de la aplicación backend
+│ │ ├── controllers/ # Endpoints y controladores de la API
+│ │ ├── core/ # Configuraciones centrales (auth, seguridad, settings)
+│ │ ├── db/ # Conexión y configuración de la base de datos
+│ │ ├── dtos/ # Data Transfer Objects (esquemas de entrada/salida)
+│ │ ├── models/ # Modelos de base de datos con SQLAlchemy
+│ │ ├── services/ # Lógica de negocio y servicios reutilizables
+│ │ └── main.py # Punto de entrada principal del backend (FastAPI app)
+│ ├── tests/ # Pruebas unitarias y de integración
+│ ├── .gitignore # Archivos/carpetas ignoradas por git
+│ ├── alembic.ini # Configuración de Alembic
+│ ├── cleanup_job.py # Script para tareas de limpieza
+│ └── requirements.txt # Dependencias del backend (Python)
+│
 ```
 
 ## Frontend
 ```text
-frontend/                     # Interfaz de usuario (React + Vite)
-├── node_modules/             # Dependencias instaladas de npm
-├── public/                   # Archivos estáticos públicos (favicon, imágenes, etc.)
-├── src/                      # Código fuente del frontend
-│   ├── assets/               # Recursos estáticos como imágenes, íconos, fuentes
-│   ├── components/           # Componentes reutilizables de React
-│   ├── pages/                # Páginas principales de la aplicación
-│   ├── App.css               # Estilos globales para el componente App
-│   ├── App.jsx               # Componente principal de React
-│   ├── index.css             # Estilos globales de la aplicación
-│   └── main.jsx              # Punto de entrada principal del frontend
-├── .env                      # Variables de entorno para el frontend
-├── .gitignore                # Archivos y carpetas a ignorar en Git
-├── eslint.config.js          # Configuración de ESLint para control de calidad de código
-├── index.html                # HTML base donde se monta la aplicación React
-├── package-lock.json         # Versiones exactas de las dependencias instaladas
-├── package.json              # Configuración del proyecto frontend y lista de dependencias
-├── README.md                 # Documentación del frontend
-└── vite.config.js            # Configuración de Vite para el frontend
+├── frontend/ # Aplicación cliente (React)
+│ ├── node_modules/ # Dependencias instaladas de Node.js
+│ ├── public/ # Archivos públicos estáticos (index.html, imágenes globales)
+│ ├── src/ # Código fuente principal del frontend
+│ │ ├── Admin/ # Vistas y componentes del módulo de administración
+│ │ ├── assets/ # Recursos estáticos (imágenes, íconos, fuentes)
+│ │ ├── InicioSesion/ # Componentes para el inicio de sesión
+│ │ ├── Joven/ # Vistas y componentes del módulo para usuarios jóvenes
+│ │ ├── LandingPage/ # Componentes y vista de la página principal (landing)
+│ │ ├── Registro/ # Componentes de registro de usuarios
+│ │ ├── services/ # Conexión con la API (servicios HTTP con axios/fetch)
+│ │ ├── styles/ # Estilos CSS globales o modulares
+│ │ ├── App.css # Estilos principales del componente App
+│ │ ├── App.jsx # Componente raíz del frontend
+│ │ ├── index.css # Estilos globales de la aplicación
+│ │ └── main.jsx # Punto de entrada de React (monta App.jsx en index.html)
+│ ├── .gitignore # Archivos/carpetas ignoradas por git
+│ ├── eslint.config.js # Configuración de ESLint (linter de JS/React)
+│ ├── index.html # Plantilla HTML principal de la app React
+│ ├── package-lock.json # Bloqueo de versiones exactas de dependencias
+│ ├── package.json # Dependencias y scripts del frontend
+│ └── README.md (opcional) # Documentación del frontend (si se crea)
 ```
 
