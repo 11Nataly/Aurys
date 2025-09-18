@@ -1,6 +1,4 @@
-from app.core.deps import get_current_user # para obtener el usuario del token
-from app.models.usuario import Usuario #para que reconozca el usuario
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -11,30 +9,59 @@ from app.services.tecnicaFavorita_service import (
     quitar_favorita,
     listar_favoritas
 )
+from app.services.subir_tecnica import simplificar_duracion  # Importar la función
 
 router = APIRouter(
     prefix="/favoritos",
     tags=["Favoritos"]
 )
 
-@router.post("/", response_model=TecnicaFavoritaResponse)
-def agregar_favorito(favorita: TecnicaFavoritaCreate, db: Session = Depends(get_db),
-                     current_user: Usuario = Depends(get_current_user)):
-    return marcar_favorita(db, favorita, current_user.id)
+# ----------------------
+# Agregar técnica favorita
+# ----------------------
+@router.post("/", response_model=TecnicaFavoritaResponse, status_code=status.HTTP_201_CREATED)
+def agregar_favorito(
+    favorita: TecnicaFavoritaCreate,
+    db: Session = Depends(get_db)
+):
+    nueva = marcar_favorita(db, favorita)
+    return TecnicaFavoritaResponse(
+        tecnica_id=nueva.tecnica_id,
+        usuario_id=nueva.usuario_id
+    )
 
 
-@router.delete("/{tecnica_id}")
+# ----------------------
+# Eliminar técnica favorita
+# ----------------------
+@router.delete("/", status_code=status.HTTP_200_OK)
 def eliminar_favorito(
+    usuario_id: int,
     tecnica_id: int,
-    db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_user)
+    db: Session = Depends(get_db)
 ):
-    return quitar_favorita(db, current_user.id, tecnica_id)
+    return quitar_favorita(db, usuario_id, tecnica_id)
 
 
-@router.get("/", response_model=List[TecnicaFavoritaResponse])
-def obtener_favoritos(
-    db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_user)
+# ----------------------
+# Listar técnicas favoritas
+# ----------------------
+@router.get("/filtrarFavoritas", response_model=List[TecnicaFavoritaResponse])
+def listar_favoritas_endpoint(
+    usuario_id: int,
+    db: Session = Depends(get_db)
 ):
-    return listar_favoritas(db, current_user.id)
+    tecnicas = listar_favoritas(db, usuario_id)
+    return [
+        TecnicaFavoritaResponse(
+            tecnica_id=t.id,
+            usuario_id=usuario_id,
+            nombre=t.nombre,
+            descripcion=t.descripcion,
+            video=t.video,
+            instruccion=t.instruccion,
+            duracion_user=simplificar_duracion(t.duracion_video) if t.duracion_video else None,
+            activo=t.activo
+        )
+        for t in tecnicas
+    ]

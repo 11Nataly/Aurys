@@ -31,7 +31,9 @@ class TecnicaAfrontamiento(Base):
 
     # Relaciones
     usuario = relationship("Usuario", back_populates="tecnicasafrontamiento")
-    promesas = relationship("Promesa", back_populates="tecnica_afrontamiento")
+    favoritos = relationship("TecnicaFavorita", back_populates="tecnica_afrontamiento", cascade="all, delete-orphan")
 
+
+    
     def __repr__(self):
         return f"<TecnicaAfrontamiento(id={self.id}, nombre='{self.nombre}', usuario_id={self.usuario_id})>"
