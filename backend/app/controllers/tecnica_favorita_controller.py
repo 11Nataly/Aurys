@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -19,16 +19,17 @@ router = APIRouter(
 # ----------------------
 # Agregar técnica favorita
 # ----------------------
-@router.post("/", response_model=TecnicaFavoritaResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED)
 def agregar_favorito(
     favorita: TecnicaFavoritaCreate,
     db: Session = Depends(get_db)
 ):
     nueva = marcar_favorita(db, favorita)
-    return TecnicaFavoritaResponse(
-        tecnica_id=nueva.tecnica_id,
-        usuario_id=nueva.usuario_id
-    )
+    return {
+        "message": "Técnica marcada como favorita",
+        "usuario_id": nueva.usuario_id,
+        "tecnica_id": nueva.tecnica_id
+    }
 
 
 # ----------------------
@@ -40,7 +41,12 @@ def eliminar_favorito(
     tecnica_id: int,
     db: Session = Depends(get_db)
 ):
-    return quitar_favorita(db, usuario_id, tecnica_id)
+    quitar_favorita(db, usuario_id, tecnica_id)
+    return {
+        "message": "Técnica eliminada de favoritos",
+        "usuario_id": usuario_id,
+        "tecnica_id": tecnica_id
+    }
 
 
 # ----------------------

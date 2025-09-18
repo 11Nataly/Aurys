@@ -50,7 +50,7 @@ def quitar_favorita(db: Session, usuario_id: int, tecnica_id: int):
     db.commit()
     return {"message": "Técnica eliminada de favoritos."}
 
-
+    
 def listar_favoritas(db: Session, usuario_id: int):
     """
     Retorna las técnicas que el usuario marcó como favoritas,
@@ -58,36 +58,7 @@ def listar_favoritas(db: Session, usuario_id: int):
     """
     return (
         db.query(TecnicaAfrontamiento)
-        .join(TecnicaFavorita, TecnicaAfrontamiento.id == TecnicaFavorita.tecnica_id)
+        .join(TecnicaFavorita, TecnicaFavorita.tecnica_id == TecnicaAfrontamiento.id)
         .filter(TecnicaFavorita.usuario_id == usuario_id)
         .all()
     )
-    
-def listar_favoritas(db: Session, usuario_id: int):
-    """
-    Retorna las técnicas que el usuario marcó como favoritas,
-    como un diccionario planno
-    haciendo JOIN con TecnicaAfrontamiento.
-    """
-    favoritas = (
-        db.query(TecnicaFavorita, TecnicaAfrontamiento)
-        .join(TecnicaAfrontamiento, TecnicaFavorita.tecnica_id == TecnicaAfrontamiento.id)
-        .filter(TecnicaFavorita.usuario_id == usuario_id)
-        .all()
-    )
-    return [
-        {
-            "id": tecnica.id,
-            "usuario_id": fav.usuario_id,
-            "nombre": tecnica.nombre,
-            "descripcion": tecnica.descripcion,
-            "video": tecnica.video,
-            "instruccion": tecnica.instruccion,
-            "calificacion": getattr(tecnica, "calificacion", None),  # si existe
-            "duracion_user": tecnica.duracion_user,
-            "activo": tecnica.activo,
-        }
-        for fav, tecnica in favoritas
-    ]
-    
-    
