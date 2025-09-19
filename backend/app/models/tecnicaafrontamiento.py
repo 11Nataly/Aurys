@@ -1,4 +1,4 @@
-# models/tecnicaafrontamiento.py
+# app.maodels/tecnicaafrontamiento.py
 from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -32,7 +32,7 @@ class TecnicaAfrontamiento(Base):
     # Relaciones
     usuario = relationship("Usuario", back_populates="tecnicasafrontamiento")
     favoritos = relationship("TecnicaFavorita", back_populates="tecnica_afrontamiento", cascade="all, delete-orphan")
-
+    calificaciones = relationship("TecnicaCalificacion", back_populates="tecnica_afrontamiento", cascade="all, delete-orphan")
 
     
     def __repr__(self):
