@@ -11,6 +11,7 @@ from app.controllers import diario_controllers
 from app.controllers import tecnica_favorita_controller
 from app.controllers import tecnica_calificacion_controllers
 
+
 app = FastAPI()
 
 app.add_middleware(
@@ -24,14 +25,19 @@ app.add_middleware(
 
 
 # Incluye los routers de tus controladores
+# usuario
 app.include_router(usuario_controller.router)
 app.include_router(rol_controllers.router)
 app.include_router(envio_correo_contrasena.router)
+
+# Controllers de la función tecnicas de afrontamiento
 app.include_router(tecnica_controller.router)
 app.include_router(video_controller.router)
-app.include_router(diario_controllers.router)
 app.include_router(tecnica_favorita_controller.router)
 app.include_router(tecnica_calificacion_controllers.router)
+
+app.include_router(diario_controllers.router)
+
 
 @app.get("/")
 def read_root():
