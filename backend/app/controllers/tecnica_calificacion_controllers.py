@@ -10,10 +10,12 @@ from app.services import tecnica_calificacion_service as service
 
 router = APIRouter(prefix="/calificaciones", tags=["Calificaciones"])
 
+# Este endpoint sirve para calificar y modificar la calificación de una técnica
 @router.post("/", response_model=TecnicaCalificacionResponse)
 def calificar_tecnica(calificacion_data: TecnicaCalificacionCreate, db: Session = Depends(get_db)):
     return service.crear_o_actualizar_calificacion(db, calificacion_data)
 
+# ESte endpoint consulta una técnica de un usuario
 @router.get("/{usuario_id}/{tecnica_id}", response_model=TecnicaCalificacionResponse)
 def obtener_calificacion(usuario_id: int, tecnica_id: int, db: Session = Depends(get_db)):
     return service.obtener_calificacion_usuario(db, usuario_id, tecnica_id)

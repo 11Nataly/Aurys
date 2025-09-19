@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional,  List
 
 # -------------------------------
 # DTOs para Técnicas de Afrontamiento
@@ -55,11 +55,30 @@ class TecnicaResponseDTO(BaseModel):
         from_attributes = True
 
 
+
 class TecnicaUpdateVideoDTO(BaseModel):
     id: int  # ID de la técnica para actualizar el video
     video: str
 
+# -------------------------------
+# DTO para devolver las tecnicas con calificacion y favoritos (interfaz)
+# -------------------------------
+class TecnicaBaseDTO(BaseModel):
+    id: int
+    nombre: str
+    descripcion: Optional[str] = None
+    video: Optional[str] = None
+    instruccion: Optional[str] = None
+    duracion: Optional[str] = None
 
+    class Config:
+        from_attributes = True
+
+
+class TecnicaConEstadoResponseDTO(TecnicaBaseDTO):
+    calificacion: Optional[int] = None
+    favorita: bool = False
+    
 # -------------------------------
 # DTOs para Calificación
 # -------------------------------
