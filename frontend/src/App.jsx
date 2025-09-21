@@ -5,6 +5,8 @@ import Login from "./InicioSesion/InicioSesion";
 import Register from "./Registro/Registro";
 import LandingPage from "./LandingPage/LandingPage";
 import Admin from "./Admin/pages/Admin";
+import RecuperarContraseña from "./InicioSesion/RecuperarContraseña"; // Importa el componente tempralmente para provar  se tiene que quitar
+import  RegistroExitoso from "./Registro/RegistroExitoso"; // Importa el componente tempralmente para provar  se tiene que quitar
 
 export default function App() {
   return (
@@ -19,6 +21,9 @@ export default function App() {
         {/* Login y Registro */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+         <Route path="/ver-recuperar" element={<RecuperarContraseña />} />
+         <Route path="/ver-registroexitoso" element={<RegistroExitoso />} />
         
         {/* Admin */}
         <Route path="/admin" element={<Admin />} />
