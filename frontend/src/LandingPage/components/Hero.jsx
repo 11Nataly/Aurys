@@ -1,5 +1,6 @@
 //src/components/Hero/Hero.jsx
 import './Hero.css';
+import imagenAurys from './images/imagenaurys.png';
 
 const Hero = () => {
   return (
@@ -13,15 +14,16 @@ const Hero = () => {
             acogedor, lleno de mensajes positivos y recursos que te recuerdan que siempre 
             hay un nuevo comienzo.
           </p>
-          <div className="hero-buttons">
-            <button className="btn-primary">Comenzar ahora</button>
-            <button className="btn-secondary">Explorar más</button>
+          <div className="hero-decoration">
+            <div className="decoration-item"></div>
+            <div className="decoration-item"></div>
+            <div className="decoration-item"></div>
           </div>
         </div>
         
         <div className="hero-image">
           <img 
-            src="/src/assets/images/imagentexto.jpeg" 
+            src={imagenAurys} 
             alt="Aurys - Bienestar emocional"
           />
         </div>

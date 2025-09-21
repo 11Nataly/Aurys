@@ -1,0 +1,42 @@
+/* Reset básico para márgenes y padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.landing-page {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Asegurar que el contenido no quede oculto detrás del header fijo */
+main {
+  padding-top: 80px; /* Ajusta según la altura de tu header */
+}
+
+/* Estilos para el contenedor consistente */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+  
+  main {
+    padding-top: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 1rem;
+  }
+}

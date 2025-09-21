@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import fondo from './imagenfondo.jpeg'; // ✅ Importamos la imagen
 import './RecuperarContraseña.css';
 
 const RecuperarContrasenaCard = () => {
@@ -54,7 +53,7 @@ const RecuperarContrasenaCard = () => {
       setTimeout(() => {
         setFormData({
           nuevaContrasena: '',
-          confirmarContrasena: ''
+          confirmarContraseña: ''
         });
         setIsSubmitted(false);
       }, 3000);
@@ -64,16 +63,7 @@ const RecuperarContrasenaCard = () => {
   };
 
   return (
-    <div 
-      className="recuperar-contrasena-container"
-      style={{
-        backgroundImage: `url(${fondo})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        minHeight: '100vh',
-      }}
-    >
+    <div className="recuperar-contrasena-container">
       <div className="recuperar-contrasena-card">
         <h2 className="recuperar-contrasena-title">Recuperar Contraseña</h2>
         

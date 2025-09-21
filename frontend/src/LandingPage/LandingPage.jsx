@@ -1,16 +1,18 @@
 // src/LandingPage/LandingPage.jsx
-import Header from "../LandingPage/components/Header";
-import Hero from "../LandingPage/components/Hero";
-import Benefits from "../LandingPage/components/Benefits";
-import Footer from "../LandingPage/components/Footer";
-
+import Header from "./components/Header";
+import Hero from "./components/Hero";
+import Benefits from "./components/Benefits";
+import Footer from "./components/Footer";
+import './LandingPage.css';
 
 function LandingPage() {
   return (
-    <div className="App">
+    <div className="landing-page">
       <Header />
-      <Hero />
-      <Benefits />
+      <main>
+        <Hero />
+        <Benefits />
+      </main>
       <Footer />
     </div>
   );
