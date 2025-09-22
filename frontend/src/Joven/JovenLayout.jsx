@@ -33,8 +33,11 @@ export default function JovenLayout() {
               <Route path="diario" element={<Diario />} />
               <Route path="afrontamiento" element={<Afrontamiento />} />
               <Route path="kit-emergencia" element={<KitEmergencia />} />
+              <Route path="kit-emergencia/afrontamiento" element={<Afrontamiento />} /> {/* Nueva ruta */}
               <Route path="promesas" element={<Promesas />} />
             </Routes>
+
+            
           </main>
         </div>
       </div>

@@ -109,3 +109,42 @@
     height: 20px;
   }
 }
+
+/* Agrega esto al final de header.css */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  margin-left: 2rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.breadcrumb-item {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumb-item:hover {
+  color: white;
+}
+
+.breadcrumb-item.active {
+  color: white;
+  font-weight: 500;
+}
+
+.breadcrumb-separator {
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0.3rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .breadcrumb {
+    margin-left: 1rem;
+    font-size: 0.8rem;
+    display: none; /* Ocultar en móviles para ahorrar espacio */
+  }
+}

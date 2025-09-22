@@ -30,7 +30,7 @@ body.agm-modal-open {
 
 /* Contenido del modal */
 .agm-modal-content {
-  background: #fff;
+  background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   display: flex;
@@ -40,8 +40,8 @@ body.agm-modal-open {
 }
 
 .agm-modal-header {
-  background: linear-gradient(135deg, #4a6bdf, #3b5ecc);
-  color: white;
+  background: linear-gradient(135deg, #848ddb, #4840c2);
+  color: #ffffff;
   padding: 1.2rem 1.5rem;
   display: flex;
   justify-content: space-between;
@@ -57,6 +57,7 @@ body.agm-modal-open {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  color: #ffffff;
 }
 
 .agm-close {
@@ -64,7 +65,7 @@ body.agm-modal-open {
   border: none;
   font-size: 1.5rem;
   font-weight: bold;
-  color: white;
+  color: #ffffff;
   cursor: pointer;
   padding: 0;
   line-height: 1;
@@ -80,6 +81,7 @@ body.agm-modal-open {
   padding: 1.5rem;
   text-align: left;
   overflow-y: auto;
+  background-color: #ffffff;
 }
 
 .agm-form-group {
@@ -90,7 +92,7 @@ body.agm-modal-open {
   display: block;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: #2d3748;
+  color: #000000;
   text-align: left;
   font-size: 0.95rem;
 }
@@ -100,15 +102,15 @@ body.agm-modal-open {
   padding: 0.75rem;
   border-radius: 6px;
   border: 1px solid #e2e8f0;
-  background-color: #fff;
+  background-color: #ffffff;
   font-size: 0.95rem;
   transition: border 0.2s ease-in-out, box-shadow 0.2s;
-  color: #2d3748;
+  color: #000000;
 }
 
 .agm-form-control:focus {
-  border-color: #4a6bdf;
-  box-shadow: 0 0 0 3px rgba(74, 107, 223, 0.15);
+  border-color: #848ddb;
+  box-shadow: 0 0 0 3px rgba(132, 141, 219, 0.15);
   outline: none;
 }
 
@@ -125,7 +127,7 @@ body.agm-modal-open {
 
 .agm-duration-separator {
   font-weight: 600;
-  color: #4a6bdf;
+  color: #4840c2;
   font-size: 1.1rem;
 }
 
@@ -156,7 +158,7 @@ body.agm-modal-open {
 
 .agm-btn-secondary {
   background-color: #a0aec0;
-  color: white;
+  color: #ffffff;
 }
 
 .agm-btn-secondary:hover {
@@ -164,17 +166,18 @@ body.agm-modal-open {
 }
 
 .agm-btn-primary {
-  background-color: #4a6bdf;
-  color: white;
+  background-color: #4840c2;
+  color: #ffffff;
 }
 
 .agm-btn-primary:hover:not(:disabled) {
-  background-color: #3b5ecc;
+  background-color: #3a33a8;
 }
 
 .agm-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  background-color: #a0aec0;
 }
 
 .agm-form-control.agm-is-invalid {

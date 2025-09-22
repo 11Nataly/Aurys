@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ConfirmModal from './ConfirmModal';
+import './UserManagement.css';
 
 const UserManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -30,13 +31,13 @@ const UserManagement = () => {
   );
 
   return (
-    <div id="users">
-      <div className="card-header">
-        <h3 className="card-title">Gestión de Usuarios</h3>
-        <div className="form-group" style={{marginBottom: 0, width: '300px'}}>
+    <div className="um-container">
+      <div className="um-header">
+        <h3 className="um-title">Gestión de Usuarios</h3>
+        <div className="um-search-container">
           <input 
             type="text" 
-            className="form-control" 
+            className="um-search-input" 
             placeholder="Buscar usuario..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -44,7 +45,7 @@ const UserManagement = () => {
         </div>
       </div>
 
-      <table className="admin-table">
+      <table className="um-table">
         <thead>
           <tr>
             <th>Usuario</th>
@@ -61,20 +62,20 @@ const UserManagement = () => {
               <td>{user.email}</td>
               <td>{user.registerDate}</td>
               <td>
-                <span className={`badge ${user.status === 'active' ? 'badge-success' : 'badge-danger'}`}>
+                <span className={`um-status ${user.status === 'active' ? 'um-status-active' : 'um-status-inactive'}`}>
                   {user.status === 'active' ? 'Activo' : 'Inactivo'}
                 </span>
               </td>
               <td>
                 {user.status === 'active' ? (
                   <button 
-                    className="btn btn-sm btn-danger"
+                    className="um-action-btn um-action-btn-danger"
                     onClick={() => handleDeactivate(user)}
                   >
                     <i className="fas fa-user-slash"></i> Desactivar
                   </button>
                 ) : (
-                  <button className="btn btn-sm btn-success">
+                  <button className="um-action-btn um-action-btn-success">
                     <i className="fas fa-user-check"></i> Activar
                   </button>
                 )}

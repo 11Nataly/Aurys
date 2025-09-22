@@ -81,7 +81,6 @@ const GuideManagement = () => {
   };
 
   const handleAddGuide = (newGuide) => {
-    // Generar un ID único para la nueva guía
     const newId = guides.length > 0 ? Math.max(...guides.map(g => g.id)) + 1 : 1;
     const guideToAdd = {
       ...newGuide,
@@ -112,12 +111,10 @@ const GuideManagement = () => {
   const formatDuration = (duration) => {
     if (!duration) return '00:00:00';
     
-    // Si ya está en formato HH:MM:SS, devolverlo tal cual
     if (typeof duration === 'string' && duration.includes(':')) {
       return duration;
     }
     
-    // Si es un objeto con horas, minutos y segundos, formatearlo
     if (typeof duration === 'object') {
       const { durationHours = 0, durationMinutes = 0, durationSeconds = 0 } = duration;
       return `${String(durationHours).padStart(2, '0')}:${String(durationMinutes).padStart(2, '0')}:${String(durationSeconds).padStart(2, '0')}`;
@@ -127,15 +124,15 @@ const GuideManagement = () => {
   };
 
   return (
-    <div className="guide-management-container">
-      <div className="guide-header">
-        <h3 className="guide-title">Guías de Afrontamiento</h3>
-        <button className="btn btn-primary" onClick={() => setShowAddModal(true)}>
+    <div className="gm-container">
+      <div className="gm-header">
+        <h3 className="gm-title">Guías de Afrontamiento</h3>
+        <button className="gm-add-btn" onClick={() => setShowAddModal(true)}>
           <i className="fas fa-plus"></i> Agregar Guía
         </button>
       </div>
 
-      <table className="guide-table">
+      <table className="gm-table">
         <thead>
           <tr>
             <th>Título</th>
@@ -149,17 +146,19 @@ const GuideManagement = () => {
             <tr key={guide.id}>
               <td>{guide.title}</td>
               <td>{guide.description}</td>
-              <td>{formatDuration(guide)}</td>
               <td>
-                <div className="action-buttons">
+                <span className="gm-duration">{formatDuration(guide)}</span>
+              </td>
+              <td>
+                <div className="gm-action-buttons">
                   <button 
-                    className="btn btn-sm btn-warning"
+                    className="gm-action-btn gm-action-btn-warning"
                     onClick={() => handleEdit(guide)}
                   >
                     <i className="fas fa-edit"></i> Editar
                   </button>
                   <button 
-                    className="btn btn-sm btn-danger"
+                    className="gm-action-btn gm-action-btn-danger"
                     onClick={() => handleDelete(guide)}
                   >
                     <i className="fas fa-trash"></i> Eliminar
@@ -198,8 +197,7 @@ const GuideManagement = () => {
         onClose={() => setShowDeleteModal(false)}
         onConfirm={confirmDelete}
         title="Confirmar Eliminación"
-        icon="exclamation-triangle"
-        message={`¿Estás seguro de que deseas eliminar la guía "${selectedGuide?.title}"? Esta acción no se puede deshacer.`}
+        message={`¿Estás seguro de que deseas eliminar la guía "${selectedGuide?.title}"?`}
         confirmText="Eliminar"
       />
     </div>

@@ -17,15 +17,11 @@ body {
 
 .diario-container {
     max-width: 1200px;
-    margin: 0 auto;
-    padding-top: 100px;
-    position: relative;
-    /* SOMBRADO AÑADIDO */
+    margin: 40px auto; /* MARGEN SUPERIOR AUMENTADO de 20px a 40px */
+    padding: 40px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
     border-radius: 16px;
     background: #ffffff;
-    padding: 40px;
-    margin-top: 20px;
     margin-bottom: 40px;
 }
 
@@ -37,16 +33,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    background: transparent;
-    color: #000000;
-    padding: 0;
     margin-bottom: 30px;
     flex-wrap: wrap;
     gap: 20px;
-}
-
-.diario-titulo {
-    flex: 1 1 auto;
 }
 
 .diario-titulo h1 {
@@ -66,7 +55,6 @@ body {
     display: flex;
     gap: 12px;
     align-items: flex-start;
-    flex-shrink: 0;
 }
 
 .btn-agregar,
@@ -75,25 +63,16 @@ body {
     border-radius: 20px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
     font-size: 1rem;
     border: 2px solid #4840c2;
     background: #ffffff;
     color: #4840c2;
-    white-space: nowrap;
 }
 
 .btn-agregar:hover:not(:disabled),
 .btn-historial:hover {
     background: #4840c2;
     color: #ffffff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(72, 64, 194, 0.2);
-}
-
-.btn-agregar:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
 }
 
 .btn-historial.activo {
@@ -102,7 +81,7 @@ body {
 }
 
 /* =========================================
-   CONTENIDO: bloque con sombreado y márgenes
+   CONTENIDO
    ========================================= */
 
 .diario-contenido {
@@ -132,11 +111,6 @@ body {
     margin-bottom: 25px;
 }
 
-.componente-body {
-    margin: 30px 0;
-    flex: 1;
-}
-
 .input-titulo {
     width: 100%;
     padding: 20px;
@@ -146,13 +120,6 @@ body {
     font-weight: 600;
     color: #2c3e50;
     margin-bottom: 25px;
-    transition: border-color 0.3s;
-}
-
-.input-titulo:focus {
-    border-color: #6a11cb;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
 }
 
 .textarea-contenido {
@@ -166,14 +133,7 @@ body {
     resize: vertical;
     min-height: 400px;
     font-family: inherit;
-    transition: border-color 0.3s;
     margin-bottom: 20px;
-}
-
-.textarea-contenido:focus {
-    border-color: #6a11cb;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
 }
 
 .componente-footer {
@@ -201,9 +161,7 @@ body {
     border-radius: 25px;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
     font-size: 1.1rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-cancelar {
@@ -212,29 +170,14 @@ body {
     border: 1px solid #e74c3c;
 }
 
-.btn-cancelar:hover {
-    background-color: #fef0ef;
-}
-
 .btn-guardar {
     background-color: #6a11cb;
     color: white;
     border: none;
 }
 
-.btn-guardar:hover:not(:disabled) {
-    background-color: #5a0fb8;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.btn-guardar:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
 /* =========================================
-   EDITOR DE DIARIO (VISTA LECTURA)
+   EDITOR DE DIARIO
    ========================================= */
 
 .editor-diario-vacio {
@@ -250,13 +193,6 @@ body {
     margin-bottom: 20px;
 }
 
-.mensaje-bienvenida p {
-    font-size: 1.2rem;
-    max-width: 700px;
-    margin: 0 auto 40px;
-    line-height: 1.6;
-}
-
 .btn-comenzar {
     padding: 16px 40px;
     background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
@@ -265,19 +201,8 @@ body {
     border-radius: 25px;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
     font-size: 1.1rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
-}
-
-.btn-comenzar:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.entrada-diario-editor {
-    padding: 0;
 }
 
 .editor-header {
@@ -285,7 +210,6 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 30px;
-    position: relative;
     padding-bottom: 20px;
     border-bottom: 1px solid #f0f0f0;
 }
@@ -296,7 +220,6 @@ body {
     margin: 0 0 15px 0;
     font-weight: 700;
     flex: 1;
-    padding-right: 60px;
 }
 
 .editor-fecha {
@@ -304,12 +227,6 @@ body {
     font-style: italic;
     margin-bottom: 20px;
     font-size: 1.1rem;
-}
-
-.entrada-acciones {
-    position: absolute;
-    top: 0;
-    right: 0;
 }
 
 .btn-editar {
@@ -322,15 +239,7 @@ body {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s;
     color: #6a11cb;
-    font-size: 1.2rem;
-}
-
-.btn-editar:hover {
-    background: #6a11cb;
-    color: white;
-    transform: scale(1.05);
 }
 
 .editor-contenido {
@@ -343,7 +252,7 @@ body {
 }
 
 /* =========================================
-   DIV ENTRADA-DIARIO CON SOMBRA Y MÁRGENES
+   ENTRADA DIARIO
    ========================================= */
 
 .entrada-diario {
@@ -353,10 +262,6 @@ body {
     padding: 40px;
     margin: 25px 0 40px;
 }
-
-/* =========================================
-   EVITAR DESBORDAMIENTO DE TEXTO
-   ========================================= */
 
 .entrada-texto {
     white-space: pre-line;
@@ -395,15 +300,8 @@ body {
     border: 1px solid #e0e0e0;
     border-radius: 20px;
     cursor: pointer;
-    transition: all 0.3s;
     color: #6a11cb;
     font-weight: 500;
-    font-size: 1rem;
-}
-
-.btn-volver:hover {
-    background: #6a11cb;
-    color: white;
 }
 
 .sin-entradas {
@@ -428,17 +326,10 @@ body {
     padding: 25px;
     border-left: 4px solid #6a11cb;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s, box-shadow 0.3s;
     position: relative;
     display: flex;
     flex-direction: column;
-    height: fit-content;
     margin: 15px 0;
-}
-
-.entrada-historial:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
 }
 
 .entrada-historial-header {
@@ -453,13 +344,11 @@ body {
     margin: 0;
     font-size: 1.4rem;
     flex: 1;
-    padding-right: 50px;
 }
 
 .entrada-historial-header span {
     color: #7f8c8d;
     font-size: 0.95rem;
-    white-space: nowrap;
 }
 
 .entrada-historial-acciones {
@@ -480,19 +369,7 @@ body {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s;
     color: #6a11cb;
-    font-size: 1.1rem;
-}
-
-.entrada-historial-acciones button:hover {
-    background: #6a11cb;
-    color: white;
-    transform: scale(1.05);
-}
-
-.entrada-historial-contenido {
-    flex: 1;
 }
 
 .entrada-historial-preview {
@@ -504,141 +381,126 @@ body {
 }
 
 /* =========================================
-   MÁRGENES ADICIONALES PARA SEPARACIÓN
+   RESPONSIVE - MEDIA QUERIES
    ========================================= */
 
-/* Espaciado entre secciones */
-.diario-container > * {
-    margin-bottom: 30px;
+@media (max-width: 1024px) {
+    .diario-container {
+        padding: 30px;
+        margin: 30px 15px; /* Margen superior mantenido en tablets */
+    }
+    
+    .diario-contenido {
+        padding: 35px;
+    }
+    
+    .lista-entradas {
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    }
 }
-
-/* Espaciado entre elementos dentro del contenido */
-.diario-contenido > * {
-    margin-bottom: 25px;
-}
-
-/* Espaciado para los últimos elementos */
-.diario-contenido > *:last-child {
-    margin-bottom: 0;
-}
-
-/* =========================================
-   RESPONSIVE
-   ========================================= */
 
 @media (max-width: 768px) {
     .diario-container {
-        padding: 25px 20px;
-        margin: 15px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Sombra más suave en móviles */
-        border-radius: 12px;
-        padding-top: 80px;
+        padding: 20px;
+        margin: 25px 10px; /* Margen superior mantenido en móviles */
     }
-
+    
     .diario-header {
         flex-direction: column;
-        gap: 20px;
-        padding: 20px;
-        margin-bottom: 25px;
+        text-align: center;
     }
-
+    
     .diario-botones-header {
-        width: 100%;
         justify-content: center;
+        width: 100%;
     }
-
-    .diario-titulo h1 {
-        font-size: 2.2rem;
-        text-align: center;
-    }
-
-    .diario-titulo p {
-        text-align: center;
-    }
-
+    
     .diario-contenido {
         padding: 25px;
-        margin: 20px 0 40px;
     }
-
-    .agregar-entrada-componente,
-    .entrada-diario-editor,
-    .historial-entradas {
-        padding: 0;
-    }
-
-    .editor-header {
-        flex-direction: column;
-    }
-
-    .entrada-acciones {
-        position: static;
-        margin-top: 20px;
-        align-self: flex-end;
-    }
-
-    .entrada-historial-header {
-        flex-direction: column;
-    }
-
-    .entrada-historial-header span {
-        margin-top: 8px;
-    }
-
+    
     .componente-footer {
         flex-direction: column;
     }
-
+    
     .botones-accion {
         flex-direction: column;
         width: 100%;
     }
-
-    .btn-cancelar,
-    .btn-guardar {
+    
+    .btn-cancelar, .btn-guardar {
         width: 100%;
-    }
-
-    .input-titulo {
-        font-size: 1.4rem;
     }
     
     .lista-entradas {
         grid-template-columns: 1fr;
-        margin: 20px 0;
     }
     
-    .entrada-diario {
-        padding: 25px;
-        margin: 20px 0 30px;
+    .historial-header {
+        flex-direction: column;
+        gap: 15px;
     }
     
-    .editor-contenido {
-        margin-top: 20px;
-        padding: 15px 0;
+    .btn-volver {
+        width: 100%;
+        text-align: center;
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
     .diario-container {
-        padding: 20px 15px;
-        margin: 10px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-        border-radius: 10px;
-        padding-top: 70px;
+        padding: 15px;
+        margin: 20px 5px; /* Margen superior mantenido en móviles pequeños */
     }
-
+    
+    .diario-titulo h1 {
+        font-size: 2rem;
+    }
+    
     .diario-contenido {
         padding: 20px;
-        margin: 15px 0 30px;
     }
     
-    .entrada-diario {
+    .input-titulo {
+        font-size: 1.4rem;
+        padding: 15px;
+    }
+    
+    .textarea-contenido {
+        padding: 18px;
+        min-height: 300px;
+        font-size: 1rem;
+    }
+    
+    .entrada-titulo {
+        font-size: 1.8rem;
+    }
+    
+    .entrada-historial {
         padding: 20px;
-        margin: 15px 0 25px;
     }
     
-    .diario-header {
-        margin-bottom: 20px;
+    .historial-entradas {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 360px) {
+    .diario-container {
+        padding: 10px;
+        margin: 15px 2px; /* Margen superior mantenido en dispositivos muy pequeños */
+    }
+    
+    .diario-titulo h1 {
+        font-size: 1.7rem;
+    }
+    
+    .diario-contenido {
+        padding: 15px;
+    }
+    
+    .btn-agregar, .btn-historial {
+        padding: 10px 15px;
+        font-size: 0.9rem;
     }
 }

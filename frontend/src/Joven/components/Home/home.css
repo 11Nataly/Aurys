@@ -1,396 +1,317 @@
-/* ===================================
-   🎯 VARIABLES Y ESTILOS GLOBALES
-   =================================== */
-:root {
-  --primary: #4840c2;
-  --primary-dark: #4840c2;
-  --secondary: #848ddb;
-  --accent: #848ddb;
-  --light: #ffffff;
-  --dark: #000000;
-  --success: #848ddb;
-  --card-bg: #ffffff;
-  --gradient-start: #848ddb;
-  --gradient-end: #4840c2;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-  --border-radius: 20px;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* src/Joven/components/Home/home.css */
 
-.home {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
-  padding: 2rem 1rem;
-}
-
-/* ===================================
-   🎯 CARTA DE BIENVENIDA MODERNA
-   =================================== */
-.welcome-card {
+/* Contenedor principal - MÁRGENES SUPERIOR E INFERIOR AUMENTADOS */
+.home-container {
+  padding: 0;
+  color: #000000;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto 4rem auto;
-  background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
-  border-radius: var(--border-radius);
-  padding: 3rem 2.5rem;
+  margin: 40px 0; /* Margen superior e inferior aumentado significativamente */
+}
+
+/* Carta de bienvenida */
+.welcome-card {
   display: flex;
   align-items: center;
-  gap: 2rem;
-  text-align: left;
-  box-shadow: var(--shadow-xl);
-  color: white;
-  position: relative;
-  overflow: hidden;
-}
-
-.welcome-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-  opacity: 0.3;
+  background: linear-gradient(135deg, #4840c2, #848ddb);
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 0 0 2.5rem 0; /* Margen inferior aumentado */
+  box-shadow: 0 4px 12px rgba(72, 64, 194, 0.2);
 }
 
 .welcome-icon {
-  font-size: 3rem;
-  color: white;
-  flex-shrink: 0;
-  z-index: 1;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 1rem;
-  border-radius: 50%;
-  backdrop-filter: blur(10px);
-}
-
-.welcome-text {
-  z-index: 1;
+  font-size: 2.5rem;
+  margin-right: 1rem;
 }
 
 .welcome-text h2 {
-  font-size: 2.8rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, #fff 0%, #e0e7ff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  text-align: left; /* Aseguramos alineación izquierda */
 }
 
 .welcome-text p {
-  font-size: 1.3rem;
-  color: rgba(255, 255, 255, 0.9);
-  line-height: 1.6;
-  font-weight: 400;
+  margin: 0;
+  opacity: 0.9;
+  text-align: left; /* Aseguramos alineación izquierda */
 }
 
-/* ===================================
-   📦 CONTENEDOR DE TARJETAS MODERNO
-   =================================== */
+/* Contenedor de tarjetas */
 .cards-container {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto 4rem auto;
+  margin-bottom: 3rem; /* Margen inferior aumentado */
 }
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-  gap: 2.5rem;
-  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem; /* Espacio entre tarjetas aumentado */
+  margin: 0 0 2.5rem 0; /* Margen inferior aumentado */
 }
 
+/* Tarjetas individuales - CONTENIDO JUSTIFICADO A LA IZQUIERDA */
 .card {
-  background: var(--card-bg);
-  border-radius: var(--border-radius);
-  padding: 2.5rem;
-  box-shadow: var(--shadow-lg);
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.8rem; /* Padding aumentado */
+  box-shadow: 0 4px 12px rgba(72, 64, 194, 0.1);
+  text-align: left; /* Cambiado de center a left */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #848ddb;
+  margin: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  transition: var(--transition);
-  border: 1px solid rgba(132, 141, 219, 0.2);
-  backdrop-filter: blur(10px);
-  position: relative;
-  overflow: hidden;
-}
-
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--primary), var(--accent));
+  align-items: flex-start; /* Alineación a la izquierda */
 }
 
 .card:hover {
-  box-shadow: var(--shadow-xl);
   transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(72, 64, 194, 0.15);
 }
 
 .card-icon {
-  font-size: 3rem;
-  color: var(--primary);
-  margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: 2.8rem; /* Tamaño de icono aumentado */
+  margin-bottom: 1.2rem; /* Espacio inferior aumentado */
+  align-self: flex-start; /* Icono alineado a la izquierda */
 }
 
 .card h3 {
-  font-size: 1.8rem;
-  color: var(--dark);
-  margin-bottom: 1.2rem;
-  font-weight: 600;
+  margin: 0 0 1.2rem 0; /* Margen inferior aumentado */
+  color: #4840c2;
+  font-size: 1.3rem; /* Tamaño de fuente aumentado */
+  text-align: left; /* Aseguramos alineación izquierda */
+  width: 100%; /* Aseguramos que ocupe todo el ancho */
 }
 
 .card p {
-  font-size: 1.1rem;
+  margin: 0 0 1.8rem 0; /* Margen inferior aumentado */
   color: #000000;
-  line-height: 1.7;
-  margin-bottom: 2rem;
-  font-weight: 400;
-  opacity: 0.8;
+  line-height: 1.6; /* Interlineado aumentado */
+  font-size: 1.05rem; /* Tamaño de fuente aumentado */
+  text-align: left; /* Aseguramos alineación izquierda */
+  width: 100%; /* Aseguramos que ocupe todo el ancho */
 }
 
 .card button {
-  align-self: flex-start;
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: white;
+  background: #4840c2;
+  color: #ffffff;
   border: none;
-  padding: 1rem 2rem;
-  border-radius: 50px;
-  font-weight: 600;
-  font-size: 1rem;
+  padding: 0.85rem 1.8rem; /* Padding aumentado */
+  border-radius: 8px;
   cursor: pointer;
-  transition: var(--transition);
-  box-shadow: var(--shadow-md);
-  position: relative;
-  overflow: hidden;
-}
-
-.card button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.card button:hover::before {
-  left: 100%;
+  font-weight: 600;
+  font-size: 1.05rem; /* Tamaño de fuente aumentado */
+  transition: background 0.3s ease;
+  align-self: flex-start; /* Botón alineado a la izquierda */
+  margin-top: auto; /* Empuja el botón hacia abajo si hay espacio */
 }
 
 .card button:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  background: #3a33a0;
 }
 
-/* ===================================
-   📞 SECCIÓN DE EMERGENCIA MODERNA
-   =================================== */
+/* Sección de emergencia */
 .emergency-section {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem;
-  background: var(--card-bg);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-lg);
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 2rem; /* Padding aumentado */
+  margin-bottom: 2.5rem; /* Margen inferior aumentado */
+  border: 1px solid #848ddb;
+  box-shadow: 0 4px 12px rgba(72, 64, 194, 0.1);
 }
 
 .emergency-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 2.5rem;
-  justify-content: center;
+  margin-bottom: 1.8rem; /* Margen inferior aumentado */
+  justify-content: flex-start; /* Aseguramos alineación izquierda */
 }
 
 .emergency-icon {
-  color: var(--primary);
+  font-size: 2.5rem; /* Tamaño de icono aumentado */
+  margin-right: 1rem; /* Margen derecho aumentado */
+  color: #4840c2;
 }
 
 .emergency-title {
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: var(--dark);
   margin: 0;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #4840c2;
+  font-size: 1.5rem; /* Tamaño de fuente aumentado */
+  text-align: left; /* Aseguramos alineación izquierda */
 }
 
-/* Estilos para la tabla minimal */
-.emergency-section .emergency-table-kit.minimal-version {
+/* Tabla de emergencia */
+.emergency-table-kit {
   width: 100%;
-  max-width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: var(--card-bg);
-  border-radius: 16px;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: var(--shadow-md);
-  font-size: 0.95rem;
+  box-shadow: 0 2px 8px rgba(72, 64, 194, 0.1);
+  margin: 0;
 }
 
-.emergency-section .emergency-table-kit.minimal-version th {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: white;
-  padding: 1.2rem 1.5rem;
-  text-align: left;
+.emergency-table-kit th,
+.emergency-table-kit td {
+  padding: 1.2rem; /* Padding aumentado */
+  text-align: left; /* Aseguramos alineación izquierda */
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.emergency-table-kit th {
+  background-color: #4840c2;
+  color: #ffffff;
   font-weight: 600;
-  font-size: 1rem;
-  border: none;
+  font-size: 1.1rem; /* Tamaño de fuente aumentado */
 }
 
-.emergency-section .emergency-table-kit.minimal-version td {
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid rgba(132, 141, 219, 0.3);
-  font-size: 0.9rem;
-  color: var(--dark);
-  transition: var(--transition);
-}
-
-.emergency-section .emergency-table-kit.minimal-version tr:last-child td {
+.emergency-table-kit tr:last-child td {
   border-bottom: none;
 }
 
-.emergency-section .emergency-table-kit.minimal-version tr:nth-child(even) {
-  background-color: rgba(132, 141, 219, 0.1);
+.emergency-table-kit tr:hover {
+  background-color: #f0f2ff;
 }
 
-.emergency-section .emergency-table-kit.minimal-version tr:hover td {
-  background-color: rgba(132, 141, 219, 0.2);
-  transform: scale(1.01);
+.emergency-table-kit td {
+  font-size: 1.05rem; /* Tamaño de fuente aumentado */
 }
 
-/* ===================================
-   📱 RESPONSIVE MODERNO
-   =================================== */
+.emergency-table-kit td:nth-child(2) {
+  font-weight: 600;
+  color: #4840c2;
+}
+
+/* Media Queries para responsividad DENTRO del layout */
 @media (max-width: 1024px) {
-  .welcome-card {
-    flex-direction: column;
-    text-align: center;
-    padding: 2.5rem 2rem;
-  }
-  
-  .welcome-text h2 {
-    font-size: 2.2rem;
+  .home-container {
+    margin: 30px 0; /* Margen reducido en tablets */
   }
   
   .cards {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .welcome-card {
+    padding: 1.5rem;
+    margin: 0 0 2rem 0;
+  }
+  
+  .card {
+    padding: 1.5rem;
   }
 }
 
 @media (max-width: 768px) {
-  .home {
-    padding: 1.5rem 1rem;
+  .home-container {
+    margin: 25px 0; /* Margen reducido en móviles */
+  }
+  
+  .cards {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
   
   .welcome-card {
-    padding: 2rem 1.5rem;
-    margin-bottom: 3rem;
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+    margin: 0 0 2rem 0;
   }
   
-  .welcome-text h2 {
-    font-size: 1.8rem;
+  .welcome-icon {
+    margin-right: 0;
+    margin-bottom: 1rem;
   }
   
+  .welcome-text h2,
   .welcome-text p {
-    font-size: 1.1rem;
-  }
-  
-  .card {
-    padding: 2rem;
+    text-align: center; /* Centrado en móviles para la bienvenida */
   }
   
   .emergency-section {
     padding: 1.5rem;
+    margin-bottom: 2rem;
   }
   
-  .emergency-title {
-    font-size: 1.8rem;
+  .emergency-table-kit {
+    display: block;
+    overflow-x: auto;
   }
   
-  .emergency-section .emergency-table-kit.minimal-version th,
-  .emergency-section .emergency-table-kit.minimal-version td {
-    padding: 0.8rem 1rem;
-    font-size: 0.85rem;
+  .emergency-table-kit th,
+  .emergency-table-kit td {
+    padding: 1rem;
   }
 }
 
 @media (max-width: 480px) {
+  .home-container {
+    margin: 20px 0; /* Margen mínimo en móviles pequeños */
+  }
+  
   .welcome-card {
-    padding: 1.5rem;
+    padding: 1.2rem;
+    margin: 0 0 1.5rem 0;
+  }
+  
+  .welcome-icon {
+    font-size: 2.2rem;
   }
   
   .welcome-text h2 {
-    font-size: 1.6rem;
+    font-size: 1.3rem;
   }
   
   .card {
-    padding: 1.5rem;
+    padding: 1.2rem;
+    margin: 0 0 1.2rem 0;
+  }
+  
+  .card-icon {
+    font-size: 2.2rem;
+  }
+  
+  .card h3 {
+    font-size: 1.2rem;
+  }
+  
+  .emergency-section {
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
   }
   
   .emergency-header {
     flex-direction: column;
     text-align: center;
-    gap: 0.5rem;
+  }
+  
+  .emergency-icon {
+    margin-right: 0;
+    margin-bottom: 0.8rem;
+    font-size: 2rem;
+  }
+  
+  .emergency-title {
+    font-size: 1.3rem;
+  }
+  
+  .emergency-table-kit th,
+  .emergency-table-kit td {
+    padding: 0.8rem;
+    font-size: 0.95rem;
+  }
+  
+  .emergency-table-kit th {
+    font-size: 1rem;
   }
 }
 
-/* ===================================
-   🎯 EFECTOS ESPECIALES
-   =================================== */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .card button {
+    transition: none;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.welcome-card {
-  animation: fadeInUp 0.8s ease-out;
-}
-
-.card {
-  animation: fadeInUp 0.8s ease-out 0.2s both;
-}
-
-.emergency-section {
-  animation: fadeInUp 0.8s ease-out 0.4s both;
-}
-
-/* Efecto de partículas sutiles en el fondo */
-.home::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: 
-    radial-gradient(circle at 20% 20%, rgba(72, 64, 194, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(132, 141, 219, 0.1) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: -1;
 }
