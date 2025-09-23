@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, Lock } from "lucide-react";
 import { register } from "../services/authService"; 
+import '../styles/register.css'
 
 export default function Register() {
   const navigate = useNavigate();
@@ -15,16 +16,12 @@ export default function Register() {
     setError("");
 
     try {
-      // Llamamos al endpoint de registro
       const data = await register({ nombre, correo, contrasena });
 
-      // Si el backend devuelve un token
       if (data.access_token) {
         localStorage.setItem("nombre", data.nombre);
         localStorage.setItem("correo", data.correo);
         localStorage.setItem("contrasena", data.contrasena);
-
-        // Si solo devuelve un "Usuario creado"
         navigate("/login");
       }
     } catch (err) {
@@ -33,74 +30,61 @@ export default function Register() {
   };
 
   return (
-    <div className="md:w-1/2 bg-green-500 flex items-center justify-center p-4 pl-16">
-      <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-sm md:-translate-x-6 my-6 py-15">
-        <h2 className="text-xl font-bold text-gray-800 text-center mb-2">
-          Crear cuenta
-        </h2>
-        <p className="text-center text-gray-600 mb-4 text-sm">
-          Regístrate para comenzar
-        </p>
+    <div className="register-container">
+      <div className="register-card">
+        <h2 className="register-title">Crear cuenta</h2>
+        <p className="register-subtitle">Regístrate para comenzar</p>
 
-        <form className="space-y-3" onSubmit={handleSubmit}>
+        <form className="register-form" onSubmit={handleSubmit}>
           {/* Nombre */}
-          <div className="flex items-center border border-gray-300 rounded-full px-4 py-2">
+          <div className="input-group">
             <input
               type="text"
               placeholder="Nombre completo"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
-              className="flex-1 outline-none text-sm"
               required
             />
-            <User className="text-gray-400 w-5 h-5 ml-2" />
+            <User className="input-icon" />
           </div>
 
           {/* Correo */}
-          <div className="flex items-center border border-gray-300 rounded-full px-4 py-2">
+          <div className="input-group">
             <input
               type="email"
               placeholder="Correo electrónico"
               value={correo}
               onChange={(e) => setCorreo(e.target.value)}
-              className="flex-1 outline-none text-sm"
               required
             />
-            <Mail className="text-gray-400 w-5 h-5 ml-2" />
+            <Mail className="input-icon" />
           </div>
 
           {/* Contraseña */}
-          <div className="flex items-center border border-gray-300 rounded-full px-4 py-2">
+          <div className="input-group">
             <input
               type="password"
               placeholder="Contraseña"
               value={contrasena}
               onChange={(e) => setContrasena(e.target.value)}
-              className="flex-1 outline-none text-sm"
               required
             />
-            <Lock className="text-gray-400 w-5 h-5 ml-2" />
+            <Lock className="input-icon" />
           </div>
 
-          {error && <p className="text-red-500 text-xs text-center">{error}</p>}
+          {error && <p className="error-message">{error}</p>}
 
-          <button
-            type="submit"
-            className="w-full bg-green-500 text-white py-2 rounded-full hover:bg-green-600 transition font-medium text-sm"
-          >
+          <button type="submit" className="register-button">
             Registrarse
           </button>
         </form>
 
-        <p className="text-center text-xs text-gray-600 mt-4">
+        <div className="register-footer">
           ¿Ya tienes cuenta?{" "}
-          <a
-            href="/login"
-            className="text-blue-500 font-medium hover:underline"
-          >
+          <a href="/login" className="login-link">
             Inicia sesión
           </a>
-        </p>
+        </div>
       </div>
     </div>
   );

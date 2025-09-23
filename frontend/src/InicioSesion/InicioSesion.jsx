@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mail, Lock } from "lucide-react";
 import { login } from "../services/authService";
+import "../styles/login.css"
 
 export default function Login() {
   const navigate = useNavigate();
@@ -15,20 +16,17 @@ export default function Login() {
 
     try {
       const data = await login(correo, contrasena);
-      // Backend devuelve: { id, access_token, token_type, nombre_rol }
 
-      // Guardar sesión en localStorage
       localStorage.setItem("token", data.access_token);
-      localStorage.setItem("id_usuario", data.id); // 👈 Guardamos ID real
+      localStorage.setItem("id_usuario", data.id);
       localStorage.setItem("rol", data.nombre_rol);
 
-      // Redirigir según rol
       if (data.nombre_rol === "usuario") {
         navigate("/joven");
       } else if (data.nombre_rol === "administrador") {
         navigate("/admin");
       } else {
-        navigate("/"); // fallback
+        navigate("/");
       }
     } catch (err) {
       setError("Credenciales incorrectas o error de servidor");
@@ -36,73 +34,54 @@ export default function Login() {
   };
 
   return (
-    <div className="md:w-1/2 bg-green-500 flex items-center justify-center p-4 pl-16">
-      <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-sm md:-translate-x-6 my-6 py-15">
-        <h2 className="text-xl font-bold text-gray-800 text-center mb-2">
-          Inicia sesión
-        </h2>
-        <p className="text-center text-gray-600 mb-4 text-sm">
-          Accede a tu cuenta para continuar
-        </p>
+    <div className="login-container">
+      <div className="login-box">
+        <h2 className="login-title">Inicia sesión</h2>
+        <p className="login-subtitle">Accede a tu cuenta para continuar</p>
 
-        <form className="space-y-3" onSubmit={handleSubmit}>
-          {/* Campo correo */}
-          <div className="flex items-center border border-gray-300 rounded-full px-4 py-2">
+        <form className="login-form" onSubmit={handleSubmit}>
+          {/* Correo */}
+          <div className="input-group">
             <input
               type="email"
               placeholder="Correo electrónico"
               value={correo}
               onChange={(e) => setCorreo(e.target.value)}
-              className="flex-1 outline-none text-sm"
               required
             />
-            <Mail className="text-gray-400 w-5 h-5 ml-2" />
+            <Mail className="input-icon" />
           </div>
 
-          {/* Campo contraseña */}
-          <div className="flex items-center border border-gray-300 rounded-full px-4 py-2">
+          {/* Contraseña */}
+          <div className="input-group">
             <input
               type="password"
               placeholder="Contraseña"
               value={contrasena}
               onChange={(e) => setContrasena(e.target.value)}
-              className="flex-1 outline-none text-sm"
               required
             />
-            <Lock className="text-gray-400 w-5 h-5 ml-2" />
+            <Lock className="input-icon" />
           </div>
 
           {/* Error */}
-          {error && (
-            <p className="text-red-500 text-xs text-center">{error}</p>
-          )}
+          {error && <p className="error-text">{error}</p>}
 
-          <div className="text-right">
-            <a
-              href="/login/recuperar"
-              className="text-xs text-blue-500 hover:underline"
-            >
-              ¿Olvidaste tu contraseña?
-            </a>
+          {/* Recuperar contraseña */}
+          <div className="forgot-password">
+            <a href="/login/recuperar">¿Olvidaste tu contraseña?</a>
           </div>
 
           {/* Botón */}
-          <button
-            type="submit"
-            className="w-full bg-green-500 text-white py-2 rounded-full hover:bg-green-600 transition font-medium text-sm"
-          >
+          <button type="submit" className="login-btn">
             Iniciar sesión
           </button>
         </form>
 
-        <p className="text-center text-xs text-gray-600 mt-4">
+        {/* Texto de registro */}
+        <p className="register-text">
           ¿No tienes cuenta?{" "}
-          <a
-            href="/register"
-            className="text-blue-500 font-medium hover:underline"
-          >
-            Regístrate
-          </a>
+          <a href="/register">Regístrate</a>
         </p>
       </div>
     </div>
