@@ -3,7 +3,8 @@ import {
   listarTecnicasAdmin,
   crearTecnica,
   subirVideo,
-  eliminarTecnica, // ✅ nuevo servicio
+  editarTecnica,   // ✅ servicio editar
+  eliminarTecnica, // ✅ servicio eliminar
 } from "../../services/tecnicasService";
 import AddGuideModal from "../components/AddGuideModal";
 import "./GuideManagement.css";
@@ -30,7 +31,7 @@ export default function GuideManagement() {
     fetchTecnicas();
   }, []);
 
-  // 📌 Crear técnica
+  // 📌 Crear o editar técnica
   const handleAddGuide = async (formData = {}, videoFile = null) => {
     try {
       const usuarioId = parseInt(localStorage.getItem("id_usuario"), 10);
@@ -39,64 +40,51 @@ export default function GuideManagement() {
         return;
       }
 
-      const nombre =
-        formData.title ?? formData.nombre ?? formData.name ?? "Sin título";
-      const descripcion =
-        formData.description ??
-        formData.descripcion ??
-        formData.desc ??
-        "Sin descripción";
-      const instruccion =
-        formData.instructions ??
-        formData.instruccion ??
-        formData.instruction ??
-        "Sin instrucciones";
+      const nombre = formData.title ?? formData.nombre ?? "Sin título";
+      const descripcion = formData.description ?? formData.descripcion ?? "Sin descripción";
+      const instruccion = formData.instructions ?? formData.instruccion ?? "Sin instrucciones";
 
-      const horas = Number(
-        formData.durationHours ?? formData.horas ?? formData.hours ?? 0
-      );
-      const minutos = Number(
-        formData.durationMinutes ?? formData.minutos ?? formData.minutes ?? 0
-      );
-      const segundos = Number(
-        formData.durationSeconds ?? formData.segundos ?? formData.seconds ?? 0
-      );
+      const horas = Number(formData.durationHours ?? formData.horas ?? 0);
+      const minutos = Number(formData.durationMinutes ?? formData.minutos ?? 0);
+      const segundos = Number(formData.durationSeconds ?? formData.segundos ?? 0);
 
       const tecnicaData = {
+        id: selectedTecnica?.id, // 👈 si hay técnica seleccionada, es edición
         usuario_id: usuarioId,
         nombre,
         descripcion,
         instruccion,
-        duracion_video: horas * 3600 + minutos * 60 + segundos,
         horas,
         minutos,
         segundos,
+        duracion_video: horas * 3600 + minutos * 60 + segundos,
         activo: 1,
       };
 
-      const tecnicaCreada = await crearTecnica(tecnicaData);
+      let tecnicaProcesada;
+      if (selectedTecnica) {
+        // 👈 Editar
+        tecnicaProcesada = await editarTecnica(tecnicaData);
+      } else {
+        // 👈 Crear
+        tecnicaProcesada = await crearTecnica(tecnicaData);
 
-      const fileToUpload =
-        videoFile ?? formData.file ?? formData.videoFile ?? null;
-
-      if (fileToUpload) {
-        try {
-          await subirVideo(tecnicaCreada.id, fileToUpload);
-        } catch (err) {
-          alert(
-            "Error subiendo video: " +
-              (err.response?.data || err.message || err)
-          );
+        // si hay video y es nuevo, subir
+        const fileToUpload = videoFile ?? formData.file ?? null;
+        if (fileToUpload) {
+          try {
+            await subirVideo(tecnicaProcesada.id, fileToUpload);
+          } catch (err) {
+            alert("Error subiendo video: " + (err.response?.data || err.message || err));
+          }
         }
       }
 
       await fetchTecnicas();
       setShowModal(false);
+      setSelectedTecnica(null);
     } catch (error) {
-      alert(
-        "Error al agregar técnica: " +
-          (error.response?.data || error.message || error)
-      );
+      alert("Error al guardar técnica: " + (error.response?.data || error.message || error));
     }
   };
 
@@ -106,19 +94,15 @@ export default function GuideManagement() {
     setShowModal(true);
   };
 
-  //  Eliminar técnica
-const handleDelete = async (tecnica) => {
-  if (window.confirm(`¿Estás seguro de eliminar "${tecnica.nombre}"?`)) {
+  // 📌 Eliminar técnica
+  const handleDelete = async (id) => {
     try {
-      await eliminarTecnica(tecnica.id); //  se pasa el id
-      alert(" Técnica eliminada correctamente");
-      fetchTecnicas(); // recarga la lista
+      await eliminarTecnica(id);
+      setTecnicas(tecnicas.filter((t) => t.id !== id));
     } catch (err) {
-      alert(" Error al eliminar técnica: " + (err.detail || err.message || err));
+      console.error("Error eliminando técnica:", err);
     }
-  }
-};
-
+  };
 
   return (
     <div className="gm-container">
@@ -146,9 +130,7 @@ const handleDelete = async (tecnica) => {
               <td>
                 <span className="gm-duration">
                   {tecnica.duracion ??
-                    `${tecnica.horas ?? 0}h ${tecnica.minutos ?? 0}m ${
-                      tecnica.segundos ?? 0
-                    }s`}
+                    `${tecnica.horas ?? 0}h ${tecnica.minutos ?? 0}m ${tecnica.segundos ?? 0}s`}
                 </span>
               </td>
               <td>
@@ -161,7 +143,7 @@ const handleDelete = async (tecnica) => {
                   </button>
                   <button
                     className="gm-action-btn gm-action-btn-danger"
-                    onClick={() => handleDelete(tecnica)}
+                    onClick={() => handleDelete(tecnica.id)}
                   >
                     <i className="fas fa-trash"></i> Eliminar
                   </button>

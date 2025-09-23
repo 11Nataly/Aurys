@@ -98,6 +98,19 @@ class CalificacionResponseDTO(BaseModel):
 
 
 class TecnicaAdministrador(BaseModel):
+    id: int
     nombre: str
     descripcion: str
     duracion: str
+
+
+class TecnicaCard(BaseModel):
+    id: int
+    nombre: str
+    video: str
+    descripcion: Optional[str] = None
+    video: Optional[str] = None
+    instruccion: Optional[str] = None
+    duracion: Optional[str] = None  
+    calificacion: Optional[int] = None
+    favorita: bool

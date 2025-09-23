@@ -1,0 +1,104 @@
+.register-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-image: url("../assets/images/fondo.jpg.jpg");
+  min-height: 100vh;
+    background-size: cover;
+}
+
+/* Tarjeta */
+.register-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  margin: 14rem auto;
+}
+
+/* Título */
+.register-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.9rem;
+}
+
+.register-subtitle {
+  font-size: 1.1rem;
+  color: #e53935;
+  margin-bottom: 1.2rem;
+}
+
+/* Inputs */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid #bbb;
+  border-radius: 9999px;
+  padding: 1rem 1rem;
+}
+
+.input-group input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+}
+
+.input-icon {
+  color: #888;
+  width: 25px;
+  height: 25px;
+  margin-left: 8px;
+}
+
+/* Botón */
+.register-button {
+  background: #4341e0;
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.register-button:hover {
+  background: #3c3ba0;
+}
+
+/* Mensajes */
+.error-message {
+  color: red;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+/* Texto inferior */
+.register-footer {
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  color: #555;
+  text-align: center;
+}
+
+.login-link {
+  color: #1e88e5;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}

@@ -21,16 +21,25 @@ export const subirVideo = async (tecnicaId, file) => {
   return response.data;
 };
 
-// Listar todas las técnicas
+//===============
+// Listar técnica
+//===============
+
+
 export const listarTecnicasAdmin = async () => {
   const response = await api.get("/tecnicas/todas_tecnicas");
   return response.data;
 };
 
 
+//===============
+// Eliminar técnica
+//===============
+
+
 export const eliminarTecnica = async (id) => {
   try {
-    const payload = { id: String(id) };     // enviar como string seguro
+    const payload = { id: id }; // 👈 mantener como número
     console.log("[servicio] eliminarTecnica payload:", payload);
 
     const response = await api.delete("/tecnicas/eliminar_tecnica", {
@@ -41,7 +50,27 @@ export const eliminarTecnica = async (id) => {
     return response.data;
   } catch (err) {
     console.error("[servicio] eliminarTecnica error:", err.response?.data || err.message || err);
-    // Normalizo el error para el frontend
     throw err.response?.data || { message: err.message || "Error eliminando técnica" };
+  }
+};
+
+
+
+//===============
+// Editar técnica
+//===============
+
+
+export const editarTecnica = async (tecnicaData) => {
+  try {
+    console.log("[servicio] editarTecnica payload:", tecnicaData);
+
+    const response = await api.put("/tecnicas/actualizar_tecnica", tecnicaData);
+
+    console.log("[servicio] editarTecnica response:", response.data);
+    return response.data;
+  } catch (err) {
+    console.error("[servicio] editarTecnica error:", err.response?.data || err.message || err);
+    throw err.response?.data || { message: err.message || "Error editando técnica" };
   }
 };

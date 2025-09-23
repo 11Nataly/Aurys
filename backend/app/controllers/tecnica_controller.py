@@ -9,7 +9,8 @@ from app.dtos.tecnica_dto import (
     CalificacionCreateDTO,
     CalificacionResponseDTO,
     TecnicaConEstadoResponseDTO,
-    TecnicaAdministrador
+    TecnicaAdministrador,
+    TecnicaCard
 )
 from app.services.subir_tecnica import (
     crear_tecnica,
@@ -19,7 +20,8 @@ from app.services.subir_tecnica import (
     crear_calificacion,
     calificar_tecnica,
     simplificar_duracion,
-    listar_tecnicas_administrador 
+    listar_tecnicas_administrador,
+    listar_tecnicas_con_estado 
 )
 from app.models.tecnicaafrontamiento import TecnicaAfrontamiento
 from app.services.cloudinary_service import upload_video
@@ -132,3 +134,15 @@ def calificar_endpoint(dto: CalificacionCreateDTO, usuario_id: int, db: Session 
 @router.get("/todas_tecnicas", response_model=list[TecnicaAdministrador])
 def obtener_todas_tecnicas(db: Session = Depends(get_db)):
     return listar_tecnicas_administrador(db)
+
+# -------------------
+# Obtener técnica por ID (para administrador)
+
+
+
+@router.get("/listar_tecnicas", response_model=List[TecnicaCard])
+def listar_tecnicas(usuario_id: int, db: Session = Depends(get_db)):
+    try:
+        return listar_tecnicas_con_estado(db, usuario_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error listando técnicas: {str(e)}")

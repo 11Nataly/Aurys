@@ -6,7 +6,8 @@ from app.dtos.tecnica_dto import (
     TecnicaUpdateDTO,
     CalificacionCreateDTO,
     CalificacionResponseDTO,
-    TecnicaAdministrador
+    TecnicaAdministrador,
+    TecnicaCard
     
 )
 import re
@@ -115,9 +116,32 @@ def listar_tecnicas_administrador(db: Session):
     resultado = []
     for tecnica in tecnicas:
         dto = TecnicaAdministrador(
+            id=tecnica.id,
             nombre=tecnica.nombre,
             descripcion=tecnica.descripcion,
             duracion=simplificar_duracion(tecnica.duracion_video)
+        )
+        resultado.append(dto)
+    return resultado
+
+
+
+#==============================
+# Tecnica usuario Get
+#===============================
+def listar_tecnicas_con_estado(db: Session, usuario_id: int):
+    tecnicas = db.query(TecnicaAfrontamiento).all()
+    resultado = []
+    for tecnica in tecnicas:
+        dto = TecnicaCard(
+            id=tecnica.id,
+            nombre=tecnica.nombre,
+            descripcion=tecnica.descripcion,
+            video=tecnica.video,
+            instruccion=tecnica.instruccion,
+            duracion=simplificar_duracion(tecnica.duracion_video),
+            calificacion=tecnica.calificacion,
+            favorita=False  # aquí luego puedes validar si el usuario la marcó favorita
         )
         resultado.append(dto)
     return resultado

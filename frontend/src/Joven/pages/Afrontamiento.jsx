@@ -1,170 +1,85 @@
-import React, { useState } from 'react';
-import { FaPlay, FaFilter, FaHeart, FaTimes } from 'react-icons/fa';
-import TecnicasLista from '../components/Afrontamiento/TecnicasLista';
-import videoEjemplo from '../components/Afrontamiento/videotecnica.mp4';
-import '../../styles/afrontamiento.css';
+import React, { useEffect, useState } from "react";
+import { listarTecnicas } from "../../services/tecnicasServicejoven";
+import "../../styles/afrontamiento.css";
 
 const Afrontamiento = () => {
-  const [tecnicaDetalle, setTecnicaDetalle] = useState(null);
-  const [mostrarSoloFavoritos, setMostrarSoloFavoritos] = useState(false);
-  const [mostrarModalVideo, setMostrarModalVideo] = useState(false);
-  const [tecnicaVideo, setTecnicaVideo] = useState(null);
+  const [tecnicas, setTecnicas] = useState([]);
+  const [selected, setSelected] = useState(null); // técnica seleccionada
+  const [verMas, setVerMas] = useState(false);
 
-  const toggleFiltroFavoritos = () => {
-    setMostrarSoloFavoritos(!mostrarSoloFavoritos);
+  useEffect(() => {
+    const fetchTecnicas = async () => {
+      try {
+        const userId = localStorage.getItem("userId"); // obtener id desde localStorage
+        const data = await listarTecnicas(userId);
+        setTecnicas(data);
+      } catch (error) {
+        console.error("Error al cargar técnicas:", error);
+      }
+    };
+    fetchTecnicas();
+  }, []);
+
+  const abrirModal = (tecnica) => {
+    setSelected(tecnica);
+    setVerMas(false);
   };
 
-  const abrirModalVideo = (tecnica) => {
-    setTecnicaVideo(tecnica);
-    setMostrarModalVideo(true);
-  };
-
-  const cerrarModalVideo = () => {
-    setMostrarModalVideo(false);
-    setTecnicaVideo(null);
+  const cerrarModal = () => {
+    setSelected(null);
   };
 
   return (
-    <div>
-      <div className="page-header">
-        <div className="header-content">
-          <div className="header-titles">
-            <h1>Técnicas de Afrontamiento</h1>
-            <h2>Encuentra tu paz interior</h2>
+    <div className="afrontamiento-container">
+      <h2>Técnicas de Afrontamiento</h2>
+      <div className="tecnicas-grid">
+        {tecnicas.map((tecnica) => (
+          <div key={tecnica.id} className="tecnica-card">
+            <h3>{tecnica.nombre}</h3>
+            <p className="descripcion">{tecnica.descripcion}</p>
+            <p><strong>Duración:</strong> {tecnica.duracion}</p>
+
+            <button
+              onClick={() => abrirModal(tecnica)}
+              className="btn-detalle"
+            >
+              Ver detalles
+            </button>
           </div>
-          <button
-            className={`filtro-favoritos-btn ${mostrarSoloFavoritos ? 'active' : ''}`}
-            onClick={toggleFiltroFavoritos}
-          >
-            <FaFilter />
-            {mostrarSoloFavoritos ? (
-              <>
-                <FaHeart className="heart-icon" />
-                Mostrar todas
-              </>
-            ) : (
-              "Ver favoritas"
-            )}
-          </button>
-        </div>
+        ))}
       </div>
 
-      <div className="page-content">
-        <TecnicasLista
-          onSelectTecnica={setTecnicaDetalle}
-          onShowVideo={abrirModalVideo}
-          mostrarSoloFavoritos={mostrarSoloFavoritos}
-        />
-      </div>
-
-      {/* Modal de detalle de técnica - CON TEXTO Y VIDEO */}
-      {tecnicaDetalle && (
+      {selected && (
         <div className="modal-overlay">
-          <div className="modal-container">
-            <div className="modal modal-detalles">
-              <div className="modal-header">
-                <h2>{tecnicaDetalle.titulo}</h2>
-                <button className="btn-cerrar" onClick={() => setTecnicaDetalle(null)}>
-                  <FaTimes />
-                </button>
-              </div>
-              
-              <div className="modal-content">
-                <div className="modal-grid">
-                  {/* Columna izquierda - Información de la técnica */}
-                  <div className="modal-info">
-                    <div className="modal-seccion">
-                      <h3>Descripción</h3>
-                      <p className="modal-descripcion">{tecnicaDetalle.descripcion}</p>
-                    </div>
-                    
-                    <div className="modal-seccion">
-                      <h3>Instrucciones</h3>
-                      <ol className="modal-lista">
-                        {tecnicaDetalle.pasos && tecnicaDetalle.pasos.map((paso, index) => (
-                          <li key={index}>{paso}</li>
-                        ))}
-                      </ol>
-                    </div>
-                    
-                    {tecnicaDetalle.beneficios && (
-                      <div className="modal-seccion">
-                        <h3>Beneficios</h3>
-                        <ul className="modal-lista">
-                          {tecnicaDetalle.beneficios.map((beneficio, index) => (
-                            <li key={index}>{beneficio}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Columna derecha - Video */}
-                  <div className="modal-video">
-                    <div className="modal-seccion">
-                      <h3>Video demostrativo</h3>
-                      
-                      {/* Reproductor de video integrado */}
-                      <div className="video-integrado-container">
-                        <video 
-                          controls 
-                          className="video-integrado"
-                          autoPlay
-                          poster={tecnicaDetalle.imagen || ''}
-                        >
-                          <source src={videoEjemplo} type="video/mp4" />
-                          Tu navegador no soporta el elemento de video.
-                        </video>
-                      </div>
-                      
-                      {tecnicaDetalle.duracion && (
-                        <div className="duracion-info">
-                          <p><strong>Duración:</strong> {tecnicaDetalle.duracion}</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+          <div className="modal-content">
+            <button className="modal-close" onClick={cerrarModal}>
+              ✖
+            </button>
+            <h2>{selected.nombre}</h2>
 
-      {/* Modal de video - SOLO VIDEO SIN TEXTO */}
-      {mostrarModalVideo && tecnicaVideo && (
-        <div className="modal-overlay" onClick={cerrarModalVideo}>
-          <div className="modal-container">
-            <div className="modal modal-solo-video" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-header">
-                <h2>{tecnicaVideo.titulo}</h2>
-                <button className="btn-cerrar" onClick={cerrarModalVideo}>
-                  <FaTimes />
-                </button>
-              </div>
-              
-              <div className="modal-content">
-                <div className="video-contenedor-principal">
-                  <div className="video-integrado-container grande">
-                    <video 
-                      controls 
-                      className="video-integrado"
-                      autoPlay
-                      poster={tecnicaVideo.imagen || ''}
-                    >
-                      <source src={videoEjemplo} type="video/mp4" />
-                      Tu navegador no soporta el elemento de video.
-                    </video>
-                  </div>
-                  
-                  {tecnicaVideo.duracion && (
-                    <div className="duracion-info">
-                      <p><strong>Duración:</strong> {tecnicaVideo.duracion}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+            {selected.video ? (
+              <video src={selected.video} controls className="video-player" />
+            ) : (
+              <p className="sin-video">No hay video disponible</p>
+            )}
+
+            <p><strong>Descripción:</strong> {selected.descripcion}</p>
+            <p><strong>Duración:</strong> {selected.duracion}</p>
+
+            <h4>Instrucciones:</h4>
+            <p>
+              {verMas
+                ? selected.instruccion
+                : selected.instruccion.slice(0, 80) + "..."}
+            </p>
+            {selected.instruccion.length > 80 && (
+              <button
+                className="btn-vermas"
+                onClick={() => setVerMas(!verMas)}
+              >
+                {verMas ? "Ver menos" : "Ver más"}
+              </button>
+            )}
           </div>
         </div>
       )}
