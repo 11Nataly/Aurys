@@ -1,7 +1,8 @@
+/* header.css actualizado */
 .header {
   background-color: #4a3fb0;
   color: white;
-  padding: 0.5rem 1.5rem; /* Reducido de 0.8rem a 0.5rem */
+  padding: 0rem 1.5rem; /* Cero padding vertical, solo horizontal */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -19,27 +20,54 @@
 .header-left {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem; /* Reducido el gap */
+  height: 100%; /* Ocupa toda la altura del header */
+}
+
+/* Estilos del botón hamburger */
+.hamburger-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  align-items: center;
+  justify-content: center;
+  height: 100%; /* Ocupa toda la altura disponible */
+}
+
+.hamburger-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.hamburger-icon {
+  font-size: 1.3rem;
+  width: 24px;
+  height: 24px;
 }
 
 .logo {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  height: 100%; /* Ocupa toda la altura del header */
 }
 
 .logo-img {
-  height: 25px; /* Reducido de 30px a 25px */
-  width: auto;
-}
-
-.logo-text {
-  font-weight: bold;
-  font-size: 1.1rem; /* Reducido de 1.2rem a 1.1rem */
+  height: auto; /* Altura automática para mantener proporción */
+  width: 150px; /* Ancho aumentado significativamente */
+  max-height: 90%; /* No supera el 90% de la altura del header */
+  object-fit: contain; /* Mantiene la proporción de la imagen */
 }
 
 .header-right {
   position: relative;
+  height: 100%; /* Ocupa toda la altura del header */
+  display: flex;
+  align-items: center;
 }
 
 .profile-button {
@@ -47,12 +75,13 @@
   border: none;
   color: white;
   cursor: pointer;
-  padding: 0.4rem; /* Reducido de 0.5rem a 0.4rem */
+  padding: 0.5rem;
   border-radius: 50%;
   transition: background-color 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100%; /* Ocupa toda la altura disponible */
 }
 
 .profile-button:hover {
@@ -60,9 +89,9 @@
 }
 
 .profile-icon {
-  font-size: 1.1rem; /* Reducido de 1.2rem a 1.1rem */
-  width: 22px; /* Reducido de 24px a 22px */
-  height: 22px; /* Reducido de 24px a 22px */
+  font-size: 1.3rem;
+  width: 26px;
+  height: 26px;
 }
 
 .profile-dropdown {
@@ -79,7 +108,7 @@
 
 .profile-dropdown a {
   display: block;
-  padding: 0.6rem 1rem; /* Reducido de 0.7rem a 0.6rem */
+  padding: 0.6rem 1rem;
   color: #333;
   text-decoration: none;
   transition: background-color 0.2s;
@@ -89,34 +118,12 @@
   background-color: #f5f5f5;
 }
 
-@media (max-width: 768px) {
-  .header {
-    padding: 0.5rem 1rem; /* Reducido de 0.8rem a 0.5rem */
-    height: 55px; /* Un poco más bajo en móviles */
-  }
-  
-  .logo-img {
-    height: 22px; /* Más pequeño en móviles */
-  }
-  
-  .logo-text {
-    font-size: 1rem; /* Más pequeño en móviles */
-  }
-  
-  .profile-icon {
-    font-size: 1rem; /* Más pequeño en móviles */
-    width: 20px;
-    height: 20px;
-  }
-}
-
-/* Agrega esto al final de header.css */
 .breadcrumb {
   display: flex;
   align-items: center;
   gap: 0.3rem;
   font-size: 0.85rem;
-  margin-left: 2rem;
+  margin-left: 1rem;
   color: rgba(255, 255, 255, 0.9);
 }
 
@@ -142,9 +149,39 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .header {
+    padding: 0rem 1rem; /* Cero padding vertical en móviles también */
+    height: 55px;
+  }
+  
+  .hamburger-btn {
+    display: flex;
+  }
+  
+  .logo-img {
+    width: 120px; /* Ancho más pequeño en móviles */
+    height: auto;
+    max-height: 90%;
+  }
+  
+  .profile-icon {
+    font-size: 1.2rem;
+    width: 24px;
+    height: 24px;
+  }
+  
   .breadcrumb {
-    margin-left: 1rem;
-    font-size: 0.8rem;
-    display: none; /* Ocultar en móviles para ahorrar espacio */
+    display: none;
+  }
+  
+  .header-left {
+    gap: 0.3rem; /* Gap más pequeño en móviles */
+  }
+}
+
+/* Para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .logo-img {
+    width: 100px; /* Aún más pequeño en pantallas muy pequeñas */
   }
 }
