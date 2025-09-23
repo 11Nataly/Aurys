@@ -1,0 +1,187 @@
+/* FOOTER STYLES */
+.footer {
+  background-color: #4840c2;
+  color: white;
+  padding: 2rem 0 0; /* Sin padding inferior, solo superior y lateral 0 */
+  box-sizing: border-box;
+  width: 100%; /* Ocupa todo el ancho disponible */
+  margin: 60px 0 0; /* Solo margen superior, 0 en laterales e inferior */
+  border-top: 3px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1.5rem; /* Padding interno para el contenido */
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.footer-section h3 {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.footer-section p {
+  line-height: 1.5;
+  opacity: 0.9;
+  margin: 0.5rem 0;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-section li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-section a {
+  color: white;
+  text-decoration: none;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+  display: inline-block;
+}
+
+.footer-section a:hover {
+  opacity: 1;
+  text-decoration: underline;
+  transform: translateX(5px);
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1rem 1.5rem; /* Padding lateral añadido */
+  text-align: center;
+  opacity: 0.8;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 0.9rem;
+}
+
+/* Cuando está con sidebar (sin margen) */
+.has-sidebar .footer {
+  margin: 0; /* Sin margen superior cuando hay sidebar */
+  padding: 2rem 0 0; /* Mantenemos padding superior pero sin márgenes */
+}
+
+/* SIDEBAR COLLAPSED STATES */
+.main-content.sidebar-collapsed ~ .footer {
+  margin-left: 0;
+  width: 100%;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+  .footer-content {
+    gap: 1.5rem;
+  }
+  
+  .footer-section {
+    min-width: 180px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 1.5rem 0 0;
+    margin-top: 40px;
+  }
+  
+  .footer-content {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+    padding: 0 1rem;
+  }
+  
+  .footer-section {
+    min-width: 100%;
+  }
+  
+  .footer-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .footer-bottom {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 1.2rem 0 0;
+    margin-top: 30px;
+  }
+  
+  .footer-content {
+    gap: 1.2rem;
+  }
+  
+  .footer-section h3 {
+    font-size: 1.1rem;
+  }
+  
+  .footer-bottom {
+    font-size: 0.8rem;
+  }
+}
+
+/* AUTH LAYOUT SPECIFIC - sin sidebar */
+.auth-layout .footer {
+  margin-top: 60px; /* Margen superior para layouts sin sidebar */
+}
+
+/* UTILITY CLASSES */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* SMOOTH TRANSITIONS */
+.footer,
+.main-content,
+.footer-section a {
+  transition: all 0.3s ease;
+}
+
+/* ENHANCED VISUALS */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(to bottom, transparent, rgba(72, 64, 194, 0.1));
+  pointer-events: none;
+}
+
+/* PRINT STYLES */
+@media print {
+  .footer {
+    display: none;
+  }
+}
