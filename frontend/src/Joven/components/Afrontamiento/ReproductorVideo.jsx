@@ -21,14 +21,18 @@ const ReproductorVideo = ({ videoUrl, titulo, onClose }) => {
 
   if (!tieneConexion) {
     return (
-      <div className="video-modal">
-        <div className="video-error">
-          <FaSignal size={48} />
-          <h3>Este video requiere conexión a internet</h3>
-          <p>Conéctate a internet para poder reproducir el video.</p>
-          <button onClick={onClose} className="btn-cerrar">
-            Cerrar
-          </button>
+      <div className="modal-overlay">
+        <div className="modal modal-solo-video">
+          <div className="modal-content">
+            <div className="video-error" style={{textAlign: 'center', padding: '40px'}}>
+              <FaSignal size={48} style={{color: '#7f8c8d', marginBottom: '20px'}} />
+              <h3>Este video requiere conexión a internet</h3>
+              <p>Conéctate a internet para poder reproducir el video.</p>
+              <button onClick={onClose} className="btn btn-detalles" style={{marginTop: '20px'}}>
+                Cerrar
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -36,44 +40,55 @@ const ReproductorVideo = ({ videoUrl, titulo, onClose }) => {
 
   if (error) {
     return (
-      <div className="video-modal">
-        <div className="video-error">
-          <h3>No se pudo cargar el video</h3>
-          <p>Intenta más tarde o contacta con soporte.</p>
-          <button onClick={() => setError(false)} className="btn-reintentar">
-            <FaRedo /> Reintentar
-          </button>
-          <button onClick={onClose} className="btn-cerrar">
-            Cerrar
-          </button>
+      <div className="modal-overlay">
+        <div className="modal modal-solo-video">
+          <div className="modal-content">
+            <div className="video-error" style={{textAlign: 'center', padding: '40px'}}>
+              <h3>No se pudo cargar el video</h3>
+              <p>Intenta más tarde o contacta con soporte.</p>
+              <div className="acciones-container" style={{justifyContent: 'center', gap: '10px', marginTop: '20px'}}>
+                <button onClick={() => setError(false)} className="btn btn-reproducir">
+                  <FaRedo /> Reintentar
+                </button>
+                <button onClick={onClose} className="btn btn-detalles">
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="video-modal">
-      <div className="video-container">
-        <div className="video-header">
-          <h3>{titulo}</h3>
+    <div className="modal-overlay">
+      <div className="modal modal-solo-video">
+        <div className="modal-header">
+          <h2>{titulo}</h2>
           <button onClick={onClose} className="btn-cerrar">
             <FaTimes />
           </button>
         </div>
         
-        <div className="video-player">
-          <ReactPlayer
-            url={videoUrl}
-            controls
-            width="100%"
-            height="400px"
-            onError={() => setError(true)}
-            playing={true}
-          />
-        </div>
-        
-        <div className="video-status">
-          <FaWifi /> Conectado
+        <div className="modal-content">
+          <div className="video-contenedor-principal">
+            <div className="video-integrado-container grande">
+              <ReactPlayer
+                url={videoUrl}
+                controls
+                width="100%"
+                height="400px"
+                onError={() => setError(true)}
+                playing={true}
+                className="video-integrado"
+              />
+            </div>
+            
+            <div className="duracion-info">
+              <p><FaWifi /> Conectado y reproduciendo</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

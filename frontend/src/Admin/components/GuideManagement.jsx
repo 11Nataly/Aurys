@@ -3,8 +3,8 @@ import {
   listarTecnicasAdmin,
   crearTecnica,
   subirVideo,
-  editarTecnica,   // ✅ servicio editar
-  eliminarTecnica, // ✅ servicio eliminar
+  editarTecnica,
+  eliminarTecnica,
 } from "../../services/tecnicasService";
 import AddGuideModal from "../components/AddGuideModal";
 import "./GuideManagement.css";
@@ -49,7 +49,7 @@ export default function GuideManagement() {
       const segundos = Number(formData.durationSeconds ?? formData.segundos ?? 0);
 
       const tecnicaData = {
-        id: selectedTecnica?.id, // 👈 si hay técnica seleccionada, es edición
+        id: selectedTecnica?.id,
         usuario_id: usuarioId,
         nombre,
         descripcion,
@@ -96,11 +96,15 @@ export default function GuideManagement() {
 
   // 📌 Eliminar técnica
   const handleDelete = async (id) => {
-    try {
-      await eliminarTecnica(id);
-      setTecnicas(tecnicas.filter((t) => t.id !== id));
-    } catch (err) {
-      console.error("Error eliminando técnica:", err);
+    if (window.confirm("¿Estás seguro de que deseas eliminar esta técnica?")) {
+      try {
+        await eliminarTecnica(id);
+        setTecnicas(tecnicas.filter((t) => t.id !== id));
+        alert("Técnica eliminada correctamente");
+      } catch (err) {
+        console.error("Error eliminando técnica:", err);
+        alert("Error al eliminar la técnica: " + (err.response?.data || err.message || err));
+      }
     }
   };
 
@@ -126,7 +130,11 @@ export default function GuideManagement() {
           {tecnicas.map((tecnica, index) => (
             <tr key={tecnica.id ?? `tecnica-${index}`}>
               <td>{tecnica.nombre}</td>
-              <td>{tecnica.descripcion}</td>
+              <td>
+                <div className="gm-description-cell">
+                  {tecnica.descripcion}
+                </div>
+              </td>
               <td>
                 <span className="gm-duration">
                   {tecnica.duracion ??

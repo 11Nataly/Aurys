@@ -1,92 +1,927 @@
+/* ===============================
+   🎨 ESTILOS GLOBALES
+   =============================== */
 .afrontamiento-container {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f5f8ff;
+  color: #333;
+  margin: 0;
   padding: 20px;
-  text-align: center;
 }
 
+/* ===============================
+   🔝 HEADER PRINCIPAL
+   =============================== */
+.page-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 40px auto 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e6ecf8;
+  max-width: 1200px;
+  padding: 0 20px 15px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+}
+
+.header-titles h1 {
+  font-size: 3rem;
+  color: #3c2bbf;
+  font-weight: 700;
+  margin: 0 0 5px 0;
+}
+
+.header-titles h2 {
+  font-size: 2rem;
+  color: #9288dd;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* ===============================
+   🔘 BOTÓN DE FILTRO DE FAVORITOS
+   =============================== */
+.filtro-favoritos-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border: 2px solid #3c2bbf;
+  background: transparent;
+  color: #3c2bbf;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  margin: 10px 0;
+}
+
+.filtro-favoritos-btn:hover {
+  background: #f3f0ff;
+}
+
+.filtro-favoritos-btn.active {
+  background: #3c2bbf;
+  color: white;
+}
+
+/* ===============================
+   📦 CONTENEDOR PRINCIPAL
+   =============================== */
+.page-content {
+  padding: 30px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===============================
+   🃏 CONTENEDOR DE TARJETAS
+   =============================== */
 .tecnicas-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 15px;
-  margin-top: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  margin: 30px 0 50px;
 }
 
+.tecnicas-lista {
+  width: 100%;
+}
+
+/* ===============================
+   🃏 TARJETA INDIVIDUAL
+   =============================== */
 .tecnica-card {
   background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 15px;
-  text-align: left;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease-in-out;
+  border-radius: 18px;
+  padding: 25px;
+  min-height: 280px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #e8eefb;
+  margin: 15px 0;
+  transition: transform 0.3s ease;
+  position: relative;
+  overflow: visible;
+  width: 100%;
 }
 
 .tecnica-card:hover {
-  transform: scale(1.02);
+  transform: translateY(-5px);
 }
 
-.btn-detalle, .btn-vermas {
-  background-color: #3b82f6;
-  color: white;
+/* ===============================
+   🔘 HEADER DE TARJETA
+   =============================== */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  gap: 15px;
+}
+
+.tecnica-titulo {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #3c2bbf;
+  margin: 0;
+  line-height: 1.4;
+  text-align: left;
+  
+  /* 🔧 TÍTULO CON SALTO DE LÍNEA NATURAL */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Máximo 3 líneas */
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  
+  flex: 1;
+  min-width: 0;
+  max-height: 4.2em; /* 3 líneas * line-height 1.4 */
+}
+
+.duracion-circulo {
+  border: 2px solid #2ecc71;
+  color: #2ecc71;
+  background: #eafff2;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+  flex-shrink: 0;
+  text-align: center;
+  line-height: 1.2;
+  position: relative;
+  z-index: 1;
+}
+
+.duracion-circulo span {
+  display: block;
+  text-align: center;
+  width: 100%;
+}
+
+/* ===============================
+   📝 CONTENIDO DE TARJETA
+   =============================== */
+.card-content {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+.tecnica-descripcion {
+  font-size: 0.95rem;
+  color: #7a7fbb;
+  line-height: 1.6;
+  text-align: left;
+  margin: 0;
+  padding: 10px 0;
+
+  /* 🔧 Controla el desbordamiento del texto */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4; /* Limita el texto a 4 líneas */
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  word-break: break-word;
+  width: 100%;
+}
+
+/* ===============================
+   ⭐ SISTEMA DE CALIFICACIÓN - SIN EFECTO MORADO
+   =============================== */
+.card-footer {
+  border-top: 1px solid #ecf0f1;
+  padding-top: 20px;
+  margin-top: 15px;
+}
+
+.calificacion-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.estrellas {
+  display: flex;
+  gap: 6px;
+}
+
+.star-btn {
+  background: none;
   border: none;
-  border-radius: 8px;
-  padding: 6px 12px;
-  margin-top: 10px;
+  font-size: 1.3rem;
+  color: #d6c645;
   cursor: pointer;
+  padding: 5px;
+  transition: transform 0.2s ease;
 }
 
-.btn-detalle:hover, .btn-vermas:hover {
-  background-color: #2563eb;
+.star-btn:hover {
+  transform: scale(1.2);
+  color: #f39c12;
 }
 
-/* ----- Modal ----- */
+.star-btn.active {
+  color: #f39c12;
+}
+
+/* ===============================
+   ❤️ BOTÓN FAVORITO - SIN EFECTO MORADO
+   =============================== */
+.favorito-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #ccc;
+  cursor: pointer;
+  padding: 5px;
+  transition: all 0.3s ease;
+}
+
+.favorito-btn:hover {
+  transform: scale(1.1);
+  color: indianred;
+}
+
+.favorito-btn.active {
+  color: #ff5a5f;
+}
+
+/* ===============================
+   🔘 BOTONES DE ACCIÓN - SIN EFECTO MORADO EN HOVER
+   =============================== */
+.acciones-container {
+  display: flex;
+  gap: 14px;
+  margin-top: 15px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 500;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: none;
+  flex: 1;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-reproducir {
+  background: #3c2bbf;
+  color: #fff;
+  border-color: #3c2bbf;
+}
+
+.btn-reproducir:hover {
+  background: #2a1e8f;
+  border-color: #2a1e8f;
+}
+
+.btn-detalles {
+  background: transparent;
+  color: #3c2bbf;
+  border-color: #3c2bbf;
+}
+
+.btn-detalles:hover {
+  background: #f3f0ff;
+  color: #3c2bbf;
+  border-color: #3c2bbf;
+}
+
+/* ===============================
+   🎭 MODAL OVERLAY - CONTENEDOR CENTRADO
+   =============================== */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 40px 20px;
+}
+
+.modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* ===============================
+   📋 MODAL BASE - ESTILOS UNIFICADOS
+   =============================== */
+.modal {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid #e8eefb;
+  margin: auto;
+  animation: modalAppear 0.3s ease-out;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 15px;
+}
+
+.modal-header h2 {
+  color: #3c2bbf;
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.btn-cerrar {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #7f8c8d;
+  padding: 5px;
+  transition: color 0.3s ease;
+}
+
+.btn-cerrar:hover {
+  color: #e74c3c;
 }
 
 .modal-content {
-  background: #fff;
-  border-radius: 12px;
+  padding: 10px 0;
+}
+
+/* ===============================
+   🎬 MODAL SOLO VIDEO - SIN TEXTO
+   =============================== */
+.modal-solo-video {
+  max-width: 800px;
   padding: 20px;
-  width: 90%;
-  max-width: 600px;
-  position: relative;
-  text-align: left;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  animation: fadeIn 0.3s ease;
 }
 
-.modal-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: transparent;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
+.modal-solo-video .modal-header {
+  margin-bottom: 20px;
 }
 
-.video-player {
+.modal-solo-video .modal-content {
+  padding: 0;
+}
+
+.video-contenedor-principal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-solo-video .video-integrado-container.grande {
+  margin-bottom: 15px;
   width: 100%;
-  max-height: 250px;
+  max-width: 100%;
+}
+
+.modal-solo-video .video-integrado {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  border-radius: 12px;
+}
+
+/* ===============================
+   📝 MODAL DETALLES - CON TEXTO Y VIDEO
+   =============================== */
+.modal-detalles .modal-content {
+  padding: 10px 0;
+}
+
+.modal-seccion {
+  margin-bottom: 25px;
+}
+
+.modal-seccion:last-child {
+  margin-bottom: 0;
+}
+
+.modal-seccion h3 {
+  color: #3c2bbf;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.modal-descripcion {
+  text-align: left;
+  font-size: 1rem;
+  color: #5d6d7e;
+  line-height: 1.7;
+  margin: 0;
+  padding: 15px;
+  background: #f8f9ff;
   border-radius: 10px;
-  margin: 10px 0;
+  border-left: 4px solid #3c2bbf;
+}
+
+.modal-lista {
+  text-align: left;
+  color: #5d6d7e;
+  line-height: 1.6;
+  padding-left: 20px;
+  margin: 0;
+}
+
+.modal-lista li {
+  margin-bottom: 10px;
+  text-align: left;
+  padding: 5px 0;
+}
+
+/* ===============================
+   🎥 VIDEO EN MODALES
+   =============================== */
+.video-integrado-container {
+  margin-bottom: 15px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.video-integrado {
+  width: 100%;
+  height: auto;
+  background: #000;
+  display: block;
+}
+
+.modal-detalles .video-integrado {
+  max-height: 250px;
+  border-radius: 8px;
+}
+
+.duracion-info {
+  padding: 12px;
+  background: #f0f7ff;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #d6e4ff;
+  margin-top: 10px;
+}
+
+.duracion-info p {
+  margin: 0;
+  color: #3c2bbf;
+  font-weight: 500;
+}
+
+/* ===============================
+   🔲 LAYOUT DE MODAL DETALLES
+   =============================== */
+.modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+/* ===============================
+   🌀 ESTADOS DE CARGA Y ERROR
+   =============================== */
+.loading, .error {
+  text-align: center;
+  padding: 40px;
+  font-size: 1.1rem;
+  color: #7a7fbb;
+}
+
+.error {
+  color: #e74c3c;
+}
+
+.video-error {
+  text-align: center;
+  padding: 40px;
+}
+
+.video-error h3 {
+  color: #3c2bbf;
+  margin-bottom: 15px;
+}
+
+.video-error p {
+  color: #7a7fbb;
+  margin-bottom: 20px;
+}
+
+/* ===============================
+   📊 FILTRO ACTIVO
+   =============================== */
+.filtro-activo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: #f3f0ff;
+  border: 2px solid #3c2bbf;
+  border-radius: 25px;
+  color: #3c2bbf;
+  font-weight: 600;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+/* ===============================
+   📭 ESTADO VACÍO
+   =============================== */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #7a7fbb;
+  font-size: 1.1rem;
+}
+
+.empty-state.favoritos {
+  background: #fff9e6;
+  border-radius: 12px;
+  border: 2px dashed #ffd166;
 }
 
 .sin-video {
-  color: gray;
+  text-align: center;
+  padding: 20px;
+  color: #7a7fbb;
   font-style: italic;
+  background: #f8f9fa;
+  border-radius: 8px;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+/* ===============================
+   🎨 ANIMACIONES
+   =============================== */
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
+
+.tecnica-card,
+.btn,
+.modal {
+  transition: all 0.3s ease;
+}
+
+/* ===============================
+   📱 RESPONSIVE - TABLETS (768px)
+   =============================== */
+@media (max-width: 768px) {
+  .afrontamiento-container {
+    padding: 15px;
+  }
+  
+  .page-header {
+    margin: 30px auto 20px;
+    padding: 0 15px 15px;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .header-titles h1 {
+    font-size: 2.2rem;
+  }
+  
+  .header-titles h2 {
+    font-size: 1.5rem;
+  }
+  
+  .filtro-favoritos-btn {
+    align-self: stretch;
+    justify-content: center;
+  }
+  
+  .page-content {
+    padding: 20px 15px;
+  }
+  
+  .tecnicas-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .tecnica-card {
+    padding: 20px;
+    min-height: 250px;
+  }
+  
+  .card-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: left;
+  }
+  
+  .duracion-circulo {
+    margin-left: 0;
+    align-self: flex-start;
+  }
+  
+  .tecnica-titulo {
+    -webkit-line-clamp: 3; /* Mantener 3 líneas en tablet */
+    max-height: 4.2em;
+    text-align: left;
+  }
+  
+  .tecnica-descripcion {
+    text-align: left;
+  }
+  
+  .calificacion-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .acciones-container {
+    flex-direction: column;
+  }
+  
+  .modal-overlay {
+    padding: 20px 15px;
+  }
+  
+  .modal {
+    padding: 20px;
+    max-width: 95vw;
+  }
+  
+  .modal-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .modal-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .modal-descripcion {
+    font-size: 0.95rem;
+    padding: 12px;
+  }
+  
+  .modal-lista {
+    font-size: 0.9rem;
+  }
+  
+  .modal-detalles .video-integrado {
+    max-height: 200px;
+  }
+  
+  .modal-solo-video .video-integrado {
+    max-height: 400px;
+  }
+  
+  .tecnicas-lista {
+    padding: 0 10px;
+  }
+  
+  .filtro-activo {
+    margin: 0 10px 20px 10px;
+    text-align: center;
+  }
+  
+  .empty-state {
+    margin: 0 20px;
+  }
+}
+
+/* ===============================
+   📱 RESPONSIVE - MÓVILES (480px)
+   =============================== */
+@media (max-width: 480px) {
+  .afrontamiento-container {
+    padding: 10px;
+  }
+  
+  .page-header {
+    margin: 20px auto 15px;
+    padding: 0 10px 10px;
+  }
+  
+  .header-titles h1 {
+    font-size: 1.8rem;
+  }
+  
+  .header-titles h2 {
+    font-size: 1.2rem;
+  }
+  
+  .filtro-favoritos-btn {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+  
+  .page-content {
+    padding: 15px 10px;
+  }
+  
+  .tecnicas-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .tecnica-card {
+    padding: 15px;
+    min-height: 220px;
+  }
+  
+  .tecnica-titulo {
+    font-size: 1.1rem;
+    -webkit-line-clamp: 3; /* Mantener 3 líneas en móvil */
+    max-height: 4.2em;
+  }
+  
+  .duracion-circulo {
+    width: 50px;
+    height: 50px;
+    font-size: 0.7rem;
+  }
+  
+  .btn {
+    padding: 10px 15px;
+    font-size: 0.85rem;
+  }
+  
+  .modal-overlay {
+    padding: 15px 10px;
+  }
+  
+  .modal {
+    padding: 15px;
+    max-width: 98vw;
+  }
+  
+  .modal-header h2 {
+    font-size: 1.4rem;
+  }
+  
+  .modal-descripcion {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+  
+  .modal-lista {
+    font-size: 0.85rem;
+    padding-left: 15px;
+  }
+  
+  .modal-detalles .video-integrado {
+    max-height: 180px;
+  }
+  
+  .modal-solo-video {
+    padding: 15px;
+  }
+  
+  .modal-solo-video .video-integrado {
+    max-height: 300px;
+  }
+}
+
+/* ===============================
+   🎯 ESTILOS ESPECÍFICOS PARA COMPONENTES
+   =============================== */
+.video-player {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.video-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.video-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #2ecc71;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+.btn-reintentar {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.3s ease;
+}
+
+.btn-reintentar:hover {
+  background: #2980b9;
+}
+
+.afrontamiento-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.afrontamiento-container h2 {
+  color: #3c2bbf;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2.5rem;
+}
+
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  .tecnica-card,
+  .btn,
+  .modal,
+  .star-btn,
+  .favorito-btn {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .tecnica-card {
+    border: 2px solid #000;
+  }
+  
+  .btn {
+    border-width: 2px;
+  }
+  
+  .modal {
+    border: 2px solid #000;
+  }
+}
+/* ===============================
+   🧩 FIN DEL ARCHIVO
+   =============================== */
+
+   

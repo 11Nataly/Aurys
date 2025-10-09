@@ -1,8 +1,10 @@
+// src/Joven/pages/Diario.jsx
 import { useState, useEffect } from 'react';
 import DiarioHeader from '../components/Diario/DiarioHeader';
 import EditorDiario from '../components/Diario/EditorDiario';
 import HistorialEntradas from '../components/Diario/HistorialEntradas';
 import AgregarEntrada from '../components/Diario/AgregarEntrada';
+import Breadcrumb from '../components/Breadcrumb/Breadcrumb'; // ✅ Importamos
 import '../../styles/diario.css';
 
 const Diario = () => {
@@ -10,21 +12,17 @@ const Diario = () => {
   const [entradas, setEntradas] = useState([]);
   const [entradaEditando, setEntradaEditando] = useState(null);
 
-  // Efecto para persistir las entradas en localStorage
   useEffect(() => {
     const entradasGuardadas = localStorage.getItem('diarioEntradas');
     if (entradasGuardadas) {
       const entradasParseadas = JSON.parse(entradasGuardadas);
       setEntradas(entradasParseadas);
-      
-      // Si no hay entradas, mostrar la vista de agregar
       if (entradasParseadas.length === 0) {
         setVistaActual('agregar');
       }
     }
   }, []);
 
-  // Efecto para guardar las entradas en localStorage cuando cambien
   useEffect(() => {
     localStorage.setItem('diarioEntradas', JSON.stringify(entradas));
   }, [entradas]);
@@ -36,20 +34,14 @@ const Diario = () => {
       month: 'long',
       year: 'numeric'
     });
-    
-    const entradaCompleta = { 
-      id, 
-      fecha, 
-      ...nuevaEntrada 
-    };
-    
+    const entradaCompleta = { id, fecha, ...nuevaEntrada };
     setEntradas([...entradas, entradaCompleta]);
     setVistaActual('editor');
   };
 
   const editarEntrada = (entradaEditada) => {
-    setEntradas(entradas.map(entrada => 
-      entrada.id === entradaEditada.id ? {...entradaEditada, fecha: entrada.fecha} : entrada
+    setEntradas(entradas.map(entrada =>
+      entrada.id === entradaEditada.id ? { ...entradaEditada, fecha: entrada.fecha } : entrada
     ));
     setVistaActual('editor');
     setEntradaEditando(null);
@@ -58,8 +50,6 @@ const Diario = () => {
   const eliminarEntrada = (id) => {
     if (window.confirm('¿Estás seguro de que quieres eliminar esta entrada?')) {
       setEntradas(entradas.filter(entrada => entrada.id !== id));
-      
-      // Si era la última entrada, mostrar la vista de agregar
       if (entradas.length === 1) {
         setVistaActual('agregar');
       }
@@ -70,7 +60,7 @@ const Diario = () => {
     switch (vistaActual) {
       case 'historial':
         return (
-          <HistorialEntradas 
+          <HistorialEntradas
             entradas={[...entradas].reverse()}
             onEditar={(entrada) => {
               setEntradaEditando(entrada);
@@ -80,7 +70,6 @@ const Diario = () => {
             onVolver={() => setVistaActual('editor')}
           />
         );
-      
       case 'agregar':
         return (
           <AgregarEntrada
@@ -92,10 +81,9 @@ const Diario = () => {
             }}
           />
         );
-      
       default:
         return (
-          <EditorDiario 
+          <EditorDiario
             entradas={entradas}
             onAgregarEntrada={() => {
               setEntradaEditando(null);
@@ -107,13 +95,18 @@ const Diario = () => {
   };
 
   return (
-    <div className="diario-container">
-      <DiarioHeader 
-        vistaActual={vistaActual}
-        onCambiarVista={setVistaActual}
-      />
-      {renderVista()}
-    </div>
+    <>
+      {/* ✅ BREADCRUMB FUERA Y ARRIBA */}
+      <Breadcrumb />
+
+      <div className="diario-container">
+        <DiarioHeader
+          vistaActual={vistaActual}
+          onCambiarVista={setVistaActual}
+        />
+        {renderVista()}
+      </div>
+    </>
   );
 };
 
