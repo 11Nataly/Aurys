@@ -1,65 +1,100 @@
+/* MAIN LAYOUT */
 .main-layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background: #fff;
+  position: relative;
 }
 
+/* LAYOUT BODY */
 .layout-body {
   display: flex;
   flex: 1;
-  margin-top: 60px; /* Compensa el header fijo */
+  padding-top: 60px;
 }
 
+/* MAIN CONTENT - MODIFICADO */
 .main-content {
   flex: 1;
-  padding: 20px;
-  background-color: #fff;
   margin-left: 250px;
   transition: margin-left 0.3s ease;
-  /* Eliminamos padding-bottom ya que el footer ya no es fijo */
+  background: #fff;
+  padding-bottom: 20px;
+  width: calc(100% - 250px);
+  max-width: none;
 }
 
-.main-content.sidebar-collapsed {
-  margin-left: 70px;
-}
-
-/* Estilos para el layout de autenticación */
-.auth-layout {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #4a3fb0 0%, #6a62c7 100%);
+/* PAGE CONTENT - MODIFICADO */
+.page-content {
   padding: 20px;
-}
-
-.auth-container {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
+  overflow-y: auto;
+  box-sizing: border-box;
+  min-height: calc(100vh - 160px);
   width: 100%;
-  max-width: 400px;
+  max-width: none;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* SIDEBAR COLLAPSED STATES */
+.main-content.sidebar-collapsed {
+  margin-left: 80px;
+  width: calc(100% - 80px);
+}
+
+/* OVERLAY PARA MÓVILES */
+.sidebar-overlay-mobile {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 899;
+  display: none;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
   .main-content {
     margin-left: 0;
+    width: 100%;
+  }
+  
+  .page-content {
+    padding: 20px 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
     padding: 15px;
-    /* Eliminamos padding-bottom para móviles */
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+  
+  .layout-body {
+    padding-top: 55px;
+  }
+  
+  .page-content {
+    padding: 15px;
+    min-height: calc(100vh - 140px);
   }
   
   .main-content.sidebar-collapsed {
     margin-left: 0;
+    width: 100%;
   }
   
-  .auth-container {
-    margin: 1rem;
-    padding: 1.5rem;
+  /* Mostrar overlay en móviles cuando sidebar está abierto */
+  .sidebar-overlay-mobile {
+    display: block;
   }
-  
-  .layout-body {
-    margin-top: 55px;
+}
+
+/* Para desktop: ocultar overlay */
+@media (min-width: 769px) {
+  .sidebar-overlay-mobile {
+    display: none !important;
   }
 }

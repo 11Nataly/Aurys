@@ -15,3 +15,21 @@ def crear_diario(db: Session, dto: AgregarDiarioDtos):
     db.commit()
     db.refresh(diario)
     return diario
+
+def obtener_notas_por_usuario(usuario_id: int, db: Session):
+    """
+    Retorna todas las notas activas del diario creadas por un usuario específico.
+    """
+    notas = (
+        db.query(NotaDiario)
+        .filter(
+            NotaDiario.usuario_id == usuario_id,
+            NotaDiario.activo == True
+        )
+        .all()
+    )
+
+    if not notas:
+        raise HTTPException(status_code=404, detail="No se encontraron notas para este usuario")
+
+    return notas

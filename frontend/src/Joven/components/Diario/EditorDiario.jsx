@@ -1,3 +1,5 @@
+import React from 'react';
+
 const EditorDiario = ({ entradas, onAgregarEntrada }) => {
   const ultimaEntrada = entradas[entradas.length - 1];
 
@@ -18,21 +20,19 @@ const EditorDiario = ({ entradas, onAgregarEntrada }) => {
   return (
     <div className="entrada-diario-editor">
       <div className="editor-header">
-        <h2 className="entrada-titulo">{ultimaEntrada.titulo}</h2>
-        <div className="editor-fecha">
-          {ultimaEntrada.fecha}
+        <div>
+          <h2 className="entrada-titulo">{ultimaEntrada.titulo}</h2>
+          <div className="editor-fecha">{ultimaEntrada.fecha}</div>
         </div>
         <div className="entrada-acciones">
-          <button className="btn-editar" onClick={onAgregarEntrada}>
+          <button className="btn-editar" onClick={onAgregarEntrada} title="Editar entrada">
             ✏️
           </button>
         </div>
       </div>
-      
+
       <div className="editor-contenido">
-        <div className="entrada-texto">
-          {ultimaEntrada.contenido}
-        </div>
+        <div className="entrada-texto">{ultimaEntrada.contenido}</div>
       </div>
     </div>
   );

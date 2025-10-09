@@ -1,0 +1,70 @@
+.registro-exitoso-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+
+  background-image: url('./imagenfondo.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  padding: 20px;
+}
+
+.registro-exitoso-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+}
+
+.registro-exitoso-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  color: #22c55e; /* verde éxito */
+}
+
+.registro-exitoso-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 15px;
+}
+
+.registro-exitoso-message {
+  font-size: 16px;
+  color: #6b7280;
+  margin-bottom: 30px;
+}
+
+.registro-exitoso-button {
+  display: inline-block;
+  background-color: #4840c2;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.registro-exitoso-button:hover {
+  background-color: #3a32b0;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .registro-exitoso-card {
+    padding: 30px 20px;
+  }
+
+  .registro-exitoso-title {
+    font-size: 20px;
+  }
+}

@@ -1,33 +1,63 @@
+// src/Joven/JovenLayout.jsx
+import { useState } from "react";
+import Sidebar from "./components/Sidebar/Sidebar";
+import { Routes, Route } from "react-router-dom";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
+
+// Rutas internas del layout Joven
 import Home from "./pages/Home";
+import Diario from "./pages/Diario";
+import Afrontamiento from "./pages/Afrontamiento";
+import KitEmergencia from "./pages/KitEmergencia";
+import Promesas from "./pages/Promesas";
 
 export default function JovenLayout() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setSidebarOpen(false);
+  };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      {/* Navbar: le pasamos toggle para abrir/cerrar en móvil */}
-      <header className="w-full">
-        <Navbar onToggleSidebar={() => setSidebarOpen((s) => !s)} />
-      </header>
+    <div className={`main-layout ${sidebarOpen ? 'has-sidebar' : 'sidebar-collapsed'}`}>
+      {/* HEADER con control del sidebar */}
+      <Header onToggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
 
-      <div className="flex flex-1">
-        {/* Sidebar: en móvil será overlay basado en sidebarOpen */}
-        <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="layout-body">
+        {/* SIDEBAR */}
+        <Sidebar isOpen={sidebarOpen} />
 
-        {/* Main area */}
-        <main
-          className="flex-1 p-4 md:p-6 overflow-auto"
-          // cuando el sidebar overlay está abierto en móvil, podría evitar interacción con main
-          aria-hidden={sidebarOpen ? "true" : "false"}
-        >
-          <Routes>
-            <Route index element={<Home />} /> {/* equivale a /paciente */}
-            <Route path="Home" element={<Home />} />
-            <Route path="*" element={<Navigate to="Home" replace />} />
-            
-          </Routes>
-        </main>
+        {/* Overlay para móviles */}
+        {sidebarOpen && (
+          <div 
+            className="sidebar-overlay-mobile"
+            onClick={closeSidebar}
+          />
+        )}
+
+        {/* CONTENEDOR PRINCIPAL */}
+        <div className={`main-content ${!sidebarOpen ? 'sidebar-collapsed' : ''}`}>
+          <main className="page-content">
+            <Routes>
+              <Route index element={<Home />} />
+              <Route path="home" element={<Home />} />
+              <Route path="diario" element={<Diario />} />
+              <Route path="afrontamiento" element={<Afrontamiento />} />
+              <Route path="kit-emergencia" element={<KitEmergencia />} />
+              <Route path="kit-emergencia/afrontamiento" element={<Afrontamiento />} />
+              <Route path="promesas" element={<Promesas />} />
+            </Routes>
+          </main>
+        </div>
       </div>
+      
+      {/* FOOTER */}
+      <Footer />
     </div>
   );
 }

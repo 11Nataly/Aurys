@@ -29,6 +29,9 @@ class Usuario(Base):
     tecnicasafrontamiento = relationship("TecnicaAfrontamiento", back_populates="usuario", cascade="all, delete-orphan")
     promesas = relationship("Promesa", back_populates="usuario", cascade="all, delete-orphan")
     emociones = relationship("Emocion", back_populates="usuario", cascade="all, delete-orphan")  # si existe el modelo
+    favoritos = relationship("TecnicaFavorita", back_populates="usuario", cascade="all, delete-orphan")
+    # Relación nueva con calificación de efectividad
+    calificaciones = relationship("TecnicaCalificacion", back_populates="usuario", cascade="all, delete-orphan")
     activo = Column(Boolean, default=False)
 
 

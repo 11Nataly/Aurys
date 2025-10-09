@@ -1,0 +1,92 @@
+.afrontamiento-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.tecnicas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.tecnica-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: left;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.tecnica-card:hover {
+  transform: scale(1.02);
+}
+
+.btn-detalle, .btn-vermas {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.btn-detalle:hover, .btn-vermas:hover {
+  background-color: #2563eb;
+}
+
+/* ----- Modal ----- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  width: 90%;
+  max-width: 600px;
+  position: relative;
+  text-align: left;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.video-player {
+  width: 100%;
+  max-height: 250px;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+.sin-video {
+  color: gray;
+  font-style: italic;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}

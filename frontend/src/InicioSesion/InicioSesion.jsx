@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, Mail, Lock } from "lucide-react";
-import { login } from "../services/authService"; 
+import { Mail, Lock } from "lucide-react";
+import { login } from "../services/authService";
+import "../styles/login.css";
 
 export default function Login() {
-
   const navigate = useNavigate();
   const [correo, setCorreo] = useState("");
   const [contrasena, setContrasena] = useState("");
@@ -15,92 +15,96 @@ export default function Login() {
     setError("");
 
     try {
-    const data = await login(correo, contrasena); // { access_token, token_type, rol }
-    
-    // Guardar token y rol
-    localStorage.setItem("token", data.access_token);
-    localStorage.setItem("rol_id", data.rol);
-    localStorage.setItem("id_usuario", data.nombre_rol);
+      const data = await login(correo, contrasena);
 
-    // Redirigir según el rol
-    if (data.nombre_rol === "usuario") {
-      navigate("/usuario/inicio"); 
-    } else if (data.nombre_rol === "Administrador") {
-      navigate("/admin/panel");
-    } else {
-      navigate("/"); // fallback
+      // Guardar datos en localStorage
+      localStorage.setItem("token", data.access_token);
+      localStorage.setItem("id_usuario", data.id);
+      localStorage.setItem("rol", data.nombre_rol);
+
+      // Redirección según el rol
+      if (data.nombre_rol === "usuario") {
+        navigate("/joven");
+      } else if (data.nombre_rol === "administrador") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
+
+    } catch (err) {
+      // Si el backend devuelve un mensaje específico, úsalo
+      if (err?.response?.data?.detail) {
+        const detail = err.response.data.detail;
+
+        // Detectar el tipo de error y mostrar mensaje más claro
+        if (detail.includes("Credenciales incorrectas")) {
+          setError("Correo o contraseña incorrectos. Intenta nuevamente.");
+        } else if (detail.includes("bloqueada") || detail.includes("Has superado")) {
+          setError("Tu cuenta ha sido bloqueada temporalmente por intentos fallidos. Intenta más tarde.");
+        } else if (detail.includes("inactivo") || detail.includes("confirmar tu cuenta")) {
+          setError("Tu cuenta no está activa. Revisa tu correo y confirma tu cuenta antes de iniciar sesión.");
+        } else if (detail.includes("Token de confirmación")) {
+          setError("Hubo un problema con tu confirmación de cuenta. Solicita un nuevo enlace.");
+        } else {
+          setError(detail);
+        }
+      } else {
+        // Si no hay detalle, mensaje genérico
+        setError("Ocurrió un error al iniciar sesión. Intenta nuevamente más tarde.");
+      }
     }
-  } catch (err) {
-    setError("Credenciales incorrectas o error de servidor");
-  }
-};
+  };
 
   return (
-    <div className="md:w-1/2 bg-green-500 flex items-center justify-center p-4 pl-16">
-          <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-sm md:-translate-x-6 my-6 py-15">
-            <h2 className="text-xl font-bold text-gray-800 text-center mb-2">
-              Inicia sesión
-            </h2>
-            <p className="text-center text-gray-600 mb-4 text-sm">
-              Accede a tu cuenta para continuar
-            </p>
+    <div className="login-container">
+      <div className="login-box">
+        <h2 className="login-title">Inicia sesión</h2>
+        <p className="login-subtitle">Accede a tu cuenta para continuar</p>
 
-            <form className="space-y-3" onSubmit={handleSubmit}>
-              <div className="flex items-center border border-gray-300 rounded-full px-4 py-2">
-                <input
-                  type="email"
-                  placeholder="Correo electrónico"
-                  value={correo}
-                  onChange={(e) => setCorreo(e.target.value)}
-                  className="flex-1 outline-none text-sm"
-                  required
-                />
-                <Mail className="text-gray-400 w-5 h-5 ml-2" />
-              </div>
-
-              <div className="flex items-center border border-gray-300 rounded-full px-4 py-2">
-                <input
-                  type="password"
-                  placeholder="Contraseña"
-                  value={contrasena}
-                  onChange={(e) => setContrasena(e.target.value)}
-                  className="flex-1 outline-none text-sm"
-                  required
-                />
-                <Lock className="text-gray-400 w-5 h-5 ml-2" />
-              </div>
-
-              {error && (
-                <p className="text-red-500 text-xs text-center">{error}</p>
-              )}
-
-              <div className="text-right">
-                <a
-                  href="/login/recuperar"
-                  className="text-xs text-blue-500 hover:underline"
-                >
-                  ¿Olvidaste tu contraseña?
-                </a>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-green-500 text-white py-2 rounded-full hover:bg-green-600 transition font-medium text-sm"
-              >
-                Iniciar sesión
-              </button>
-            </form>
-
-            <p className="text-center text-xs text-gray-600 mt-4">
-              ¿No tienes cuenta?{" "}
-              <a
-                href="/register"
-                className="text-blue-500 font-medium hover:underline"
-              >
-                Regístrate
-              </a>
-            </p>
+        <form className="login-form" onSubmit={handleSubmit}>
+          {/* Correo */}
+          <div className="input-group">
+            <input
+              type="email"
+              placeholder="Correo electrónico"
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
+              required
+            />
+            <Mail className="input-icon" />
           </div>
-        </div>
+
+          {/* Contraseña */}
+          <div className="input-group">
+            <input
+              type="password"
+              placeholder="Contraseña"
+              value={contrasena}
+              onChange={(e) => setContrasena(e.target.value)}
+              required
+            />
+            <Lock className="input-icon" />
+          </div>
+
+          {/* Error */}
+          {error && <p className="error-text">{error}</p>}
+
+          {/* Recuperar contraseña */}
+          <div className="forgot-password">
+            <a href="/login/recuperar">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          {/* Botón */}
+          <button type="submit" className="login-btn">
+            Iniciar sesión
+          </button>
+        </form>
+
+        {/* Texto de registro */}
+        <p className="register-text">
+          ¿No tienes cuenta? <a href="/register">Regístrate</a>
+        </p>
+      </div>
+    </div>
   );
 }

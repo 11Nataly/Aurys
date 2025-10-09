@@ -1,9 +1,21 @@
-import React from "react";
+// src/LandingPage/LandingPage.jsx
+import Header from "./components/Header";
+import Hero from "./components/Hero";
+import Benefits from "./components/Benefits";
+import Footer from "./components/Footer";
+import './LandingPage.css';
 
-export default function Admin() {
+function LandingPage() {
   return (
-    <div>
-      <h1>Hola administrador</h1>
+    <div className="landing-page">
+      <Header />
+      <main>
+        <Hero />
+        <Benefits />
+      </main>
+      <Footer />
     </div>
   );
 }
+
+export default LandingPage;

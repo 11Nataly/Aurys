@@ -1,12 +1,19 @@
 from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
 from sqlalchemy.orm import Session
+
+from typing import List
+
 from app.db.database import get_db
 from app.dtos.tecnica_dto import (
     TecnicaCreateDTO,
     TecnicaUpdateDTO,
     TecnicaResponseDTO,
     CalificacionCreateDTO,
-    CalificacionResponseDTO
+
+    CalificacionResponseDTO,
+    TecnicaConEstadoResponseDTO,
+    TecnicaAdministrador,
+    TecnicaCard
 )
 from app.services.subir_tecnica import (
     crear_tecnica,
@@ -15,7 +22,10 @@ from app.services.subir_tecnica import (
     eliminar_tecnica,
     crear_calificacion,
     calificar_tecnica,
-    simplificar_duracion
+
+    simplificar_duracion,
+    listar_tecnicas_administrador,
+    listar_tecnicas_con_estado 
 )
 from app.models.tecnicaafrontamiento import TecnicaAfrontamiento
 from app.services.cloudinary_service import upload_video
@@ -90,6 +100,26 @@ async def actualizar_video_endpoint(tecnica_id: int, file: UploadFile = File(...
         raise HTTPException(status_code=500, detail=f"Error subiendo video: {str(e)}")
 
 # -------------------
+
+# Listar técnicas con su respectiva calificacion y favorito
+#  (si el usuario la ha calificado o marcado como favorita).
+# -------------------
+
+@router.get("/usuario/{usuario_id}", response_model=List[TecnicaConEstadoResponseDTO])
+def listar_tecnicas_usuario(usuario_id: int, db: Session = Depends(get_db)):
+    """
+    Retorna una lista de todas las técnicas de afrontamiento,
+    incluyendo si han sido calificadas o guardadas como favoritas
+    por un usuario específico.
+    """
+    # Llama al servicio para obtener la lista de técnicas.
+    # El servicio se encarga de toda la lógica de la base de datos.
+    tecnicas_listadas = listar_tecnicas_con_estado(db, usuario_id)
+    return tecnicas_listadas
+
+
+# -------------------
+
 # Crear calificación
 # -------------------
 @router.post("/crear_calificacion", response_model=CalificacionResponseDTO)
@@ -102,3 +132,25 @@ def crear_calificacion_endpoint(dto: CalificacionCreateDTO, db: Session = Depend
 @router.post("/calificar_tecnica", response_model=CalificacionResponseDTO)
 def calificar_endpoint(dto: CalificacionCreateDTO, usuario_id: int, db: Session = Depends(get_db)):
     return calificar_tecnica(db, usuario_id, dto.tecnica_id, dto)
+
+
+
+# -------------------
+# Obtener todas las técnicas (para administrador)
+
+@router.get("/todas_tecnicas", response_model=list[TecnicaAdministrador])
+def obtener_todas_tecnicas(db: Session = Depends(get_db)):
+    return listar_tecnicas_administrador(db)
+
+# -------------------
+# Obtener técnica por ID (para administrador)
+
+
+
+@router.get("/listar_tecnicas", response_model=List[TecnicaCard])
+def listar_tecnicas(usuario_id: int, db: Session = Depends(get_db)):
+    try:
+        return listar_tecnicas_con_estado(db, usuario_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error listando técnicas: {str(e)}")
+

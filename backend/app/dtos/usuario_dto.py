@@ -1,6 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field
-
-from datetime import date
+from datetime import date,datetime
 from typing import Optional
 
 class UsuarioRegistroDTO(BaseModel):
@@ -28,3 +27,19 @@ class ForgotPasswordRequest(BaseModel):
 
 class ResetPasswordRequest(BaseModel):
      nueva_contrasena: str
+
+
+class UsuarioResponseDTO(BaseModel):
+    id: int
+    nombre: str
+    gmail: str
+    fecha_registro: Optional[datetime]
+    estado: str
+
+    class Config:
+        orm_mode = True
+
+
+# ✅ DTO para actualizar el estado (PUT)
+class UsuarioEstadoUpdateDTO(BaseModel):
+    activo: bool

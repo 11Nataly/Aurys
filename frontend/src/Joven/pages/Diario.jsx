@@ -1,10 +1,9 @@
-// src/pages/Diario.jsx
 import { useState, useEffect } from 'react';
 import DiarioHeader from '../components/Diario/DiarioHeader';
 import EditorDiario from '../components/Diario/EditorDiario';
 import HistorialEntradas from '../components/Diario/HistorialEntradas';
 import AgregarEntrada from '../components/Diario/AgregarEntrada';
-import '../styles/diario.css';
+import '../../styles/diario.css';
 
 const Diario = () => {
   const [vistaActual, setVistaActual] = useState('editor');
@@ -108,14 +107,12 @@ const Diario = () => {
   };
 
   return (
-    <div className="diario-page">
-      <div className="diario-container">
-        <DiarioHeader 
-          vistaActual={vistaActual}
-          onCambiarVista={setVistaActual}
-        />
-        {renderVista()}
-      </div>
+    <div className="diario-container">
+      <DiarioHeader 
+        vistaActual={vistaActual}
+        onCambiarVista={setVistaActual}
+      />
+      {renderVista()}
     </div>
   );
 };
