@@ -1,33 +1,55 @@
-import React, { useState } from 'react';
-import ConfirmModal from './ConfirmModal';
-import './UserManagement.css';
+// src/components/UserManagement.jsx
+import React, { useState, useEffect } from "react";
+import { listarUsuarios, cambiarEstadoUsuario } from "../../services/usuariosService";
+import ConfirmModal from "./ConfirmModal";
+import "./UserManagement.css";
 
 const UserManagement = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showDeactivateModal, setShowDeactivateModal] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
-  // Datos de ejemplo
-  const users = [
-    { id: 1, username: 'usuario_ejemplo1', email: 'usuario1@ejemplo.com', registerDate: '15/03/2023', status: 'active' },
-    { id: 2, username: 'usuario_ejemplo2', email: 'usuario2@ejemplo.com', registerDate: '10/02/2023', status: 'active' },
-    { id: 3, username: 'usuario_inactivo', email: 'inactivo@ejemplo.com', registerDate: '05/01/2023', status: 'inactive' },
-  ];
+  // Cargar usuarios al montar el componente
+  useEffect(() => {
+    fetchUsuarios();
+  }, []);
 
-  const handleDeactivate = (user) => {
+  const fetchUsuarios = async () => {
+    try {
+      const data = await listarUsuarios();
+      const formatted = data.map((u) => ({
+        id: u.id,
+        username: u.nombre,
+        email: u.gmail,
+        registerDate: new Date(u.fecha_registro).toLocaleDateString(),
+        status: u.estado === "ACTIVO" ? "active" : "inactive",
+      }));
+      setUsers(formatted);
+    } catch (error) {
+      console.error("Error al cargar usuarios:", error);
+    }
+  };
+
+  const handleToggleEstado = (user) => {
     setSelectedUser(user);
-    setShowDeactivateModal(true);
+    setShowModal(true);
   };
 
-  const confirmDeactivate = () => {
-    // Lógica para desactivar usuario
-    console.log('Desactivando usuario:', selectedUser);
-    setShowDeactivateModal(false);
+  const confirmToggleEstado = async () => {
+    try {
+      await cambiarEstadoUsuario(selectedUser.id);
+      await fetchUsuarios();
+      setShowModal(false);
+    } catch (error) {
+      console.error("Error al cambiar estado:", error);
+    }
   };
 
-  const filteredUsers = users.filter(user => 
-    user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredUsers = users.filter(
+    (user) =>
+      user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -35,9 +57,9 @@ const UserManagement = () => {
       <div className="um-header">
         <h3 className="um-title">Gestión de Usuarios</h3>
         <div className="um-search-container">
-          <input 
-            type="text" 
-            className="um-search-input" 
+          <input
+            type="text"
+            className="um-search-input"
             placeholder="Buscar usuario..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -56,29 +78,34 @@ const UserManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredUsers.map(user => (
+          {filteredUsers.map((user) => (
             <tr key={user.id}>
               <td>{user.username}</td>
               <td>{user.email}</td>
               <td>{user.registerDate}</td>
               <td>
-                <span className={`um-status ${user.status === 'active' ? 'um-status-active' : 'um-status-inactive'}`}>
-                  {user.status === 'active' ? 'Activo' : 'Inactivo'}
+                <span
+                  className={`um-status ${
+                    user.status === "active" ? "um-status-active" : "um-status-inactive"
+                  }`}
+                >
+                  {user.status === "active" ? "Activo" : "Inactivo"}
                 </span>
               </td>
               <td>
-                {user.status === 'active' ? (
-                  <button 
-                    className="um-action-btn um-action-btn-danger"
-                    onClick={() => handleDeactivate(user)}
-                  >
-                    <i className="fas fa-user-slash"></i> Desactivar
-                  </button>
-                ) : (
-                  <button className="um-action-btn um-action-btn-success">
-                    <i className="fas fa-user-check"></i> Activar
-                  </button>
-                )}
+                <button
+                  className={`um-action-btn ${
+                    user.status === "active" ? "um-action-btn-danger" : "um-action-btn-success"
+                  }`}
+                  onClick={() => handleToggleEstado(user)}
+                >
+                  <i
+                    className={`fas ${
+                      user.status === "active" ? "fa-user-slash" : "fa-user-check"
+                    }`}
+                  ></i>{" "}
+                  {user.status === "active" ? "Desactivar" : "Activar"}
+                </button>
               </td>
             </tr>
           ))}
@@ -86,13 +113,21 @@ const UserManagement = () => {
       </table>
 
       <ConfirmModal
-        isOpen={showDeactivateModal}
-        onClose={() => setShowDeactivateModal(false)}
-        onConfirm={confirmDeactivate}
-        title="Confirmar Desactivación"
-        icon="user-slash"
-        message="¿Estás seguro de que deseas desactivar esta cuenta? El usuario no podrá acceder al sistema hasta que sea reactivada."
-        confirmText="Desactivar"
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onConfirm={confirmToggleEstado}
+        title={
+          selectedUser?.status === "active"
+            ? "Confirmar Desactivación"
+            : "Confirmar Activación"
+        }
+        icon={selectedUser?.status === "active" ? "user-slash" : "user-check"}
+        message={
+          selectedUser?.status === "active"
+            ? "¿Estás seguro de que deseas desactivar esta cuenta? El usuario no podrá acceder al sistema hasta que sea reactivado."
+            : "¿Estás seguro de que deseas activar esta cuenta? El usuario podrá volver a acceder al sistema."
+        }
+        confirmText={selectedUser?.status === "active" ? "Desactivar" : "Activar"}
       />
     </div>
   );

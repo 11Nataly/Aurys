@@ -3,8 +3,8 @@ import {
   listarTecnicasAdmin,
   crearTecnica,
   subirVideo,
-  editarTecnica,   // ✅ servicio editar
-  eliminarTecnica, // ✅ servicio eliminar
+  editarTecnica,   // 
+  eliminarTecnica, // 
 } from "../../services/tecnicasService";
 import AddGuideModal from "../components/AddGuideModal";
 import "./GuideManagement.css";
