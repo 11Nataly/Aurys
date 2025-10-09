@@ -1,0 +1,317 @@
+/* src/Joven/components/Home/home.css */
+
+/* Contenedor principal - MÁRGENES SUPERIOR E INFERIOR AUMENTADOS */
+.home-container {
+  padding: 0;
+  color: #000000;
+  width: 100%;
+  margin: 40px 0; /* Margen superior e inferior aumentado significativamente */
+}
+
+/* Carta de bienvenida */
+.welcome-card {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #4840c2, #848ddb);
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 0 0 2.5rem 0; /* Margen inferior aumentado */
+  box-shadow: 0 4px 12px rgba(72, 64, 194, 0.2);
+}
+
+.welcome-icon {
+  font-size: 2.5rem;
+  margin-right: 1rem;
+}
+
+.welcome-text h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  text-align: left; /* Aseguramos alineación izquierda */
+}
+
+.welcome-text p {
+  margin: 0;
+  opacity: 0.9;
+  text-align: left; /* Aseguramos alineación izquierda */
+}
+
+/* Contenedor de tarjetas */
+.cards-container {
+  margin-bottom: 3rem; /* Margen inferior aumentado */
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem; /* Espacio entre tarjetas aumentado */
+  margin: 0 0 2.5rem 0; /* Margen inferior aumentado */
+}
+
+/* Tarjetas individuales - CONTENIDO JUSTIFICADO A LA IZQUIERDA */
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.8rem; /* Padding aumentado */
+  box-shadow: 0 4px 12px rgba(72, 64, 194, 0.1);
+  text-align: left; /* Cambiado de center a left */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #848ddb;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Alineación a la izquierda */
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(72, 64, 194, 0.15);
+}
+
+.card-icon {
+  font-size: 2.8rem; /* Tamaño de icono aumentado */
+  margin-bottom: 1.2rem; /* Espacio inferior aumentado */
+  align-self: flex-start; /* Icono alineado a la izquierda */
+}
+
+.card h3 {
+  margin: 0 0 1.2rem 0; /* Margen inferior aumentado */
+  color: #4840c2;
+  font-size: 1.3rem; /* Tamaño de fuente aumentado */
+  text-align: left; /* Aseguramos alineación izquierda */
+  width: 100%; /* Aseguramos que ocupe todo el ancho */
+}
+
+.card p {
+  margin: 0 0 1.8rem 0; /* Margen inferior aumentado */
+  color: #000000;
+  line-height: 1.6; /* Interlineado aumentado */
+  font-size: 1.05rem; /* Tamaño de fuente aumentado */
+  text-align: left; /* Aseguramos alineación izquierda */
+  width: 100%; /* Aseguramos que ocupe todo el ancho */
+}
+
+.card button {
+  background: #4840c2;
+  color: #ffffff;
+  border: none;
+  padding: 0.85rem 1.8rem; /* Padding aumentado */
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.05rem; /* Tamaño de fuente aumentado */
+  transition: background 0.3s ease;
+  align-self: flex-start; /* Botón alineado a la izquierda */
+  margin-top: auto; /* Empuja el botón hacia abajo si hay espacio */
+}
+
+.card button:hover {
+  background: #3a33a0;
+}
+
+/* Sección de emergencia */
+.emergency-section {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 2rem; /* Padding aumentado */
+  margin-bottom: 2.5rem; /* Margen inferior aumentado */
+  border: 1px solid #848ddb;
+  box-shadow: 0 4px 12px rgba(72, 64, 194, 0.1);
+}
+
+.emergency-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.8rem; /* Margen inferior aumentado */
+  justify-content: flex-start; /* Aseguramos alineación izquierda */
+}
+
+.emergency-icon {
+  font-size: 2.5rem; /* Tamaño de icono aumentado */
+  margin-right: 1rem; /* Margen derecho aumentado */
+  color: #4840c2;
+}
+
+.emergency-title {
+  margin: 0;
+  color: #4840c2;
+  font-size: 1.5rem; /* Tamaño de fuente aumentado */
+  text-align: left; /* Aseguramos alineación izquierda */
+}
+
+/* Tabla de emergencia */
+.emergency-table-kit {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(72, 64, 194, 0.1);
+  margin: 0;
+}
+
+.emergency-table-kit th,
+.emergency-table-kit td {
+  padding: 1.2rem; /* Padding aumentado */
+  text-align: left; /* Aseguramos alineación izquierda */
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.emergency-table-kit th {
+  background-color: #4840c2;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1.1rem; /* Tamaño de fuente aumentado */
+}
+
+.emergency-table-kit tr:last-child td {
+  border-bottom: none;
+}
+
+.emergency-table-kit tr:hover {
+  background-color: #f0f2ff;
+}
+
+.emergency-table-kit td {
+  font-size: 1.05rem; /* Tamaño de fuente aumentado */
+}
+
+.emergency-table-kit td:nth-child(2) {
+  font-weight: 600;
+  color: #4840c2;
+}
+
+/* Media Queries para responsividad DENTRO del layout */
+@media (max-width: 1024px) {
+  .home-container {
+    margin: 30px 0; /* Margen reducido en tablets */
+  }
+  
+  .cards {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .welcome-card {
+    padding: 1.5rem;
+    margin: 0 0 2rem 0;
+  }
+  
+  .card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-container {
+    margin: 25px 0; /* Margen reducido en móviles */
+  }
+  
+  .cards {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .welcome-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+    margin: 0 0 2rem 0;
+  }
+  
+  .welcome-icon {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+  
+  .welcome-text h2,
+  .welcome-text p {
+    text-align: center; /* Centrado en móviles para la bienvenida */
+  }
+  
+  .emergency-section {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .emergency-table-kit {
+    display: block;
+    overflow-x: auto;
+  }
+  
+  .emergency-table-kit th,
+  .emergency-table-kit td {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-container {
+    margin: 20px 0; /* Margen mínimo en móviles pequeños */
+  }
+  
+  .welcome-card {
+    padding: 1.2rem;
+    margin: 0 0 1.5rem 0;
+  }
+  
+  .welcome-icon {
+    font-size: 2.2rem;
+  }
+  
+  .welcome-text h2 {
+    font-size: 1.3rem;
+  }
+  
+  .card {
+    padding: 1.2rem;
+    margin: 0 0 1.2rem 0;
+  }
+  
+  .card-icon {
+    font-size: 2.2rem;
+  }
+  
+  .card h3 {
+    font-size: 1.2rem;
+  }
+  
+  .emergency-section {
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .emergency-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .emergency-icon {
+    margin-right: 0;
+    margin-bottom: 0.8rem;
+    font-size: 2rem;
+  }
+  
+  .emergency-title {
+    font-size: 1.3rem;
+  }
+  
+  .emergency-table-kit th,
+  .emergency-table-kit td {
+    padding: 0.8rem;
+    font-size: 0.95rem;
+  }
+  
+  .emergency-table-kit th {
+    font-size: 1rem;
+  }
+}
+
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .card button {
+    transition: none;
+  }
+}

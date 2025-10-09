@@ -1,0 +1,147 @@
+.header {
+  background-color: #4a3fb0;
+  color: white;
+  padding: 0 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-sizing: border-box;
+  height: 60px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 100%;
+}
+
+.hamburger-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  height: 100%;
+}
+
+.hamburger-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.hamburger-icon {
+  font-size: 1.3rem;
+  width: 24px;
+  height: 24px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 100%;
+}
+
+.logo-img {
+  height: auto;
+  width: 150px;
+  max-height: 90%;
+  object-fit: contain;
+}
+
+.header-right {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.profile-menu {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.profile-button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 40px;
+}
+
+.profile-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.profile-icon {
+  font-size: 1.3rem;
+  width: 26px;
+  height: 26px;
+}
+
+.profile-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0.5rem 0;
+  min-width: 150px;
+  z-index: 1001;
+  display: none;
+}
+
+.profile-dropdown.show {
+  display: block;
+}
+
+.profile-dropdown a {
+  display: block;
+  padding: 0.6rem 1rem;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.profile-dropdown a:hover {
+  background-color: #f5f5f5;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0 1rem;
+    height: 55px;
+  }
+  
+  .hamburger-btn {
+    display: flex;
+  }
+  
+  .logo-img {
+    width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-img {
+    width: 100px;
+  }
+}

@@ -1,0 +1,238 @@
+/* components/Admin/AddGuideModal.css */
+/* Prevenir scroll del body cuando el modal está abierto */
+body.agm-modal-open {
+  overflow: hidden;
+}
+
+/* Fondo que cubre TODA la pantalla */
+.agm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+  padding: 1rem;
+}
+
+/* Contenedor del modal centrado */
+.agm-modal-dialog {
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  margin: auto;
+}
+
+/* Contenido del modal */
+.agm-modal-content {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  animation: agm-modal-fadeIn 0.3s ease-out;
+}
+
+.agm-modal-header {
+  background: linear-gradient(135deg, #848ddb, #4840c2);
+  color: #ffffff;
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.agm-modal-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #ffffff;
+}
+
+.agm-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.agm-close:hover {
+  opacity: 1;
+}
+
+.agm-modal-body {
+  padding: 1.5rem;
+  text-align: left;
+  overflow-y: auto;
+  background-color: #ffffff;
+}
+
+.agm-form-group {
+  margin-bottom: 1.2rem;
+}
+
+.agm-form-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #000000;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.agm-form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  font-size: 0.95rem;
+  transition: border 0.2s ease-in-out, box-shadow 0.2s;
+  color: #000000;
+}
+
+.agm-form-control:focus {
+  border-color: #848ddb;
+  box-shadow: 0 0 0 3px rgba(132, 141, 219, 0.15);
+  outline: none;
+}
+
+.agm-duration-input {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.agm-duration-input .agm-form-control {
+  width: 70px;
+  text-align: center;
+}
+
+.agm-duration-separator {
+  font-weight: 600;
+  color: #4840c2;
+  font-size: 1.1rem;
+}
+
+.agm-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1.2rem 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.agm-btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  min-width: 100px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agm-btn-secondary {
+  background-color: #a0aec0;
+  color: #ffffff;
+}
+
+.agm-btn-secondary:hover {
+  background-color: #718096;
+}
+
+.agm-btn-primary {
+  background-color: #4840c2;
+  color: #ffffff;
+}
+
+.agm-btn-primary:hover:not(:disabled) {
+  background-color: #3a33a8;
+}
+
+.agm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #a0aec0;
+}
+
+.agm-form-control.agm-is-invalid {
+  border-color: #e53e3e;
+  background-color: #fed7d7;
+}
+
+.agm-invalid-feedback {
+  display: block;
+  color: #e53e3e;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+  text-align: left;
+}
+
+.agm-form-text {
+  color: #718096;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  text-align: left;
+}
+
+textarea.agm-form-control {
+  resize: vertical;
+  min-height: 100px;
+}
+
+@keyframes agm-modal-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .agm-modal-dialog {
+    width: 95%;
+  }
+  
+  .agm-modal-footer {
+    flex-direction: column;
+  }
+  
+  .agm-btn {
+    width: 100%;
+  }
+  
+  .agm-duration-input {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
