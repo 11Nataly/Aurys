@@ -1,17 +1,21 @@
+
 // src/Joven/components/Header.jsx
 import { useState, useRef, useEffect } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { FaUser, FaBars, FaChevronRight } from 'react-icons/fa';
+
 import logoaurys from './logoaurys.png';
 import './header.css';
 
 const Header = ({ onToggleSidebar, isSidebarOpen }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef(null);
+
   const location = useLocation();
   const navigate = useNavigate();
 
   // 🔹 Cerrar menú de perfil al hacer clic fuera
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profileRef.current && !profileRef.current.contains(event.target)) {
@@ -22,6 +26,7 @@ const Header = ({ onToggleSidebar, isSidebarOpen }) => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
 
   // 🔹 Cerrar sesión: limpiar localStorage y redirigir al login
   const handleCerrarSesion = () => {
@@ -77,6 +82,7 @@ const Header = ({ onToggleSidebar, isSidebarOpen }) => {
           <img src={logoaurys} alt="Aurys Logo" className="logo-img" />
         </div>
 
+
         {/* Migas de pan */}
         {showBreadcrumb && (
           <nav className="breadcrumb" aria-label="Migas de pan">
@@ -98,6 +104,7 @@ const Header = ({ onToggleSidebar, isSidebarOpen }) => {
             ))}
           </nav>
         )}
+
       </div>
 
       <div className="header-right">
