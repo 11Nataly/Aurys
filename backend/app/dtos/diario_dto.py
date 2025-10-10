@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
+from datetime import date,datetime
 
 
 
@@ -13,5 +14,19 @@ class DiarioResponde(BaseModel):
     titulo: str 
     contenido: str
         
+
+class NotaDiarioBase(BaseModel):
+    titulo: str
+    contenido: str
+
+class NotaDiarioResponse(NotaDiarioBase):
+    id: int
+    usuario_id: int
+    activo: bool
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        orm_mode = True
 
     

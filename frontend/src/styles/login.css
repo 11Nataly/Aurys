@@ -1,0 +1,125 @@
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("../assets/images/fondo.jpg.jpg");
+  background-size: cover;
+  padding: 1rem;
+  min-height: 100vh;
+}
+
+/* Caja del formulario */
+.login-box {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  padding: 3rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Títulos */
+.login-title {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 4px;
+
+}
+
+.login-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+/* Formulario */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Grupo de input con icono */
+.input-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 50px;
+  padding: 8px 14px;
+}
+
+.input-group input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+
+.input-icon {
+  color: #999;
+  width: 18px;
+  height: 18px;
+  margin-left: 8px;
+}
+
+/* Mensaje de error */
+.error-text {
+  color: #e63946;
+  font-size: 1.2rem;
+  margin-top: 4px;
+  text-align: center;
+}
+
+/* Enlace de recuperación */
+.forgot-password {
+  font-size: 1.1rem;
+  margin-top: 6px;
+  text-align: center;
+}
+
+.forgot-password a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+
+/* Botón */
+.login-btn {
+  width: 100%;
+  background-color: #2d22c5;
+  color: white;
+  border: none;
+  padding: 1.1rem;
+  border-radius: 50px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-btn:hover {
+  background-color: #2b16a3;
+}
+
+/* Texto para registro */
+.register-text {
+  margin-top: 16px;
+  font-size: 1.1rem;
+  color: #555;
+  text-align: center;
+}
+
+.register-text a {
+  color: #0051ff;
+  font-weight: 500;
+  text-decoration: none;
+  justify-content: center;
+}
+
+.register-text a:hover {
+  text-decoration: underline;
+}

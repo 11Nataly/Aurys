@@ -26,7 +26,6 @@ const Header = () => {
           {isProfileOpen && (
             <div className="profile-dropdown">
               <a href="/perfil">Mi Perfil</a>
-              {/* Quitamos Configuración */}
               <a href="/logout">Cerrar Sesión</a>
             </div>
           )}
