@@ -76,37 +76,6 @@ const MisMotivaciones = () => {
   return (
     <div className="mm-page">
       <div className="mm-container">
-        {/* Main header */}
-        <header className="mm-header">
-          <div>
-            <h1 className="mm-title">Mis motivaciones</h1>
-            <p className="mm-sub">Organiza y mantén visibles las razones que te impulsan.</p>
-          </div>
-
-          <div className="mm-actions">
-            <input
-              className="mm-search"
-              placeholder="Buscar motivaciones"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-
-            <button
-              className={soloFavoritas ? "mm-btn mm-btn-primary mm-fav-active" : "mm-btn mm-btn-outline"}
-              onClick={() => setSoloFavoritas((v) => !v)}
-              title="Ver solo favoritas"
-            >
-              ♥ Favoritas
-            </button>
-
-            <button
-              className="mm-btn mm-btn-primary"
-              onClick={() => setMostrarAgregar(true)}
-            >
-              + Nueva motivación
-            </button>
-          </div>
-        </header>
 
         <div className="mm-layout">
           {/* Sidebar categorias */}
