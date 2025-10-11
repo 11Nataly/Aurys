@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import "../components/MisMotivaciones/categorias"; // si usas el css global que te entregué
-import "../components/Motivaciones/categorias/categorias.css";     // estilos de categorias (opcional)
-import "./MisMotivaciones.css";
+import "../components/MisMotivaciones/motivaciones/motivaciones.css"; // si usas el css global que te entregué
+import "../components/MisMotivaciones/categorias/categorias.css";     // estilos de categorias (opcional)
+import "../../styles/MisMotivaciones.css"; // estilos específicos de la página (opcional)
 
-import ListaCategorias from "../components/Motivaciones/Categorias/ListaCategorias";
-import ListaMotivaciones from "../components/Motivaciones/Motivaciones/ListaMotivaciones";
+import ListaCategorias from "../components/MisMotivaciones/categorias/ListaCategorias";
+import ListaMotivaciones from "../components/MisMotivaciones/motivaciones/ListaMotivaciones";
 
 // Importar datos falsos (webpack/CRA supports importing JSON from src)
 import motivacionesData from "../fake_data/motivaciones.json";

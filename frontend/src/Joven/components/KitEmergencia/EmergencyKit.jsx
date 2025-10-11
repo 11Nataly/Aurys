@@ -9,6 +9,10 @@ const EmergencyKit = ({ minimal = false }) => {
     navigate("/joven/afrontamiento");
   };
 
+  const handleMisMotivacionesClick = () => {
+    navigate("/joven/kit-emergencia/mis-motivaciones");
+  };
+
   // Cuando minimal es true, mostramos la versión compacta
   if (minimal) {
     return (
@@ -57,8 +61,11 @@ const EmergencyKit = ({ minimal = false }) => {
       <div className="emergency-header">
         <h1 className="titulo">Kit de emergencia</h1>
         <div className="emergency-buttons">
-          <button className="custom-button">⭐ Mis motivaciones</button>
-          <button 
+          <button className="custom-button" 
+          onClick={handleMisMotivacionesClick}>
+            ⭐ Mis motivaciones
+          </button>
+          <button
             className="custom-button"
             onClick={handleAfrontamientoClick}
           >

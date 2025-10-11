@@ -56,7 +56,7 @@ export default function JovenLayout() {
               <Route path="afrontamiento" element={<Afrontamiento />} />
               <Route path="kit-emergencia" element={<KitEmergencia />} />
               <Route path="kit-emergencia/afrontamiento" element={<Afrontamiento />} />
-              <Route path="mis-motivaciones" element={<MisMotivaciones />} />
+              <Route path="kit-emergencia/mis-motivaciones" element={<MisMotivaciones />} />
               <Route path="promesas" element={<Promesas />} />
             </Routes>
           </main>
