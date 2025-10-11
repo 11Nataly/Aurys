@@ -1,0 +1,178 @@
+.motivaciones-panel {
+  flex: 1;
+  padding: 1.2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(72, 64, 194, 0.1);
+}
+
+.motivaciones-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.btn-nueva-motivacion {
+  background: linear-gradient(135deg, #4840c2, #848ddb);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.filtros-barra {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.filtros-barra input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #848ddb;
+  border-radius: 8px;
+}
+
+.filtros-barra button {
+  background: #f6f6ff;
+  border: 1px solid #848ddb;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.filtros-barra .favorito-activo {
+  background: linear-gradient(135deg, #4840c2, #848ddb);
+  color: #fff;
+}
+
+.motivaciones-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.tarjeta-motivacion {
+  background: #fff;
+  border: 1px solid #e5e5ff;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s;
+}
+
+.tarjeta-motivacion:hover {
+  transform: translateY(-5px);
+}
+
+.img-motivacion {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.motivacion-info {
+  padding: 10px;
+}
+
+.titulo-favorito {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.favorito {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #848ddb;
+  cursor: pointer;
+}
+
+.favorito.activo {
+  color: #4840c2;
+}
+
+.descripcion {
+  font-size: 0.9rem;
+  color: #444;
+  margin-top: 4px;
+}
+
+.acciones {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.btn-editar, .btn-eliminar {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.btn-editar {
+  background: #f6f6ff;
+  color: #4840c2;
+}
+
+.btn-eliminar {
+  background: #ffe6e6;
+  color: #b30000;
+}
+
+.modal-motivacion {
+  background: #fff;
+  border-radius: 12px;
+  width: 480px;
+  max-width: 90%;
+  padding: 1.2rem;
+  box-shadow: 0 0 20px rgba(72, 64, 194, 0.2);
+}
+
+.modal-body input,
+.modal-body textarea,
+.modal-body select {
+  width: 100%;
+  border: 1px solid #848ddb;
+  border-radius: 8px;
+  padding: 8px;
+  margin-top: 6px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  gap: 8px;
+}
+
+.btn-cancelar {
+  background: #f2f2f2;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.btn-guardar {
+  background: linear-gradient(135deg, #4840c2, #848ddb);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .motivaciones-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .motivaciones-grid {
+    grid-template-columns: 1fr;
+  }
+}

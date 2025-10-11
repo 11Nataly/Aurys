@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "usuario_id": 1,
+    "categoria_id": 1,
+    "titulo": "Salud y bienestar",
+    "descripcion": "Cuidar mi cuerpo y mente con hábitos diarios.",
+    "imagen": "https://picsum.photos/seed/bienestar1/600/300",
+    "esFavorita": 1,
+    "activo": 1,
+    "created_at": "2025-09-20T10:00:00Z",
+    "update_at": "2025-10-05T09:00:00Z"
+  },
+  {
+    "id": 2,
+    "usuario_id": 1,
+    "categoria_id": 2,
+    "titulo": "Familia",
+    "descripcion": "Estar presente y construir recuerdos con quienes amo.",
+    "imagen": "https://picsum.photos/seed/familia/600/300",
+    "esFavorita": 1,
+    "activo": 1,
+    "created_at": "2025-09-18T09:30:00Z",
+    "update_at": "2025-10-04T16:45:00Z"
+  },
+  {
+    "id": 3,
+    "usuario_id": 1,
+    "categoria_id": 3,
+    "titulo": "Aprendizaje constante",
+    "descripcion": "Crecer cada día con nuevas habilidades y conocimientos.",
+    "imagen": "https://picsum.photos/seed/aprendizaje1/600/300",
+    "esFavorita": 0,
+    "activo": 1,
+    "created_at": "2025-09-15T08:45:00Z",
+    "update_at": "2025-10-02T12:30:00Z"
+  },
+  {
+    "id": 4,
+    "usuario_id": 1,
+    "categoria_id": 4,
+    "titulo": "Aventura",
+    "descripcion": "Vivir nuevas experiencias y conocer lugares diferentes.",
+    "imagen": "https://picsum.photos/seed/aventura1/600/300",
+    "esFavorita": 0,
+    "activo": 1,
+    "created_at": "2025-09-10T14:20:00Z",
+    "update_at": "2025-09-25T18:15:00Z"
+  },
+  {
+    "id": 5,
+    "usuario_id": 1,
+    "categoria_id": 5,
+    "titulo": "Contribuir al entorno",
+    "descripcion": "Ayudar a otros y generar un impacto positivo en mi comunidad.",
+    "imagen": "https://picsum.photos/seed/contribucion1/600/300",
+    "esFavorita": 1,
+    "activo": 1,
+    "created_at": "2025-09-08T11:10:00Z",
+    "update_at": "2025-09-28T09:20:00Z"
+  },
+  {
+    "id": 6,
+    "usuario_id": 1,
+    "categoria_id": 6,
+    "titulo": "Recordar momentos felices",
+    "descripcion": "Mantener presentes los recuerdos que me hacen sonreír.",
+    "imagen": "https://picsum.photos/seed/recuerdos1/600/300",
+    "esFavorita": 0,
+    "activo": 1,
+    "created_at": "2025-09-05T10:00:00Z",
+    "update_at": "2025-09-15T08:30:00Z"
+  }
+]

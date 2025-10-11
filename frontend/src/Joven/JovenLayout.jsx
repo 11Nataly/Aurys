@@ -12,6 +12,7 @@ import Diario from "./pages/Diario";
 import Afrontamiento from "./pages/Afrontamiento";
 import KitEmergencia from "./pages/KitEmergencia";
 import Promesas from "./pages/Promesas";
+import MisMotivaciones from "./pages/MisMotivaciones";
 
 export default function JovenLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -55,6 +56,7 @@ export default function JovenLayout() {
               <Route path="afrontamiento" element={<Afrontamiento />} />
               <Route path="kit-emergencia" element={<KitEmergencia />} />
               <Route path="kit-emergencia/afrontamiento" element={<Afrontamiento />} />
+              <Route path="mis-motivaciones" element={<MisMotivaciones />} />
               <Route path="promesas" element={<Promesas />} />
             </Routes>
           </main>
