@@ -2,11 +2,6 @@
 .mm-page{ background:#FFFFFF; min-height:100vh; padding:18px; color:#000000; }
 .mm-container{ max-width:1200px; margin:0 auto; }
 
-/* Header */
-.mm-header{ display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:14px; }
-.mm-title{ margin:0; font-size:1.6rem; color:#000; }
-.mm-sub{ margin:4px 0 0; color:#666; font-size:0.95rem; }
-
 /* Actions */
 .mm-actions{ display:flex; gap:10px; align-items:center; }
 .mm-search{ padding:10px 12px; border-radius:10px; border:1px solid #848ddb; width:320px; }
