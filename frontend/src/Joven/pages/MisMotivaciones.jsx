@@ -76,7 +76,6 @@ const MisMotivaciones = () => {
   return (
     <div className="mm-page">
       <div className="mm-container">
-
         <div className="mm-layout">
           {/* Sidebar categorias */}
           <aside className="mm-sidebar">

@@ -1,5 +1,13 @@
 /* Page-level layout + palette (lavandas/violet) */
-.mm-page{ background:#FFFFFF; min-height:100vh; padding:18px; color:#000000; }
+.mm-page{ min-height:100vh; color:#000000;
+ margin: 40px auto; /* MARGEN SUPERIOR AUMENTADO de 20px a 40px */
+    padding: 40px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.288);
+    border-radius: 16px;
+    background: #ffffff;
+    margin-bottom: 40px;
+    font-family: 'Poppins', sans-serif;
+}
 .mm-container{ max-width:1200px; margin:0 auto; }
 
 /* Actions */
@@ -12,7 +20,7 @@
 
 /* Layout */
 .mm-layout{ display:flex; gap:18px; align-items:flex-start; }
-.mm-sidebar{ width:260px; }
+.mm-sidebar{ width:260px;  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.233); }
 
 /* Main area */
 .mm-main{ flex:1; }

@@ -84,17 +84,30 @@
   align-items: center;
 }
 
-.favorito {
+
+/* ===============================
+   ❤️ BOTÓN FAVORITO - SIN EFECTO MORADO
+   =============================== */
+.btn-favorito{
   background: none;
-  border: none;
-  font-size: 1.2rem;
-  color: #848ddb;
+  font-size: 1.5rem;
+  color: #ccc;
   cursor: pointer;
+  padding: 5px;
+  transition: all 0.3s ease;
+    width: 38px;
+  height: 38px;
 }
 
-.favorito.activo {
-  color: #4840c2;
+.btn-favorito:hover{
+  transform: scale(1.1);
+  color: indianred;
 }
+
+.btn-favorito.activo {
+  color: #ff5a5f;
+}
+
 
 .descripcion {
   font-size: 0.9rem;
@@ -103,7 +116,7 @@
 }
 
 .acciones {
-  display: flex;
+  display: inline-flex;
   justify-content: space-between;
   padding: 10px;
 }
@@ -111,18 +124,19 @@
 .btn-editar, .btn-eliminar {
   border: none;
   border-radius: 8px;
-  padding: 6px 10px;
   cursor: pointer;
 }
 
 .btn-editar {
   background: #f6f6ff;
   color: #4840c2;
+  padding: 6px 10px;
 }
 
 .btn-eliminar {
   background: #ffe6e6;
   color: #b30000;
+  padding: 10px 20px;
 }
 
 .modal-motivacion {

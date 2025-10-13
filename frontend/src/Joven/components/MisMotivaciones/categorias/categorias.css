@@ -122,6 +122,13 @@
   cursor: pointer;
 }
 
+/* 🖱️ ESTILO AL PASAR EL RATÓN (HOVER) */
+.btn-sugerencia:hover {
+  /* ¡Línea clave! Cambia SOLAMENTE el color de la letra a blanco. */
+  color: rgb(217, 162, 243); 
+}
+
+
 .emoji-lista {
   display: flex;
   gap: 8px;

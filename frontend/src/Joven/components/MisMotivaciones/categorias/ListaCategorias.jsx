@@ -38,6 +38,8 @@ const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
     onSelectCategoria?.(id);
   };
 
+
+  
   return (
     <div className="categorias-panel">
       <div className="categorias-header">

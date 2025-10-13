@@ -1,3 +1,5 @@
+import { FaHeart, FaRegHeart, FaPlay, FaStar, FaRegStar } from 'react-icons/fa';
+
 const TarjetaMotivacion = ({ motivacion, onEliminar, onFavorita }) => {
   return (
     <div className="tarjeta-motivacion">
@@ -11,13 +13,14 @@ const TarjetaMotivacion = ({ motivacion, onEliminar, onFavorita }) => {
         <div className="titulo-favorito">
           <h4>{motivacion.titulo}</h4>
           <button
-            className={
-              motivacion.esFavorita ? "favorito activo" : "favorito"
-            }
-            onClick={() => onFavorita(motivacion.id)}
-          >
-            ♥
-          </button>
+  className={`btn-favorito ${motivacion.esFavorita ? "activo" : ""}`}
+  onClick={() => onFavorita(motivacion.id)}
+  title={motivacion.esFavorita ? "Quitar de favoritos" : "Agregar a favoritos"}
+>
+     {motivacion.esFavorita ? <FaHeart /> : <FaRegHeart />}
+
+</button>
+
         </div>
         <p className="descripcion">{motivacion.descripcion}</p>
       </div>
