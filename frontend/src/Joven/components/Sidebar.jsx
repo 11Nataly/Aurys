@@ -1,3 +1,4 @@
+// src/Joven/components/Sidebar/Sidebar.jsx
 import { Link, useLocation } from 'react-router-dom';
 import { 
   FaHome, 
@@ -14,11 +15,12 @@ const Sidebar = ({ isOpen }) => {
   const location = useLocation();
   
   const menuItems = [
-    { path: '/', icon: <FaHome />, label: 'Inicio' },
-    { path: '/diario', icon: <FaBook />, label: 'Diario' },
-    { path: '/kit', icon: <FaFirstAid />, label: 'Kit de emergencia' },
-    { path: '/promesas', icon: <FaFlag />, label: 'Promesas' },
-    { path: '/papelera', icon: <FaTrash />, label: 'Papelera' },
+    { path: '/joven/home', icon: <FaHome />, label: 'Inicio' },
+    { path: '/joven/diario', icon: <FaBook />, label: 'Diario' },
+    { path: '/joven/kit-emergencia', icon: <FaFirstAid />, label: 'Kit de emergencia' },
+    { path: '/joven/promesas', icon: <FaFlag />, label: 'Promesas' },
+    // ✅ Nuevo botón Papelera (mismo diseño)
+    { path: '/joven/papelera', icon: <FaTrash />, label: 'Papelera' },
   ];
 
   return (
