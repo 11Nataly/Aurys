@@ -1,0 +1,118 @@
+/* Contenedor general */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+}
+
+/* Pestañas */
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  padding: 10px 16px;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 3px solid transparent;
+}
+
+.tab-btn:hover {
+  color: #4444cc;
+}
+
+.tab-btn.active {
+  color: #4444cc;
+  border-bottom: 3px solid #4444cc;
+  font-weight: 600;
+}
+
+/* Recuadro de la categoría */
+.category-group {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+}
+
+.category-title {
+  color: #4444cc;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* Elementos dentro de cada categoría */
+.trash-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.item-title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.item-meta {
+  display: flex;
+  justify-content: space-between;
+  color: #777;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-restore {
+  background-color: #22c55e;
+  color: white;
+  margin-right: 8px;
+}
+
+.btn-delete {
+  background-color: #6366f1;
+  color: white;
+}
+
+.btn-restore:hover {
+  background-color: #16a34a;
+}
+
+.btn-delete:hover {
+  background-color: #4f46e5;
+}
+
+/* Mensajes vacíos */
+.empty-category {
+  color: #777;
+  font-style: italic;
+  text-align: center;
+}
+
+/* Botón flotante */
+.btn-trash {
+  margin-top: 2rem;
+  background-color: #4444cc;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
