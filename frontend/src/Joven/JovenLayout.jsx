@@ -12,6 +12,9 @@ import Afrontamiento from "./pages/Afrontamiento";
 import KitEmergencia from "./pages/KitEmergencia";
 import Promesas from "./pages/Promesas";
 
+// ✅ Importa la Papelera
+import TrashSection from "../Joven/components/Papelera/TrashSection";
+
 export default function JovenLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
@@ -24,7 +27,7 @@ export default function JovenLayout() {
   };
 
   return (
-    <div className={`main-layout ${sidebarOpen ? 'has-sidebar' : 'sidebar-collapsed'}`}>
+    <div className={`main-layout ${sidebarOpen ? "has-sidebar" : "sidebar-collapsed"}`}>
       {/* HEADER con control del sidebar */}
       <Header onToggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
 
@@ -33,15 +36,10 @@ export default function JovenLayout() {
         <Sidebar isOpen={sidebarOpen} />
 
         {/* Overlay para móviles */}
-        {sidebarOpen && (
-          <div 
-            className="sidebar-overlay-mobile"
-            onClick={closeSidebar}
-          />
-        )}
+        {sidebarOpen && <div className="sidebar-overlay-mobile" onClick={closeSidebar} />}
 
         {/* CONTENEDOR PRINCIPAL */}
-        <div className={`main-content ${!sidebarOpen ? 'sidebar-collapsed' : ''}`}>
+        <div className={`main-content ${!sidebarOpen ? "sidebar-collapsed" : ""}`}>
           <main className="page-content">
             <Routes>
               <Route index element={<Home />} />
@@ -51,11 +49,14 @@ export default function JovenLayout() {
               <Route path="kit-emergencia" element={<KitEmergencia />} />
               <Route path="kit-emergencia/afrontamiento" element={<Afrontamiento />} />
               <Route path="promesas" element={<Promesas />} />
+
+              {/* ✅ Nueva ruta: Papelera */}
+              <Route path="papelera" element={<TrashSection />} />
             </Routes>
           </main>
         </div>
       </div>
-      
+
       {/* FOOTER */}
       <Footer />
     </div>
