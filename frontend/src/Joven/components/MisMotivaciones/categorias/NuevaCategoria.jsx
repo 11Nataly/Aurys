@@ -6,11 +6,8 @@ const sugerencias = [
   "Familia", "Amigos", "Mascotas", "Momentos"
 ];
 
-const emojis = ["💗", "📸", "✈️", "🏆", "👨‍👩‍👧", "🐶", "🎉", "🌿"];
-
 const NuevaCategoria = ({ onCerrar, onGuardar }) => {
   const [nombre, setNombre] = useState("");
-  const [emoji, setEmoji] = useState("💗");
 
   const handleGuardar = () => {
     if (!nombre.trim()) return alert("Debes ingresar un nombre de categoría");
@@ -50,24 +47,6 @@ const NuevaCategoria = ({ onCerrar, onGuardar }) => {
                 {s}
               </button>
             ))}
-          </div>
-
-          <label>Elige un emoji representativo</label>
-          <div className="emoji-lista">
-            {emojis.map((e, i) => (
-              <button
-                key={i}
-                onClick={() => setEmoji(e)}
-                className={emoji === e ? "emoji activo" : "emoji"}
-              >
-                {e}
-              </button>
-            ))}
-          </div>
-
-          <div className="vista-previa">
-            <span className="emoji-previa">{emoji}</span>
-            <span className="nombre-previa">{nombre || "Vista previa"}</span>
           </div>
         </div>
 
