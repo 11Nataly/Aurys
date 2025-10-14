@@ -6,6 +6,7 @@ import "../../styles/MisMotivaciones.css"; // estilos específicos de la página
 import ListaCategorias from "../components/MisMotivaciones/categorias/ListaCategorias";
 import ListaMotivaciones from "../components/MisMotivaciones/motivaciones/ListaMotivaciones";
 
+
 // Importar datos falsos (webpack/CRA supports importing JSON from src)
 import motivacionesData from "../fake_data/motivaciones.json";
 import categoriasData from "../fake_data/categorias.json";
@@ -85,7 +86,7 @@ const MisMotivaciones = () => {
 
           {/* Main content */}
           <main className="mm-main">
-            {/* Toolbar secundaria (opcional: ordenar, filtros) */}
+ {/* Toolbar secundaria (opcional: ordenar, filtros) */}
             <div className="mm-toolbar">
               <div className="mm-toolbar-left">
                 {categoriaSeleccionada
@@ -96,7 +97,6 @@ const MisMotivaciones = () => {
                 <span className="mm-count">{motivacionesFiltradas.length} motivaciones</span>
               </div>
             </div>
-
             {/* Lista de tarjetas */}
             <ListaMotivaciones
               initialMotivaciones={motivacionesFiltradas}

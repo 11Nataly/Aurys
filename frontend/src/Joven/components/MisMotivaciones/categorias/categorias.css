@@ -209,3 +209,70 @@ transition: transform 0.3s ease;
   background: linear-gradient(135deg, #4840c2, #848ddb);
   color: #fff;
 }
+
+
+/* === BUSCADOR CON SUGERENCIAS === */
+.buscador-categorias {
+  position: relative;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.lista-sugerencias {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 4px 0;
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.item-sugerencia {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s ease-in-out;
+  font-size: 0.9rem;
+}
+
+.item-sugerencia:hover {
+  color:#848ddb;
+}
+
+.etiqueta {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 8px;
+}
+
+.predeterminada {
+  background-color: rgba(72, 64, 194, 0.1);
+  color: #4840c2;
+}
+
+.personalizada {
+  background-color: rgba(132, 141, 219, 0.15);
+  color: #5a55b3;
+}
+
+.sin-resultados {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  background: #fff;
+  text-align: center;
+  padding: 10px;
+  font-size: 0.85rem;
+  color: #555;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
