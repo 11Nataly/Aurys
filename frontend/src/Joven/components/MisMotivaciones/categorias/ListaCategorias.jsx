@@ -1,4 +1,5 @@
-// frontend/src/Joven/components/MisMotivaciones/categorias/ListaCategorias.jsx
+
+
 import { useEffect, useState, useRef } from "react";
 import CategoriaItem from "./CategoriaItem";
 import NuevaCategoria from "./NuevaCategoria";
