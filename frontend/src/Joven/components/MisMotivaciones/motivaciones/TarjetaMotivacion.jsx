@@ -33,7 +33,7 @@ const TarjetaMotivacion = ({ motivacion, onEliminar, onFavorita, onEditar }) => 
           <span>Editar</span>
         </button>
 
-        <button className="btn-eliminar" onClick={() => onEliminar(motivacion.id)}>
+        <button className="btn-eliminar-motivacion" onClick={() => onEliminar(motivacion.id)}>
           <TrashIcon className="icono-btn" />
           <span>Eliminar</span>
         </button>

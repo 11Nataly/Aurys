@@ -3,12 +3,12 @@ const FiltrosMotivaciones = ({ filtroFavoritas, setFiltroFavoritas }) => {
     <div className="filtros-barra">
       <input type="text" placeholder="Buscar motivaciones..." />
       <button
-        className={filtroFavoritas ? "favorito-activo" : ""}
+        className={filtroFavoritas ? "favorito-activo" : "favorito-inactivo"}
         onClick={() => setFiltroFavoritas(!filtroFavoritas)}
       >
-        Favoritas ♥
+        Favoritas
       </button>
-      <button>Ordenar</button>
+      {/* ELIMINO EL BOTÓN PARA DEJAR EL MVP <button>Ordenar</button> */}
     </div>
   );
 };

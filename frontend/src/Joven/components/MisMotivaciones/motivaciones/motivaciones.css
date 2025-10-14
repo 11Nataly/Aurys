@@ -21,6 +21,7 @@
   border-radius: 10px;
   padding: 8px 14px;
   cursor: pointer;
+
 }
 
 .filtros-barra {
@@ -33,20 +34,26 @@
   flex: 1;
   padding: 6px 10px;
   border: 1px solid #848ddb;
-  border-radius: 8px;
 }
 
-.filtros-barra button {
-  background: #f6f6ff;
-  border: 1px solid #848ddb;
-  border-radius: 8px;
-  padding: 6px 10px;
-  cursor: pointer;
+.filtros-barra .favorito-inactivo {
+  background: #e8e8ff;
+  color: #3c2bbf;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-size: 1rem;
 }
+.filtros-barra .favorito-inactivo:hover {
+  background: indianred;
+  color: rgb(255, 255, 255);
+} 
 
 .filtros-barra .favorito-activo {
-  background: linear-gradient(135deg, #4840c2, #848ddb);
-  color: #fff;
+ border-radius: 25px;
+  cursor: pointer;
+  background: indianred;
+  color: rgb(255, 255, 255);
 }
 
 .motivaciones-grid {
@@ -165,7 +172,7 @@
   transform: translateY(-1px);
 }
 
-.btn-eliminar {
+.btn-eliminar-motivacion {
   background: #ffe6e6;
   color: #b30000;
   border: none;
@@ -178,19 +185,20 @@
   transition: width 0.3s ease;
 }
 
-.btn-eliminar:hover {
-  background-color: rgba(212, 32, 44, 0.986);
+.btn-eliminar-motivacion:hover {
+  background-color: rgba(209, 46, 57, 0.986);
+  color: white;
   width: 110px; /* se adapta al hover */
 }
 /* 🔹 Alineación visual de iconos */
 .btn-editar span,
-.btn-eliminar span {
+.btn-eliminar-motivacion span {
   display: inline-block;
   transition: transform 0.2s ease;
 }
 
 .btn-editar:hover span,
-.btn-eliminar:hover span {
+.btn-eliminar-motivacion:hover span {
   transform: translateX(2px);
 }
 
