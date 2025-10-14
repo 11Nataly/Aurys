@@ -1,3 +1,4 @@
+//Frontend/src/Joven/components/MisMotivaciones/motivaciones/AgregarMotivacion.jsx
 import { useState } from "react";
 import NuevaCategoria from "../categorias/NuevaCategoria"; // ✅ Importa el mismo modal que ya usas
 import "./AgregarMotivacion.css";

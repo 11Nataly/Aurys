@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
+//IMPORTAR las migas de pan
+import Breadcrumb from '../components/Breadcrumb/Breadcrumb'; // ✅ Importamos
 import "../components/MisMotivaciones/motivaciones/motivaciones.css"; // si usas el css global que te entregué
 import "../components/MisMotivaciones/categorias/categorias.css";     // estilos de categorias (opcional)
 import "../../styles/MisMotivaciones.css"; // estilos específicos de la página (opcional)
@@ -10,6 +12,9 @@ import ListaMotivaciones from "../components/MisMotivaciones/motivaciones/ListaM
 // Importar datos falsos (webpack/CRA supports importing JSON from src)
 import motivacionesData from "../fake_data/motivaciones.json";
 import categoriasData from "../fake_data/categorias.json";
+
+
+
 
 const MisMotivaciones = () => {
   // asegurar usuario en localStorage para los servicios/componenetes
@@ -75,51 +80,53 @@ const MisMotivaciones = () => {
   }, [motivaciones, categoriaSeleccionada, soloFavoritas, query]);
 
   return (
-    <div className="mm-page">
-      <div className="mm-container">
-        <div className="mm-layout">
-          {/* Sidebar categorias */}
-          <aside className="mm-sidebar">
-            {/* Pasamos categorias como prop para que el componente use los datos falsos */}
-            <ListaCategorias initialCategorias={categorias} onSelectCategoria={setCategoriaSeleccionada} />
-          </aside>
+      <div className="mm-page">
+        <Breadcrumb />
 
-          {/* Main content */}
-          <main className="mm-main">
- {/* Toolbar secundaria (opcional: ordenar, filtros) */}
-            <div className="mm-toolbar">
-              <div className="mm-toolbar-left">
-                {categoriaSeleccionada
-                  ? `Filtrando por: ${categorias.find(c => c.id === Number(categoriaSeleccionada))?.nombre || ""}`
-                  : "Todas las categorías"}
-              </div>
-              <div className="mm-toolbar-right">
-                <span className="mm-count">{motivacionesFiltradas.length} motivaciones</span>
-              </div>
-            </div>
-            {/* Lista de tarjetas */}
-            <ListaMotivaciones
-              initialMotivaciones={motivacionesFiltradas}
-              onEliminar={handleEliminarMotivacion}
-              onToggleFavorita={handleToggleFavorita}
-              onEditar={handleEditarMotivacion}
-              onRequestAgregar={() => setMostrarAgregar(true)}
-            />
+        <div className="mm-container">
+          <div className="mm-layout">
+            {/* Sidebar categorias */}
+            <aside className="mm-sidebar">
+              {/* Pasamos categorias como prop para que el componente use los datos falsos */}
+              <ListaCategorias initialCategorias={categorias} onSelectCategoria={setCategoriaSeleccionada} />
+            </aside>
 
-            {/* Modal de agregar/editar: si tu componente AgregarMotivacion es independiente lo puedes invocar aquí */}
-            {mostrarAgregar && (
-              <div>
-                {/* Si tu AgregarMotivacion ya existe, pasa onGuardar={handleAgregarMotivacion} */}
-                {/* Ejemplo: <AgregarMotivacion onCerrar={()=>setMostrarAgregar(false)} onGuardar={handleAgregarMotivacion} /> */}
-                {/* Si prefieres usar la versión que te pasé antes, habilita la línea de abajo (descomenta si existe) */}
-                {/* <AgregarMotivacion onCerrar={() => setMostrarAgregar(false)} onGuardar={handleAgregarMotivacion} /> */}
+            {/* Main content */}
+            <main className="mm-main">
+              {/* Toolbar secundaria (opcional: ordenar, filtros) */}
+              <div className="mm-toolbar">
+                <div className="mm-toolbar-left">
+                  {categoriaSeleccionada
+                    ? `Filtrando por: ${categorias.find(c => c.id === Number(categoriaSeleccionada))?.nombre || ""}`
+                    : "Todas las categorías"}
+                </div>
+                <div className="mm-toolbar-right">
+                  <span className="mm-count">{motivacionesFiltradas.length} motivaciones</span>
+                </div>
               </div>
-            )}
-          </main>
+              {/* Lista de tarjetas */}
+              <ListaMotivaciones
+                initialMotivaciones={motivacionesFiltradas}
+                onEliminar={handleEliminarMotivacion}
+                onToggleFavorita={handleToggleFavorita}
+                onEditar={handleEditarMotivacion}
+                onRequestAgregar={() => setMostrarAgregar(true)}
+              />
+
+              {/* Modal de agregar/editar: si tu componente AgregarMotivacion es independiente lo puedes invocar aquí */}
+              {mostrarAgregar && (
+                <div>
+                  {/* Si tu AgregarMotivacion ya existe, pasa onGuardar={handleAgregarMotivacion} */}
+                  {/* Ejemplo: <AgregarMotivacion onCerrar={()=>setMostrarAgregar(false)} onGuardar={handleAgregarMotivacion} /> */}
+                  {/* Si prefieres usar la versión que te pasé antes, habilita la línea de abajo (descomenta si existe) */}
+                  {/* <AgregarMotivacion onCerrar={() => setMostrarAgregar(false)} onGuardar={handleAgregarMotivacion} /> */}
+                </div>
+              )}
+            </main>
+          </div>
         </div>
       </div>
-    </div>
-  );
+      );
 };
 
-export default MisMotivaciones;
+      export default MisMotivaciones;

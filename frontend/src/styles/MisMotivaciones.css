@@ -9,7 +9,7 @@
   border-radius: 16px;
   background: #ffffff;
   margin-bottom: 40px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .mm-container {
@@ -63,6 +63,8 @@
   align-items: flex-start;
 }
 
+/*barra de cateogorías*/
+
 .mm-sidebar {
   max-height: 80vh;
   overflow-y: auto;
@@ -88,7 +90,6 @@
   background-color: #4840c2;
 }
 
-
 /* Main area */
 .mm-main {
   flex: 1;
@@ -101,14 +102,15 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
-  color: #444;
+  color: #4840c2;
+  font-weight: bolder; 
 }
 
 .mm-count {
   background: #f6f6ff;
   padding: 6px 10px;
   border-radius: 12px;
-  color: #4840c2;
+  color: #766df1ff;
 }
 
 /* Responsive */
