@@ -38,52 +38,61 @@ const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
     onSelectCategoria?.(id);
   };
 
+  const [abierto, setAbierto] = useState(true);
+  const [busqueda, setBusqueda] = useState("");
 
   
-  return (
-    <div className="categorias-panel">
-      <div className="categorias-header">
-        <h3>Categorías</h3>
-        <button
-          className="btn-agregar-categoria"
-          onClick={() => setMostrarModal(true)}
-        >
-          +
-        </button>
-      </div>
-
-      <ul className="lista-categorias">
-        <li
-          className={`categoria-item ${
-            categoriaSeleccionada === null ? "activa" : ""
-          }`}
-          onClick={() => handleSeleccion(null)}
-        >
-          <span className="categoria-nombre">Todas</span>
-          <span className="categoria-contador">
-            {categorias.length > 0 ? categorias.length : 0}
-          </span>
-        </li>
-
-        {categorias.map((cat) => (
-          <CategoriaItem
-            key={cat.id}
-            categoria={cat}
-            onEliminar={eliminarCategoria}
-            onSeleccion={handleSeleccion}
-            activa={categoriaSeleccionada === cat.id}
-          />
-        ))}
-      </ul>
-
-      {mostrarModal && (
-        <NuevaCategoria
-          onCerrar={() => setMostrarModal(false)}
-          onGuardar={agregarCategoria}
-        />
-      )}
+return (
+  <div className="categorias-panel">
+    <div className="categorias-header">
+      <h3 onClick={() => setAbierto(!abierto)} style={{ cursor: "pointer" }}>
+        Categorías
+        <span className={`flecha ${abierto ? "arriba" : "abajo"}`}>▾</span>
+      </h3>
+      <button
+        className="btn-agregar-categoria"
+        onClick={() => setMostrarModal(true)}
+      >
+        +
+      </button>
     </div>
-  );
+
+    {abierto && (
+      <>
+        <input
+          type="text"
+          placeholder="Buscar categoría..."
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          className="input-buscar-categoria"
+        />
+
+        <ul className="lista-categorias">
+          {categorias
+            .filter((c) =>
+              c.nombre.toLowerCase().includes(busqueda.toLowerCase())
+            )
+            .map((cat) => (
+              <CategoriaItem
+                key={cat.id}
+                categoria={cat}
+                onEliminar={eliminarCategoria}
+                onSeleccion={handleSeleccion}
+                activa={categoriaSeleccionada === cat.id}
+              />
+            ))}
+        </ul>
+      </>
+    )}
+
+    {mostrarModal && (
+      <NuevaCategoria
+        onCerrar={() => setMostrarModal(false)}
+        onGuardar={agregarCategoria}
+      />
+    )}
+  </div>
+);
 };
 
 export default ListaCategorias;

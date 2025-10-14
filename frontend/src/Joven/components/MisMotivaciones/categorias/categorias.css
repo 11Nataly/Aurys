@@ -24,6 +24,36 @@
   cursor: pointer;
 }
 
+
+/*BOTONES PARA LISTAR CATEGORIAS*/
+.input-buscar-categoria {
+  width: 100%;
+  border: 1px solid #848ddb;
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+/* Estado Base (Flecha hacia abajo o cerrado) */
+.flecha {
+  font-size: 1.5rem;
+  margin-left: 6px;
+   display: inline-block; /* 🔹 Necesario para que pueda rotar */
+  /* ESTADO INICIAL: Asegura que la transformación esté definida */
+transition: transform 0.3s ease;
+}
+
+/* Estado de Rotación (Flecha hacia arriba o abierto) */
+.flecha.arriba {
+  /* ESTADO FINAL: Rota 180 grados */
+  transform: rotate(180deg);
+}
+
+.flecha.abajo {
+  transform: rotate(0deg);
+}
+
+
 .lista-categorias {
   list-style: none;
   padding: 0;

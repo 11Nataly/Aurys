@@ -4,6 +4,7 @@
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(72, 64, 194, 0.1);
+  overflow: hidden;
 }
 
 .motivaciones-header {
@@ -115,29 +116,84 @@
   margin-top: 4px;
 }
 
+
+
+/**===============================
+   🗑️ BOTONES EDITAR Y ELIMINAR
+   =============================== */
 .acciones {
   display: inline-flex;
   justify-content: space-between;
   padding: 10px;
 }
 
-.btn-editar, .btn-eliminar {
+.acciones button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   border: none;
-  border-radius: 8px;
+  background-color: transparent;
+  font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 6px 10px;
+  border-radius: 8px;
 }
 
+/* 🔹 Iconos dentro del botón */
+.icono-btn {
+  width: 18px;
+  height: 18px;
+}
+
+/* 🟣 Botón Editar */
 .btn-editar {
-  background: #f6f6ff;
   color: #4840c2;
+  border: none;
+  border-radius: 8px;
   padding: 6px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  width: 90px; /* tamaño base */
+  justify-content: center;
+  transition: width 0.3s ease;
+}
+
+.btn-editar:hover {
+  background-color: #4840c2;
+  transform: translateY(-1px);
 }
 
 .btn-eliminar {
   background: #ffe6e6;
   color: #b30000;
-  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  width: 110px; /* tamaño base */
+  justify-content: center;
+  transition: width 0.3s ease;
 }
+
+.btn-eliminar:hover {
+  background-color: rgba(212, 32, 44, 0.986);
+  width: 110px; /* se adapta al hover */
+}
+/* 🔹 Alineación visual de iconos */
+.btn-editar span,
+.btn-eliminar span {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.btn-editar:hover span,
+.btn-eliminar:hover span {
+  transform: translateX(2px);
+}
+
 
 .modal-motivacion {
   background: #fff;
