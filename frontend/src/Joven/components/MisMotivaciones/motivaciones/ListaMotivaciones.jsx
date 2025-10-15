@@ -28,11 +28,14 @@ const ListaMotivaciones = ({
         }
       };
       cargarDatos();
+    } else {
+      // si se pasan inicialMotivaciones, mantenlas sincronizadas
+      setMotivaciones(initialMotivaciones);
     }
   }, [initialMotivaciones]);
 
   const agregarMotivacion = (nueva) => {
-    setMotivaciones((prev) => [...prev, nueva]);
+    setMotivaciones((prev) => [nueva, ...prev]);
     setMostrarModal(false);
   };
 
@@ -63,7 +66,11 @@ const ListaMotivaciones = ({
         </div>
         <button
           className="btn-nueva-motivacion"
-          onClick={() => setMostrarModal(true)}
+          onClick={() => {
+            // si el padre quiere manejar agregar globalmente, llama onRequestAgregar
+            if (onRequestAgregar) return onRequestAgregar();
+            setMostrarModal(true);
+          }}
         >
           + Nueva motivación
         </button>
@@ -81,6 +88,7 @@ const ListaMotivaciones = ({
             motivacion={m}
             onEliminar={eliminarMotivacion}
             onFavorita={toggleFavorita}
+            onEditar={onEditar}
           />
         ))}
       </div>

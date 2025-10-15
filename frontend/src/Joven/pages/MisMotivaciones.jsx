@@ -1,30 +1,28 @@
+// frontend/src/Joven/pages/MisMotivaciones.jsx
 import React, { useEffect, useMemo, useState } from "react";
-//IMPORTAR las migas de pan
-import Breadcrumb from '../components/Breadcrumb/Breadcrumb'; // ✅ Importamos
-import "../components/MisMotivaciones/motivaciones/motivaciones.css"; // si usas el css global que te entregué
-import "../components/MisMotivaciones/categorias/categorias.css";     // estilos de categorias (opcional)
-import "../../styles/MisMotivaciones.css"; // estilos específicos de la página (opcional)
+import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
+import "../components/MisMotivaciones/motivaciones/motivaciones.css";
+import "../components/MisMotivaciones/categorias/categorias.css";
+import "../../styles/MisMotivaciones.css";
 
 import ListaCategorias from "../components/MisMotivaciones/categorias/ListaCategorias";
 import ListaMotivaciones from "../components/MisMotivaciones/motivaciones/ListaMotivaciones";
+import EditarMotivacion from "../components/MisMotivaciones/motivaciones/EditarMotivacion";
+import AgregarMotivacion from "../components/MisMotivaciones/motivaciones/AgregarMotivacion";
 
-
-// Importar datos falsos (webpack/CRA supports importing JSON from src)
+// Datos falsos locales
 import motivacionesData from "../fake_data/motivaciones.json";
 import categoriasData from "../fake_data/categorias.json";
 
-
-
-
 const MisMotivaciones = () => {
-  // asegurar usuario en localStorage para los servicios/componenetes
+  // Asegurar usuario en localStorage
   useEffect(() => {
     if (!localStorage.getItem("id_usuario")) {
       localStorage.setItem("id_usuario", "1");
     }
   }, []);
 
-  // estados de la página
+  // Estados principales
   const [categorias] = useState(categoriasData.filter((c) => c.activo === 1));
   const [motivaciones, setMotivaciones] = useState(
     motivacionesData.filter((m) => m.activo === 1)
@@ -34,8 +32,9 @@ const MisMotivaciones = () => {
   const [soloFavoritas, setSoloFavoritas] = useState(false);
   const [query, setQuery] = useState("");
   const [mostrarAgregar, setMostrarAgregar] = useState(false);
+  const [motivacionEditando, setMotivacionEditando] = useState(null);
 
-  // handlers que pasarán a componentes hijos (puedes adaptarlos si tus componentes ya exponen callbacks)
+  // Handlers
   const handleAgregarMotivacion = (nueva) => {
     setMotivaciones((prev) => [nueva, ...prev]);
     setMostrarAgregar(false);
@@ -47,23 +46,36 @@ const MisMotivaciones = () => {
 
   const handleToggleFavorita = (id) => {
     setMotivaciones((prev) =>
-      prev.map((m) => (m.id === id ? { ...m, esFavorita: m.esFavorita ? 0 : 1 } : m))
+      prev.map((m) =>
+        m.id === id ? { ...m, esFavorita: m.esFavorita ? 0 : 1 } : m
+      )
     );
   };
 
-  const handleEditarMotivacion = (obj) => {
-    setMotivaciones((prev) => prev.map((m) => (m.id === obj.id ? obj : m)));
+  const handleEditarMotivacion = (motivacion) => {
+    setMotivacionEditando(motivacion);
   };
 
-  // filtrado aplicado a la lista (memorizado)
+  const handleActualizarMotivacion = (motivacionEditada) => {
+    setMotivaciones((prev) =>
+      prev.map((m) => (m.id === motivacionEditada.id ? motivacionEditada : m))
+    );
+    setMotivacionEditando(null);
+  };
+
+  // Filtros memorizados
   const motivacionesFiltradas = useMemo(() => {
     let list = [...motivaciones];
 
     if (categoriaSeleccionada) {
-      list = list.filter((m) => Number(m.categoria_id) === Number(categoriaSeleccionada));
+      list = list.filter(
+        (m) => Number(m.categoria_id) === Number(categoriaSeleccionada)
+      );
     }
     if (soloFavoritas) {
-      list = list.filter((m) => Number(m.esFavorita) === 1 || m.esFavorita === true);
+      list = list.filter(
+        (m) => Number(m.esFavorita) === 1 || m.esFavorita === true
+      );
     }
     if (query && query.trim()) {
       const q = query.toLowerCase();
@@ -74,59 +86,75 @@ const MisMotivaciones = () => {
       );
     }
 
-    // ordenar por created_at desc
     list.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     return list;
   }, [motivaciones, categoriaSeleccionada, soloFavoritas, query]);
 
+  // Render principal
   return (
-      <div className="mm-page">
-        <Breadcrumb />
+    <div className="mm-page">
+      <Breadcrumb />
 
-        <div className="mm-container">
-          <div className="mm-layout">
-            {/* Sidebar categorias */}
-            <aside className="mm-sidebar">
-              {/* Pasamos categorias como prop para que el componente use los datos falsos */}
-              <ListaCategorias initialCategorias={categorias} onSelectCategoria={setCategoriaSeleccionada} />
-            </aside>
+      <div className="mm-container">
+        <div className="mm-layout">
+          {/* Sidebar de categorías */}
+          <aside className="mm-sidebar">
+            <ListaCategorias
+              initialCategorias={categorias}
+              onSelectCategoria={setCategoriaSeleccionada}
+            />
+          </aside>
 
-            {/* Main content */}
-            <main className="mm-main">
-              {/* Toolbar secundaria (opcional: ordenar, filtros) */}
-              <div className="mm-toolbar">
-                <div className="mm-toolbar-left">
-                  {categoriaSeleccionada
-                    ? `Filtrando por: ${categorias.find(c => c.id === Number(categoriaSeleccionada))?.nombre || ""}`
-                    : "Todas las categorías"}
-                </div>
-                <div className="mm-toolbar-right">
-                  <span className="mm-count">{motivacionesFiltradas.length} motivaciones</span>
-                </div>
+          {/* Contenido principal */}
+          <main className="mm-main">
+            {/* Toolbar */}
+            <div className="mm-toolbar">
+              <div className="mm-toolbar-left">
+                {categoriaSeleccionada
+                  ? `Filtrando por: ${
+                      categorias.find(
+                        (c) => c.id === Number(categoriaSeleccionada)
+                      )?.nombre || ""
+                    }`
+                  : "Todas las categorías"}
               </div>
-              {/* Lista de tarjetas */}
-              <ListaMotivaciones
-                initialMotivaciones={motivacionesFiltradas}
-                onEliminar={handleEliminarMotivacion}
-                onToggleFavorita={handleToggleFavorita}
-                onEditar={handleEditarMotivacion}
-                onRequestAgregar={() => setMostrarAgregar(true)}
-              />
+              <div className="mm-toolbar-right">
+                <span className="mm-count">
+                  {motivacionesFiltradas.length} motivaciones
+                </span>
+              </div>
+            </div>
 
-              {/* Modal de agregar/editar: si tu componente AgregarMotivacion es independiente lo puedes invocar aquí */}
-              {mostrarAgregar && (
-                <div>
-                  {/* Si tu AgregarMotivacion ya existe, pasa onGuardar={handleAgregarMotivacion} */}
-                  {/* Ejemplo: <AgregarMotivacion onCerrar={()=>setMostrarAgregar(false)} onGuardar={handleAgregarMotivacion} /> */}
-                  {/* Si prefieres usar la versión que te pasé antes, habilita la línea de abajo (descomenta si existe) */}
-                  {/* <AgregarMotivacion onCerrar={() => setMostrarAgregar(false)} onGuardar={handleAgregarMotivacion} /> */}
-                </div>
-              )}
-            </main>
-          </div>
+            {/* Lista de motivaciones */}
+            <ListaMotivaciones
+              initialMotivaciones={motivacionesFiltradas}
+              onEliminar={handleEliminarMotivacion}
+              onToggleFavorita={handleToggleFavorita}
+              onEditar={handleEditarMotivacion}
+              onRequestAgregar={() => setMostrarAgregar(true)}
+            />
+          </main>
         </div>
       </div>
-      );
+
+      {/* Modal Agregar */}
+      {mostrarAgregar && (
+        <AgregarMotivacion
+          onCerrar={() => setMostrarAgregar(false)}
+          onGuardar={handleAgregarMotivacion}
+        />
+      )}
+
+      {/* Modal Editar */}
+      {motivacionEditando && (
+        <EditarMotivacion
+          motivacion={motivacionEditando}
+          onCerrar={() => setMotivacionEditando(null)}
+          onGuardar={handleActualizarMotivacion}
+        />
+      )}
+    </div>
+  );
 };
 
-      export default MisMotivaciones;
+export default MisMotivaciones;

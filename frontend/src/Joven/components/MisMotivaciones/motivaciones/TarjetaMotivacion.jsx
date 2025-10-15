@@ -1,39 +1,57 @@
-import { FaHeart, FaRegHeart, FaPlay, FaStar, FaRegStar } from 'react-icons/fa';
+// frontend / src / Joven / components / MisMotivaciones / motivaciones / TarjetaMotivacion.jsx
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 
 const TarjetaMotivacion = ({ motivacion, onEliminar, onFavorita, onEditar }) => {
   return (
     <div className="tarjeta-motivacion">
-      <img
-        src={motivacion.imagen}
-        alt={motivacion.titulo}
-        className="img-motivacion"
-      />
+      {/* Imagen */}
+      <div className="img-wrapper">
+        <img
+          src={motivacion.imagen}
+          alt={motivacion.titulo}
+          className="img-motivacion"
+        />
+      </div>
 
+      {/* Contenido */}
       <div className="motivacion-info">
         <div className="titulo-favorito">
           <h4>{motivacion.titulo}</h4>
+
           <button
             className={`btn-favorito ${motivacion.esFavorita ? "activo" : ""}`}
             onClick={() => onFavorita(motivacion.id)}
-            title={motivacion.esFavorita ? "Quitar de favoritos" : "Agregar a favoritos"}
+            title={
+              motivacion.esFavorita
+                ? "Quitar de favoritos"
+                : "Agregar a favoritos"
+            }
           >
             {motivacion.esFavorita ? <FaHeart /> : <FaRegHeart />}
-
           </button>
-
         </div>
+
         <p className="descripcion">{motivacion.descripcion}</p>
       </div>
 
+      {/* Acciones */}
       <div className="acciones">
-        <button className="btn-editar" onClick={() => onEditar(motivacion.id)}>
+        <button
+          className="btn-editar"
+          onClick={() => onEditar(motivacion)} // ✅ enviamos la motivación completa
+          title="Editar motivación"
+        >
           <PencilSquareIcon className="icono-btn" />
           <span>Editar</span>
         </button>
 
-        <button className="btn-eliminar-motivacion" onClick={() => onEliminar(motivacion.id)}>
+        <button
+          className="btn-eliminar-motivacion"
+          onClick={() => onEliminar(motivacion.id)}
+          title="Eliminar motivación"
+        >
           <TrashIcon className="icono-btn" />
           <span>Eliminar</span>
         </button>
