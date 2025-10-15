@@ -1,14 +1,16 @@
-
-
 import { useEffect, useState, useRef } from "react";
 import CategoriaItem from "./CategoriaItem";
 import NuevaCategoria from "./NuevaCategoria";
+import EditarCategoria from "./EditarCategoria";
+import { PencilSquareIcon } from "@heroicons/react/24/outline"; // ✅ nuevo componente
 import "./categorias.css";
 
 const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
   const [categorias, setCategorias] = useState(initialCategorias);
   const [mostrarModal, setMostrarModal] = useState(false);
+  const [mostrarEditar, setMostrarEditar] = useState(false); // ✅
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
+  const [categoriaEditando, setCategoriaEditando] = useState(null); // ✅
   const [abierto, setAbierto] = useState(true);
   const [busqueda, setBusqueda] = useState("");
   const [sugerencias, setSugerencias] = useState([]);
@@ -42,11 +44,10 @@ const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
     const filtradas = categorias.filter((cat) =>
       cat.nombre.toLowerCase().includes(busqueda.toLowerCase())
     );
-    setSugerencias(filtradas.slice(0, 5)); // máx 5 sugerencias
+    setSugerencias(filtradas.slice(0, 5));
     setMostrarSugerencias(true);
   }, [busqueda, categorias]);
 
-  // 🔹 Cerrar sugerencias si el usuario hace clic fuera
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (inputRef.current && !inputRef.current.contains(e.target)) {
@@ -78,6 +79,20 @@ const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
     handleSeleccion(cat.id);
   };
 
+  // ✅ Nueva función: abrir modal de edición
+  const handleEditar = (categoria) => {
+    setCategoriaEditando(categoria);
+  };
+
+  // ✅ Actualizar categoría editada
+  const handleGuardarEdicion = (categoriaEditada) => {
+    setCategorias((prev) =>
+      prev.map((cat) => (cat.id === categoriaEditada.id ? categoriaEditada : cat))
+    );
+    setMostrarEditar(false);
+    setCategoriaEditando(null);
+  };
+
   return (
     <div className="categorias-panel">
       <div className="categorias-header">
@@ -95,7 +110,7 @@ const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
 
       {abierto && (
         <>
-          {/* 🔹 Buscador con sugerencias */}
+          {/* 🔹 Buscador */}
           <div className="buscador-categorias" ref={inputRef}>
             <input
               type="text"
@@ -130,7 +145,7 @@ const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
             )}
           </div>
 
-          {/* 🔹 Lista de categorías */}
+          {/* 🔹 Lista de categorías con botón editar */}
           <ul className="lista-categorias">
             {categorias.map((cat) => (
               <CategoriaItem
@@ -138,6 +153,7 @@ const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
                 categoria={cat}
                 onEliminar={eliminarCategoria}
                 onSeleccion={handleSeleccion}
+                onEditar={handleEditar}
                 activa={categoriaSeleccionada === cat.id}
               />
             ))}
@@ -145,10 +161,20 @@ const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
         </>
       )}
 
+      {/* Modales */}
       {mostrarModal && (
         <NuevaCategoria
           onCerrar={() => setMostrarModal(false)}
           onGuardar={agregarCategoria}
+        />
+      )}
+
+      {/* ✅ Modal de editar categoría */}
+      {categoriaEditando && (
+        <EditarCategoria
+          categoria={categoriaEditando}
+          onCerrar={() => setCategoriaEditando(null)}
+          onGuardar={handleGuardarEdicion}
         />
       )}
     </div>
