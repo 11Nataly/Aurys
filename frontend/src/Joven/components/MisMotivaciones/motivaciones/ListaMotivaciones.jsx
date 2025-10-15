@@ -1,3 +1,4 @@
+// frontend/src/Joven/components/MisMotivaciones/motivaciones/ListaMotivaciones.jsx
 import { useEffect, useState } from "react";
 import TarjetaMotivacion from "./TarjetaMotivacion";
 import AgregarMotivacion from "./AgregarMotivacion";

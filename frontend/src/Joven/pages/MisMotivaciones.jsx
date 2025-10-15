@@ -108,16 +108,33 @@ const MisMotivaciones = () => {
           {/* Contenido principal */}
           <main className="mm-main">
             {/* Toolbar */}
+            {/* Toolbar */}
             <div className="mm-toolbar">
               <div className="mm-toolbar-left">
-                {categoriaSeleccionada
-                  ? `Filtrando por: ${
-                      categorias.find(
-                        (c) => c.id === Number(categoriaSeleccionada)
-                      )?.nombre || ""
-                    }`
-                  : "Todas las categorías"}
+                {categoriaSeleccionada ? (
+                  <div className="mm-filtro-activo">
+                    Filtrando por:{" "}
+                    <strong>
+                      {
+                        categorias.find(
+                          (c) => c.id === Number(categoriaSeleccionada)
+                        )?.nombre
+                      }
+                    </strong>
+                    {/* 🔹 Botón para limpiar el filtro */}
+                    <button
+                      className="btn-limpiar-filtro"
+                      onClick={() => setCategoriaSeleccionada(null)}
+                      title="Mostrar todas las categorías"
+                    >
+                      Mostrar todas
+                    </button>
+                  </div>
+                ) : (
+                  "Todas las categorías"
+                )}
               </div>
+
               <div className="mm-toolbar-right">
                 <span className="mm-count">
                   {motivacionesFiltradas.length} motivaciones
