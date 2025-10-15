@@ -1,12 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
 from sqlalchemy.orm import Session
+
 from typing import List
+
 from app.db.database import get_db
 from app.dtos.tecnica_dto import (
     TecnicaCreateDTO,
     TecnicaUpdateDTO,
     TecnicaResponseDTO,
     CalificacionCreateDTO,
+
     CalificacionResponseDTO,
     TecnicaConEstadoResponseDTO,
     TecnicaAdministrador,
@@ -19,6 +22,7 @@ from app.services.subir_tecnica import (
     eliminar_tecnica,
     crear_calificacion,
     calificar_tecnica,
+
     simplificar_duracion,
     listar_tecnicas_administrador,
     listar_tecnicas_con_estado 
@@ -96,6 +100,7 @@ async def actualizar_video_endpoint(tecnica_id: int, file: UploadFile = File(...
         raise HTTPException(status_code=500, detail=f"Error subiendo video: {str(e)}")
 
 # -------------------
+
 # Listar técnicas con su respectiva calificacion y favorito
 #  (si el usuario la ha calificado o marcado como favorita).
 # -------------------
@@ -114,6 +119,7 @@ def listar_tecnicas_usuario(usuario_id: int, db: Session = Depends(get_db)):
 
 
 # -------------------
+
 # Crear calificación
 # -------------------
 @router.post("/crear_calificacion", response_model=CalificacionResponseDTO)
@@ -126,6 +132,7 @@ def crear_calificacion_endpoint(dto: CalificacionCreateDTO, db: Session = Depend
 @router.post("/calificar_tecnica", response_model=CalificacionResponseDTO)
 def calificar_endpoint(dto: CalificacionCreateDTO, usuario_id: int, db: Session = Depends(get_db)):
     return calificar_tecnica(db, usuario_id, dto.tecnica_id, dto)
+
 
 
 # -------------------
@@ -146,3 +153,4 @@ def listar_tecnicas(usuario_id: int, db: Session = Depends(get_db)):
         return listar_tecnicas_con_estado(db, usuario_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error listando técnicas: {str(e)}")
+

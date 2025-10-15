@@ -79,6 +79,38 @@
   transition: background-color 0.2s ease;
 }
 
+/* 🔄 ESTILOS PARA SCROLL EN DESCRIPCIÓN - MÁS ANCHA */
+.gm-table td:nth-child(2) { /* Columna de descripción */
+  max-width: 500px; /* ANCHO MÁXIMO AUMENTADO */
+  min-width: 400px; /* ANCHO MÍNIMO PARA MÁS ESPACIO */
+}
+
+.gm-description-cell {
+  max-height: 100px; /* Altura máxima antes del scroll */
+  overflow-y: auto; /* Scroll vertical */
+  padding: 0.5rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.gm-description-cell::-webkit-scrollbar {
+  width: 6px;
+}
+
+.gm-description-cell::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.gm-description-cell::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.gm-description-cell::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
 .gm-table tr:last-child td {
   border-bottom: none;
 }
@@ -137,6 +169,11 @@
     display: block;
     overflow-x: auto;
   }
+  
+  .gm-table td:nth-child(2) {
+    max-width: 350px; /* Menor ancho en tablets pero aún amplio */
+    min-width: 300px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -154,6 +191,11 @@
   .gm-table th, 
   .gm-table td {
     padding: 1rem;
+  }
+  
+  .gm-table td:nth-child(2) {
+    max-width: 250px; /* Menor ancho en móviles pero suficiente */
+    min-width: 200px;
   }
   
   .gm-action-buttons {

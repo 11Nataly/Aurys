@@ -26,8 +26,8 @@ export const useGuideValidation = () => {
       newErrors.push('El campo título no puede estar vacío');
     } else if (title.length < 3) {
       newErrors.push('El título debe tener al menos 3 caracteres');
-    } else if (title.length > 100) {
-      newErrors.push('El título no puede exceder 100 caracteres');
+    } else if (title.length > 110) { // Cambiado de 100 a 110 caracteres
+      newErrors.push('El título no puede exceder 110 caracteres');
     } else if (/[<>{}[\]$%&/()=?¿¡!*+]/.test(title)) {
       newErrors.push('El título contiene símbolos no permitidos');
     }

@@ -1,11 +1,12 @@
 // src/Joven/JovenLayout.jsx
 import { useState } from "react";
-import Sidebar from "./components/Sidebar/Sidebar";
 import { Routes, Route } from "react-router-dom";
+import Sidebar from "./components/Sidebar/Sidebar";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
+import Breadcrumb from "./components/Breadcrumb/Breadcrumb";
 
-// Rutas internas del layout Joven
+// Páginas del layout
 import Home from "./pages/Home";
 import Diario from "./pages/Diario";
 import Afrontamiento from "./pages/Afrontamiento";
@@ -27,7 +28,7 @@ export default function JovenLayout() {
   };
 
   return (
-    <div className={`main-layout ${sidebarOpen ? "has-sidebar" : "sidebar-collapsed"}`}>
+    <div className={`main-layout ${sidebarOpen ? 'has-sidebar' : 'sidebar-collapsed'}`}>
       {/* HEADER con control del sidebar */}
       <Header onToggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
 
@@ -39,7 +40,13 @@ export default function JovenLayout() {
         {sidebarOpen && <div className="sidebar-overlay-mobile" onClick={closeSidebar} />}
 
         {/* CONTENEDOR PRINCIPAL */}
-        <div className={`main-content ${!sidebarOpen ? "sidebar-collapsed" : ""}`}>
+
+        <div className={`main-content ${!sidebarOpen ? 'sidebar-collapsed' : ''}`}>
+          {/* MIGA DE PAN */}
+          <Breadcrumb />
+
+          {/* CONTENIDO DE LA PÁGINA */}
+
           <main className="page-content">
             <Routes>
               <Route index element={<Home />} />

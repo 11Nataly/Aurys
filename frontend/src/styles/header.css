@@ -1,7 +1,7 @@
 .header {
   background-color: #4a3fb0;
   color: white;
-  padding: 0 1.5rem;
+  padding: 0.5rem 1.5rem; /* Reducido de 0.8rem a 0.5rem */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -10,65 +10,36 @@
   top: 0;
   left: 0;
   right: 0;
+  width: 100%;
   z-index: 1000;
   box-sizing: border-box;
-  height: 60px;
+  height: 60px; /* Altura fija para control preciso */
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  height: 100%;
-}
-
-.hamburger-btn {
-  display: none;
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-  height: 100%;
-}
-
-.hamburger-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.hamburger-icon {
-  font-size: 1.3rem;
-  width: 24px;
-  height: 24px;
+  gap: 1rem;
 }
 
 .logo {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  height: 100%;
 }
 
 .logo-img {
-  height: auto;
-  width: 150px;
-  max-height: 90%;
-  object-fit: contain;
+  height: 25px; /* Reducido de 30px a 25px */
+  width: auto;
+}
+
+.logo-text {
+  font-weight: bold;
+  font-size: 1.1rem; /* Reducido de 1.2rem a 1.1rem */
 }
 
 .header-right {
   position: relative;
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.profile-menu {
-  height: 100%;
-  display: flex;
-  align-items: center;
 }
 
 .profile-button {
@@ -76,14 +47,12 @@
   border: none;
   color: white;
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 0.4rem; /* Reducido de 0.5rem a 0.4rem */
   border-radius: 50%;
   transition: background-color 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 40px;
-  width: 40px;
 }
 
 .profile-button:hover {
@@ -91,9 +60,9 @@
 }
 
 .profile-icon {
-  font-size: 1.3rem;
-  width: 26px;
-  height: 26px;
+  font-size: 1.1rem; /* Reducido de 1.2rem a 1.1rem */
+  width: 22px; /* Reducido de 24px a 22px */
+  height: 22px; /* Reducido de 24px a 22px */
 }
 
 .profile-dropdown {
@@ -105,17 +74,12 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 0.5rem 0;
   min-width: 150px;
-  z-index: 1001;
-  display: none;
-}
-
-.profile-dropdown.show {
-  display: block;
+  z-index: 1000;
 }
 
 .profile-dropdown a {
   display: block;
-  padding: 0.6rem 1rem;
+  padding: 0.6rem 1rem; /* Reducido de 0.7rem a 0.6rem */
   color: #333;
   text-decoration: none;
   transition: background-color 0.2s;
@@ -127,21 +91,21 @@
 
 @media (max-width: 768px) {
   .header {
-    padding: 0 1rem;
-    height: 55px;
-  }
-  
-  .hamburger-btn {
-    display: flex;
+    padding: 0.5rem 1rem; /* Reducido de 0.8rem a 0.5rem */
+    height: 55px; /* Un poco más bajo en móviles */
   }
   
   .logo-img {
-    width: 120px;
+    height: 22px; /* Más pequeño en móviles */
   }
-}
-
-@media (max-width: 480px) {
-  .logo-img {
-    width: 100px;
+  
+  .logo-text {
+    font-size: 1rem; /* Más pequeño en móviles */
+  }
+  
+  .profile-icon {
+    font-size: 1rem; /* Más pequeño en móviles */
+    width: 20px;
+    height: 20px;
   }
 }

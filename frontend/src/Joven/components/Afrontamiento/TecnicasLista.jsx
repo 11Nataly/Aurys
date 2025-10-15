@@ -51,7 +51,19 @@ const TecnicasLista = ({ onSelectTecnica, onShowVideo, mostrarSoloFavoritos }) =
   return (
     <div className="tecnicas-lista">
       {mostrarSoloFavoritos && tecnicasFiltradas.length > 0 && (
-        <div className="filtro-activo">
+        <div className="filtro-activo" style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          padding: '12px 20px',
+          background: '#f3f0ff',
+          border: '2px solid #3c2bbf',
+          borderRadius: '25px',
+          color: '#3c2bbf',
+          fontWeight: '600',
+          marginBottom: '20px',
+          justifyContent: 'center'
+        }}>
           <FaHeart /> Mostrando solo técnicas favoritas
         </div>
       )}
@@ -69,7 +81,12 @@ const TecnicasLista = ({ onSelectTecnica, onShowVideo, mostrarSoloFavoritos }) =
       </div>
 
       {tecnicasFiltradas.length === 0 && (
-        <div className={`empty-state ${mostrarSoloFavoritos ? 'favoritos' : ''}`}>
+        <div className={`empty-state ${mostrarSoloFavoritos ? 'favoritos' : ''}`} style={{
+          textAlign: 'center',
+          padding: '40px',
+          color: '#7a7fbb',
+          fontSize: '1.1rem'
+        }}>
           {mostrarSoloFavoritos
             ? 'No tienes técnicas favoritas. ¡Marca algunas con el corazón!'
             : 'No hay técnicas disponibles'}

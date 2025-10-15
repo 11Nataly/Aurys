@@ -65,6 +65,16 @@ const AddGuideModal = ({ isOpen, onClose, onSave, guideData, mode = "add" }) => 
     if (name.includes("duration")) {
       const numericValue = value === "" ? 0 : parseInt(value, 10) || 0;
       setFormData((prev) => ({ ...prev, [name]: numericValue }));
+    } else if (name === "title") {
+      // Limitar el título a 110 caracteres
+      if (value.length <= 110) {
+        setFormData((prev) => ({ ...prev, [name]: value }));
+      }
+    } else if (name === "description") {
+      // Limitar la descripción a 200 caracteres
+      if (value.length <= 200) {
+        setFormData((prev) => ({ ...prev, [name]: value }));
+      }
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -85,6 +95,8 @@ const AddGuideModal = ({ isOpen, onClose, onSave, guideData, mode = "add" }) => 
 
     if (!formData.title.trim()) {
       newErrors.title = "El título es obligatorio";
+    } else if (formData.title.length > 110) {
+      newErrors.title = "El título no puede tener más de 110 caracteres";
     }
 
     if (!formData.description.trim()) {
@@ -165,11 +177,15 @@ const AddGuideModal = ({ isOpen, onClose, onSave, guideData, mode = "add" }) => 
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
+                  maxLength={110}
                   required
                 />
                 {errors.title && (
                   <div className="agm-invalid-feedback">{errors.title}</div>
                 )}
+                <small className="agm-form-text">
+                  {formData.title.length}/110 caracteres
+                </small>
               </div>
 
               {/* Campo Descripción */}
@@ -186,6 +202,7 @@ const AddGuideModal = ({ isOpen, onClose, onSave, guideData, mode = "add" }) => 
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
+                  maxLength={200}
                   required
                 ></textarea>
                 {errors.description && (
