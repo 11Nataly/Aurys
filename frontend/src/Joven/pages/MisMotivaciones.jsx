@@ -149,6 +149,8 @@ const MisMotivaciones = () => {
               onToggleFavorita={handleToggleFavorita}
               onEditar={handleEditarMotivacion}
               onRequestAgregar={() => setMostrarAgregar(true)}
+              query={query}
+              setQuery={setQuery}
             />
           </main>
         </div>

@@ -10,7 +10,9 @@ const ListaMotivaciones = ({
   onEliminar,
   onToggleFavorita,
   onEditar,
-  onRequestAgregar
+  onRequestAgregar,
+  query,
+  setQuery,
 }) => {
   const [motivaciones, setMotivaciones] = useState(initialMotivaciones);
   const [mostrarModal, setMostrarModal] = useState(false);
@@ -80,6 +82,8 @@ const ListaMotivaciones = ({
       <FiltrosMotivaciones
         filtroFavoritas={filtroFavoritas}
         setFiltroFavoritas={setFiltroFavoritas}
+        query={query}
+        setQuery={setQuery}
       />
 
       <div className="motivaciones-grid">
