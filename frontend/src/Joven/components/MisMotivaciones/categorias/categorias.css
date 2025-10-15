@@ -1,0 +1,322 @@
+.categorias-panel {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  width: 240px;
+  box-shadow: 0 0 10px rgba(72, 64, 194, 0.1);
+}
+
+.categorias-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #4840c2;
+  margin-bottom: 1rem;
+}
+
+.btn-agregar-categoria {
+  background: linear-gradient(135deg, #4840c2, #848ddb);
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+ padding: 8px 16px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-wrap: nowrap;
+
+}
+
+
+/*BOTONES PARA LISTAR CATEGORIAS*/
+.input-buscar-categoria {
+  width: 100%;
+  border: 1px solid #848ddb;
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+/* Estado Base (Flecha hacia abajo o cerrado) */
+.flecha {
+  font-size: 1.5rem;
+  margin-left: 6px;
+   display: inline-block; /* 🔹 Necesario para que pueda rotar */
+  /* ESTADO INICIAL: Asegura que la transformación esté definida */
+transition: transform 0.3s ease;
+}
+
+/* Estado de Rotación (Flecha hacia arriba o abierto) */
+.flecha.arriba {
+  /* ESTADO FINAL: Rota 180 grados */
+  transform: rotate(180deg);
+}
+
+.flecha.abajo {
+  transform: rotate(0deg);
+}
+
+
+.lista-categorias {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+/* === CATEGORÍA ITEM (MEJORADO) === */
+.categoria-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f9f9ff;
+  border-radius: 10px;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+  transition: background 0.2s ease;
+}
+
+.categoria-item:hover {
+  background: #f0efff;
+}
+
+.categoria-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.categoria-nombre {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.categoria-contador {
+  background: #e6e6fa;
+  color: #4840c2;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* === ACCIONES === */
+.categoria-acciones {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-eliminar-categoria,
+.btn-editar-categoria {
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: transform 0.2s, color 0.2s;
+}
+
+/* ❌ Eliminar */
+.btn-eliminar-categoria {
+  color: #999;
+  font-weight: bold;
+  font-size: 16px;
+}
+.btn-eliminar-categoria:hover {
+  color: #d64545;
+  transform: scale(1.1);
+}
+
+/* ✏️ Editar */
+.icono-editar {
+  width: 18px;
+  height: 18px;
+  stroke: #848ddb;
+  transition: transform 0.2s, stroke 0.2s;
+}
+
+.btn-editar-categoria:hover .icono-editar {
+  transform: scale(1.1);
+  stroke: #4840c2;
+}
+.modal-fondo {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-categoria {
+  background: #fff;
+  border-radius: 12px;
+  width: 420px;
+  padding: 1.5rem;
+  box-shadow: 0 0 20px rgba(72, 64, 194, 0.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #4840c2;
+}
+
+.modal-body label {
+  display: block;
+  font-weight: 600;
+  margin-top: 0.8rem;
+}
+
+.modal-body input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #848ddb;
+  border-radius: 6px;
+  margin-top: 4px;
+}
+
+.sugerencias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0.5rem 0;
+}
+
+.btn-sugerencia {
+  background: #f3f3ff;
+  border: 1px solid #848ddb;
+  color: #4840c2;
+  border-radius: 8px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+/* 🖱️ ESTILO AL PASAR EL RATÓN (HOVER) */
+.btn-sugerencia:hover {
+  /* ¡Línea clave! Cambia SOLAMENTE el color de la letra a blanco. */
+  color: rgb(217, 162, 243); 
+}
+
+
+.emoji-lista {
+  display: flex;
+  gap: 8px;
+  margin: 0.6rem 0;
+}
+
+.emoji {
+  font-size: 1.5rem;
+  background: #fff;
+  border: 2px solid #848ddb;
+  border-radius: 8px;
+  padding: 4px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.emoji.activo {
+  background: linear-gradient(135deg, #4840c2, #848ddb);
+  color: #fff;
+}
+
+.vista-previa {
+  background: #f6f6ff;
+  border-radius: 8px;
+  padding: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 0.6rem;
+}
+
+.btn-cancelar,
+.btn-guardar {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.btn-cancelar {
+  background: #f2f2f2;
+  color: #000;
+  margin-right: 8px;
+}
+
+.btn-guardar {
+  background: linear-gradient(135deg, #4840c2, #848ddb);
+  color: #fff;
+}
+
+
+/* === BUSCADOR CON SUGERENCIAS === */
+.buscador-categorias {
+  position: relative;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.lista-sugerencias {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 4px 0;
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.item-sugerencia {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s ease-in-out;
+  font-size: 0.9rem;
+}
+
+.item-sugerencia:hover {
+  color:#848ddb;
+}
+
+.etiqueta {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 8px;
+}
+
+.predeterminada {
+  background-color: rgba(72, 64, 194, 0.1);
+  color: #4840c2;
+}
+
+.personalizada {
+  background-color: rgba(132, 141, 219, 0.15);
+  color: #5a55b3;
+}
+
+.sin-resultados {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  background: #fff;
+  text-align: center;
+  padding: 10px;
+  font-size: 0.85rem;
+  color: #555;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}

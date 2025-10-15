@@ -12,6 +12,7 @@ import Diario from "./pages/Diario";
 import Afrontamiento from "./pages/Afrontamiento";
 import KitEmergencia from "./pages/KitEmergencia";
 import Promesas from "./pages/Promesas";
+import MisMotivaciones from "./pages/MisMotivaciones";
 
 // ✅ Importa la Papelera
 import TrashSection from "../Joven/components/Papelera/TrashSection";
@@ -53,6 +54,7 @@ export default function JovenLayout() {
               <Route path="afrontamiento" element={<Afrontamiento />} />
               <Route path="kit-emergencia" element={<KitEmergencia />} />
               <Route path="kit-emergencia/afrontamiento" element={<Afrontamiento />} />
+              <Route path="kit-emergencia/mis-motivaciones" element={<MisMotivaciones />} />
               <Route path="promesas" element={<Promesas />} />
 
               {/* ✅ Nueva ruta: Papelera */}

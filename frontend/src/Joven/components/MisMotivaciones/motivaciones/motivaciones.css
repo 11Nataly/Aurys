@@ -1,0 +1,265 @@
+/* frontend/src/Joven/components/MisMotivaciones/motivaciones/motivaciones.css */
+.motivaciones-panel {
+  flex: 1;
+  padding: 1.2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(72, 64, 194, 0.1);
+  overflow: hidden;
+}
+
+.motivaciones-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.btn-nueva-motivacion {
+  background: linear-gradient(135deg, #4840c2, #848ddb);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+
+}
+
+.filtros-barra {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.filtros-barra input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #848ddb;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+}
+
+
+.filtros-barra .favorito-inactivo {
+  background: #e8e8ff;
+  color: #3c2bbf;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-size: 1rem;
+}
+.filtros-barra .favorito-inactivo:hover {
+  background: indianred;
+  color: rgb(255, 255, 255);
+} 
+
+.filtros-barra .favorito-activo {
+ border-radius: 25px;
+  cursor: pointer;
+  background: indianred;
+  color: rgb(255, 255, 255);
+}
+
+.motivaciones-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.tarjeta-motivacion {
+  background: #fff;
+  border: 1px solid #e5e5ff;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s;
+}
+
+.tarjeta-motivacion:hover {
+  transform: translateY(-5px);
+}
+
+.img-motivacion {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.motivacion-info {
+  padding: 10px;
+}
+
+.titulo-favorito {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+/* ===============================
+   ❤️ BOTÓN FAVORITO - SIN EFECTO MORADO
+   =============================== */
+.btn-favorito{
+  background: none;
+  font-size: 1.5rem;
+  color: #ccc;
+  cursor: pointer;
+  padding: 5px;
+  transition: all 0.3s ease;
+    width: 38px;
+  height: 38px;
+}
+
+.btn-favorito:hover{
+  transform: scale(1.1);
+  color: indianred;
+}
+
+.btn-favorito.activo {
+  color: #ff5a5f;
+}
+
+
+.descripcion {
+  font-size: 0.9rem;
+  color: #444;
+  margin-top: 4px;
+}
+
+
+
+/**===============================
+   🗑️ BOTONES EDITAR Y ELIMINAR
+   =============================== */
+.acciones {
+  display: inline-flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.acciones button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background-color: transparent;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+/* 🔹 Iconos dentro del botón */
+.icono-btn {
+  width: 18px;
+  height: 18px;
+}
+
+/* 🟣 Botón Editar */
+.btn-editar {
+  color: #4840c2;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  width: 90px; /* tamaño base */
+  justify-content: center;
+  transition: width 0.3s ease;
+}
+
+.btn-editar:hover {
+  background-color: #4840c2;
+  transform: translateY(-1px);
+}
+
+.btn-eliminar-motivacion {
+  background: #ffe6e6;
+  color: #b30000;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  width: 110px; /* tamaño base */
+  justify-content: center;
+  transition: width 0.3s ease;
+}
+
+.btn-eliminar-motivacion:hover {
+  background-color: rgba(209, 46, 57, 0.986);
+  color: white;
+  width: 110px; /* se adapta al hover */
+}
+/* 🔹 Alineación visual de iconos */
+.btn-editar span,
+.btn-eliminar-motivacion span {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.btn-editar:hover span,
+.btn-eliminar-motivacion:hover span {
+  transform: translateX(2px);
+}
+
+
+/** ===============================
+   📝 MODAL AGREGAR / EDITAR MOTIVACIÓN
+   =============================== */
+
+.modal-motivacion {
+  background: #fff;
+  border-radius: 12px;
+  width: 480px;
+  max-width: 90%;
+  padding: 1.2rem;
+  box-shadow: 0 0 20px rgba(72, 64, 194, 0.2);
+}
+
+.modal-body input,
+.modal-body textarea,
+.modal-body select {
+  width: 100%;
+  border: 1px solid #848ddb;
+  border-radius: 8px;
+  padding: 8px;
+  margin-top: 6px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  gap: 8px;
+}
+
+.btn-cancelar {
+  background: #f2f2f2;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.btn-guardar {
+  background: linear-gradient(135deg, #4840c2, #848ddb);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .motivaciones-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .motivaciones-grid {
+    grid-template-columns: 1fr;
+  }
+}

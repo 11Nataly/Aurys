@@ -46,7 +46,28 @@ const Breadcrumb = () => {
               : '/joven/afrontamiento', 
         isActive: true 
       });
+      
     }
+
+    else if (location.pathname.includes('/joven/kit-emergencia/mis-motivaciones') || 
+             location.pathname === '/joven/kit-emergencia/mis-motivaciones') {
+      // SIEMPRE mostrar Kit de emergencia antes de Afrontamiento
+      breadcrumbItems.push({ 
+        name: 'Kit de emergencia', 
+        path: '/joven/kit-emergencia', 
+        isActive: false 
+      });
+       breadcrumbItems.push({ 
+        name: 'Motivaciones', 
+        path: location.pathname.includes('/joven/kit-emergencia/mis-motivaciones') 
+              ? '/joven/kit-emergencia/mis-motivaciones' 
+              : '/joven/motivaciones', 
+        isActive: true 
+      });
+      
+    }
+
+
     else if (location.pathname === '/joven/promesas') {
       breadcrumbItems.push({ 
         name: 'Promesas', 
