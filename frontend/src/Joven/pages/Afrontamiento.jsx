@@ -1,6 +1,5 @@
-// src/Joven/pages/Afrontamiento.jsx
 import React, { useEffect, useState } from "react";
-import { listarTecnicas } from "../../services/tecnicasServicejoven";
+import { listarTecnicas, actualizarEstadoTecnica } from "../../services/tecnicasServicejoven";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 import { FaStar, FaRegStar, FaHeart, FaRegHeart } from "react-icons/fa";
 import "../../styles/afrontamiento.css";
@@ -9,16 +8,12 @@ const Afrontamiento = () => {
   const [tecnicas, setTecnicas] = useState([]);
   const [selected, setSelected] = useState(null);
   const [verMas, setVerMas] = useState(false);
-
-  // Nuevos estados
-  const [favoritos, setFavoritos] = useState([]);
-  const [calificaciones, setCalificaciones] = useState({});
   const [mostrarFavoritos, setMostrarFavoritos] = useState(false);
 
   useEffect(() => {
     const fetchTecnicas = async () => {
       try {
-        const userId = localStorage.getItem("userId");
+        const userId = localStorage.getItem("id_usuario"); // ✅ usar la misma clave
         const data = await listarTecnicas(userId);
         setTecnicas(data);
       } catch (error) {
@@ -37,18 +32,42 @@ const Afrontamiento = () => {
     setSelected(null);
   };
 
-  const toggleFavorito = (id) => {
-    setFavoritos((prev) =>
-      prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id]
-    );
+  // ⭐ Calificar técnica
+  const handleCalificar = async (id, estrellas) => {
+    const userId = localStorage.getItem("id_usuario"); // ✅ corregido
+    try {
+      setTecnicas((prev) =>
+        prev.map((t) => (t.id === id ? { ...t, calificacion: estrellas } : t))
+      );
+      await actualizarEstadoTecnica(id, userId, estrellas, null);
+    } catch (error) {
+      console.error("Error al actualizar calificación:", error);
+    }
   };
 
-  const handleCalificar = (id, estrella) => {
-    setCalificaciones((prev) => ({ ...prev, [id]: estrella }));
+  // ❤️ Marcar o quitar favorito
+  const toggleFavorito = async (id) => {
+    const userId = localStorage.getItem("id_usuario"); // ✅ corregido
+    const tecnica = tecnicas.find((t) => t.id === id);
+    const nuevoEstado = !tecnica.favorita;
+
+    try {
+      // Actualiza visualmente
+      setTecnicas((prev) =>
+        prev.map((t) =>
+          t.id === id ? { ...t, favorita: nuevoEstado } : t
+        )
+      );
+
+      // ✅ Llama al backend pasando el nuevo estado del favorito
+      await actualizarEstadoTecnica(id, userId, null, nuevoEstado);
+    } catch (error) {
+      console.error("Error al actualizar favorito:", error);
+    }
   };
 
   const tecnicasFiltradas = mostrarFavoritos
-    ? tecnicas.filter((t) => favoritos.includes(t.id))
+    ? tecnicas.filter((t) => t.favorita)
     : tecnicas;
 
   return (
@@ -91,12 +110,12 @@ const Afrontamiento = () => {
                       <button
                         key={star}
                         className={`star-btn ${
-                          (calificaciones[tecnica.id] || 0) >= star ? "active" : ""
+                          (tecnica.calificacion || 0) >= star ? "active" : ""
                         }`}
                         onClick={() => handleCalificar(tecnica.id, star)}
                         aria-label={`Calificar con ${star} estrellas`}
                       >
-                        {(calificaciones[tecnica.id] || 0) >= star ? (
+                        {(tecnica.calificacion || 0) >= star ? (
                           <FaStar />
                         ) : (
                           <FaRegStar />
@@ -106,13 +125,11 @@ const Afrontamiento = () => {
                   </div>
 
                   <button
-                    className={`favorito-btn ${
-                      favoritos.includes(tecnica.id) ? "active" : ""
-                    }`}
+                    className={`favorito-btn ${tecnica.favorita ? "active" : ""}`}
                     onClick={() => toggleFavorito(tecnica.id)}
                     aria-label="Marcar como favorito"
                   >
-                    {favoritos.includes(tecnica.id) ? <FaHeart /> : <FaRegHeart />}
+                    {tecnica.favorita ? <FaHeart /> : <FaRegHeart />}
                   </button>
                 </div>
 
@@ -155,7 +172,9 @@ const Afrontamiento = () => {
                     )}
 
                     <div className="duracion-info">
-                      <p><strong>Duración:</strong> {selected.duracion}</p>
+                      <p>
+                        <strong>Duración:</strong> {selected.duracion}
+                      </p>
                     </div>
                   </div>
 

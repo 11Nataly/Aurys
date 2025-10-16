@@ -12,3 +12,17 @@ export const listarTecnicas = async () => {
     throw err;
   }
 };
+
+export const actualizarEstadoTecnica = async (tecnicaId, usuarioId, estrellas = null, favorita = null) => {
+  try {
+    const params = new URLSearchParams({ usuario_id: usuarioId });
+    if (estrellas !== null) params.append("estrellas", estrellas);
+    if (favorita !== null) params.append("favorita", favorita);
+
+    const res = await api.put(`/tecnicas/actualizar_estado/${tecnicaId}?${params.toString()}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error actualizando estado de técnica:", error);
+    throw error;
+  }
+};
