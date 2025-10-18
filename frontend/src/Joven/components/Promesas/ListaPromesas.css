@@ -1,0 +1,44 @@
+.lista-promesas {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.lista-promesas-vacia {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6c757d;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 2px dashed #dee2e6;
+}
+
+.lista-promesas-vacia h3 {
+  margin: 0 0 10px 0;
+  color: #495057;
+  font-size: 1.3rem;
+}
+
+.lista-promesas-vacia p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Scroll personalizado para el panel */
+.panel-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.panel-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.panel-content::-webkit-scrollbar-thumb {
+  background: #c5c5c5;
+  border-radius: 3px;
+}
+
+.panel-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
