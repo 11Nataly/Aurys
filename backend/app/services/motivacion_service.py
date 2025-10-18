@@ -12,7 +12,6 @@ UPLOAD_DIR = "app/static/motivaciones"
 
 
 class MotivacionService:
-
     # -------------------------------------------------------
     # GET - Listar motivaciones activas por usuario
     # -------------------------------------------------------
@@ -62,11 +61,11 @@ class MotivacionService:
             nueva = Motivacion(
                 titulo=data.titulo,
                 descripcion=data.descripcion,
-                categoria_id=data.id_categoria,
-                usuario_id=data.id_usuario,
+                categoria_id=data.categoria_id,
+                usuario_id=data.usuario_id,
                 imagen=ruta_imagen,
                 activo=True,
-                esFavorita=False  # ✅ según el modelo
+                esFavorita=False  # Valor por defecto
             )
 
             db.add(nueva)
@@ -80,35 +79,35 @@ class MotivacionService:
     # -------------------------------------------------------
     # PUT - Cambiar "esFavorita" (favorita / no favorita)
     # -------------------------------------------------------
-class MotivacionService:
-
     @staticmethod
     def cambiar_favorita(db: Session, motivacion_id: int, favorita: bool = None):
         """
-        Cambia el estado de 'esFavorito' (me gusta / no me gusta).
+        Cambia el estado de 'esFavorita' (me gusta / no me gusta).
         - Si favorita es None → hace toggle automático.
         - Si favorita=True → marca como favorita.
         - Si favorita=False → desmarca.
         """
-        motivacion = db.query(Motivacion).filter_by(id=motivacion_id).first()
+        motivacion = db.query(Motivacion).filter(Motivacion.id == motivacion_id).first()
         if not motivacion:
             raise HTTPException(status_code=404, detail="Motivación no encontrada")
 
         if favorita is None:
-            # Toggle automático
-            motivacion.esFavorito = not motivacion.esFavorito
+            motivacion.esFavorita = not motivacion.esFavorita
         else:
-            motivacion.esFavorito = favorita
+            motivacion.esFavorita = favorita
 
         db.commit()
         db.refresh(motivacion)
-        return {"message": "Estado de favorita actualizado correctamente", "esFavorito": motivacion.esFavorito}
+        return {
+            "message": "Estado de favorita actualizado correctamente",
+            "esFavorita": motivacion.esFavorita
+        }
 
     # -------------------------------------------------------
     # PUT - Editar información (sin imagen)
     # -------------------------------------------------------
     @staticmethod
-    def editar(db: Session, motivacion_id: int, data: MotivacionUpdateDTO):
+    def editar(motivacion_id: int, data: MotivacionUpdateDTO, db: Session):
         """
         Permite editar los datos de una motivación sin cambiar imagen.
         """
@@ -120,8 +119,8 @@ class MotivacionService:
             motivacion.titulo = data.titulo
         if data.descripcion:
             motivacion.descripcion = data.descripcion
-        if data.id_categoria:
-            motivacion.categoria_id = data.id_categoria
+        if data.categoria_id:
+            motivacion.categoria_id = data.categoria_id
 
         db.commit()
         db.refresh(motivacion)
@@ -131,7 +130,7 @@ class MotivacionService:
     # PUT - Modificar motivación (incluyendo nueva imagen)
     # -------------------------------------------------------
     @staticmethod
-    def modificar(db: Session, motivacion_id: int, data: MotivacionUpdateDTO, imagen: UploadFile = None):
+    def modificar(motivacion_id: int, data: MotivacionUpdateDTO, db: Session, imagen: UploadFile = None):
         """
         Permite actualizar toda la motivación, incluyendo una nueva imagen.
         """
@@ -160,9 +159,26 @@ class MotivacionService:
             motivacion.titulo = data.titulo
         if data.descripcion:
             motivacion.descripcion = data.descripcion
-        if data.id_categoria:
-            motivacion.categoria_id = data.id_categoria
+        if data.categoria_id:
+            motivacion.categoria_id = data.categoria_id
 
+        db.commit()
+        db.refresh(motivacion)
+        return motivacion
+
+    # -------------------------------------------------------
+    # PUT - Cambiar estado activo/inactivo
+    # -------------------------------------------------------
+    @staticmethod
+    def cambiar_estado(motivacion_id: int, estado: bool, db: Session):
+        """
+        Cambia el estado activo/inactivo de la motivación.
+        """
+        motivacion = db.query(Motivacion).filter(Motivacion.id == motivacion_id).first()
+        if not motivacion:
+            raise HTTPException(status_code=404, detail="Motivación no encontrada")
+
+        motivacion.activo = estado
         db.commit()
         db.refresh(motivacion)
         return motivacion

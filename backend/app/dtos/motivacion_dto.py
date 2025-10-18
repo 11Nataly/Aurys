@@ -7,15 +7,15 @@ class MotivacionBaseDTO(BaseModel):
     """Campos comunes para creación y actualización"""
     titulo: Optional[str] = None
     descripcion: Optional[str] = None
-    id_categoria: Optional[int] = None
+    categoria_id: Optional[int] = None
 
 
 class MotivacionCreateDTO(MotivacionBaseDTO):
     """DTO para crear una motivación"""
     titulo: str
     descripcion: str
-    id_categoria: int
-    id_usuario: int
+    categoria_id: int
+    usuario_id: int
 
 
 class MotivacionUpdateDTO(MotivacionBaseDTO):
@@ -26,11 +26,11 @@ class MotivacionUpdateDTO(MotivacionBaseDTO):
 class MotivacionResponseDTO(MotivacionBaseDTO):
     """DTO para respuestas al cliente"""
     id: int
-    id_usuario: int
-    id_categoria: int
+    usuario_id: int
+    categoria_id: int
     imagen: Optional[str] = None
-    estado: bool
-    me_gusta: bool
+    activo: bool
+    esFavorita: bool
     created_at: datetime
     updated_at: datetime
 

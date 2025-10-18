@@ -61,9 +61,9 @@ def agregar_motivacion(
 # -------------------------------------------------------
 # ✅ PUT - Alternar “me gusta / no me gusta” (favorita)
 # -------------------------------------------------------
-@router.put("/{motivacion_id}/favorita", response_model=dict)
+@router.put("/{id}/favorita", response_model=dict)
 def cambiar_favorita(
-    motivacion_id: int,
+    id: int,
     favorita: bool | None = None,
     db: Session = Depends(get_db)
 ):
@@ -72,7 +72,7 @@ def cambiar_favorita(
     - Si no se envía 'favorita', alterna automáticamente.
     - Si se envía 'favorita=true' o 'favorita=false', lo actualiza según el valor.
     """
-    return MotivacionService.cambiar_favorita(db, motivacion_id, favorita)
+    return MotivacionService.cambiar_favorita(db, id, favorita)
 
 
 # -------------------------------------------------------

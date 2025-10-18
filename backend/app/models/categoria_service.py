@@ -1,3 +1,5 @@
+# app/services/categoria_service.py
+
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from app.models.categoria import Categoria
@@ -53,8 +55,7 @@ class CategoriaService:
     def cambiar_estado_categoria(db: Session, categoria_id: int, dto: CategoriaEstadoDTO):
         """
         Cambia el estado de una categoría (activo/inactivo).
-        Si se desactiva, desactiva las motivaciones asociadas.
-        Si se reactiva, también las vuelve a activar.
+        Si se desactiva, también desactiva las motivaciones relacionadas.
         """
         categoria = db.query(Categoria).filter(Categoria.id == categoria_id).first()
         if not categoria:
@@ -64,11 +65,12 @@ class CategoriaService:
         db.commit()
         db.refresh(categoria)
 
-        # 🔄 Sincronizar motivaciones según el estado de la categoría
-        db.query(Motivacion).filter(
-            Motivacion.categoria_id == categoria_id
-        ).update({"activo": dto.activo})
-        db.commit()
+        # Si se desactiva, también desactivar motivaciones asociadas
+        if not dto.activo:
+            db.query(Motivacion).filter(
+                Motivacion.categoria_id == categoria_id
+            ).update({"activo": False})
+            db.commit()
 
         return categoria
 
@@ -92,5 +94,5 @@ class CategoriaService:
         return [{"id": c.id, "nombre": c.nombre} for c in categorias]
 
 
-# Instancia global del servicio (para usar desde los controladores)
+# Instancia del servicio para importar fácilmente
 categoria_service = CategoriaService()
