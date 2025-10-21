@@ -10,7 +10,9 @@ from app.controllers import video_controller  # Importa el controlador de video
 from app.controllers import diario_controllers
 from app.controllers import tecnica_favorita_controller
 from app.controllers import tecnica_calificacion_controllers
-
+from app.controllers import categoria_controller
+from app.controllers import motivacion_controller
+from app.controllers import promesa_controller
 
 app = FastAPI()
 
@@ -36,7 +38,10 @@ app.include_router(video_controller.router)
 app.include_router(tecnica_favorita_controller.router)
 app.include_router(tecnica_calificacion_controllers.router)
 
+app.include_router(categoria_controller.router)
+app.include_router(motivacion_controller.router)
 app.include_router(diario_controllers.router)
+app.include_router(promesa_controller.router)
 
 
 @app.get("/")

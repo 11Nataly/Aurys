@@ -12,6 +12,8 @@ from app.dtos.tecnica_dto import (
 )
 import re
 import cloudinary.uploader
+from app.models.tecnica_calificacion import TecnicaCalificacion
+from app.models.tecnicaFavorita import TecnicaFavorita
 
 # ==============================
 # CRUD Técnicas
@@ -131,6 +133,22 @@ def listar_tecnicas_administrador(db: Session):
 #===============================
 def listar_tecnicas_con_estado(db: Session, usuario_id: int):
     tecnicas = db.query(TecnicaAfrontamiento).all()
+
+    # Obtener IDs de calificaciones y favoritas del usuario
+    calificaciones = {
+        c.tecnica_id: c.estrellas
+        for c in db.query(TecnicaCalificacion)
+        .filter(TecnicaCalificacion.usuario_id == usuario_id)
+        .all()
+    }
+
+    favoritas = {
+        f.tecnica_id
+        for f in db.query(TecnicaFavorita)
+        .filter(TecnicaFavorita.usuario_id == usuario_id)
+        .all()
+    }
+
     resultado = []
     for tecnica in tecnicas:
         dto = TecnicaCard(
@@ -140,8 +158,38 @@ def listar_tecnicas_con_estado(db: Session, usuario_id: int):
             video=tecnica.video,
             instruccion=tecnica.instruccion,
             duracion=simplificar_duracion(tecnica.duracion_video),
-            calificacion=tecnica.calificacion,
-            favorita=False  # aquí luego puedes validar si el usuario la marcó favorita
+            calificacion=calificaciones.get(tecnica.id, tecnica.calificacion),
+            favorita=tecnica.id in favoritas
         )
         resultado.append(dto)
+
     return resultado
+
+
+def actualizar_estado_tecnica(db, usuario_id: int, tecnica_id: int, estrellas: int | None, favorita: bool | None):
+    # ⭐ Actualizar calificación
+    if estrellas is not None:
+        calificacion = (
+            db.query(TecnicaCalificacion)
+            .filter_by(usuario_id=usuario_id, tecnica_id=tecnica_id)
+            .first()
+        )
+        if calificacion:
+            calificacion.estrellas = estrellas
+        else:
+            db.add(TecnicaCalificacion(usuario_id=usuario_id, tecnica_id=tecnica_id, estrellas=estrellas))
+
+    # ❤ Actualizar favorito
+    if favorita is not None:
+        favorito = (
+            db.query(TecnicaFavorita)
+            .filter_by(usuario_id=usuario_id, tecnica_id=tecnica_id)
+            .first()
+        )
+        if favorita and not favorito:
+            db.add(TecnicaFavorita(usuario_id=usuario_id, tecnica_id=tecnica_id))
+        elif not favorita and favorito:
+            db.delete(favorito)
+
+    db.commit()
+    return {"message": "Estado actualizado correctamente"}

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile, Query
 from sqlalchemy.orm import Session
 
 from typing import List
@@ -14,6 +14,7 @@ from app.dtos.tecnica_dto import (
     TecnicaConEstadoResponseDTO,
     TecnicaAdministrador,
     TecnicaCard
+    
 )
 from app.services.subir_tecnica import (
     crear_tecnica,
@@ -25,7 +26,9 @@ from app.services.subir_tecnica import (
 
     simplificar_duracion,
     listar_tecnicas_administrador,
-    listar_tecnicas_con_estado 
+    listar_tecnicas_con_estado,
+    listar_tecnicas_con_estado,
+    actualizar_estado_tecnica 
 )
 from app.models.tecnicaafrontamiento import TecnicaAfrontamiento
 from app.services.cloudinary_service import upload_video
@@ -148,9 +151,36 @@ def obtener_todas_tecnicas(db: Session = Depends(get_db)):
 
 
 @router.get("/listar_tecnicas", response_model=List[TecnicaCard])
-def listar_tecnicas(usuario_id: int, db: Session = Depends(get_db)):
+def listar_tecnicas(
+    usuario_id: int = Query(..., description="ID del usuario para listar técnicas con su estado"),
+    db: Session = Depends(get_db)
+):
+    """
+    Lista todas las técnicas, mostrando la calificación que le ha dado el usuario (si existe)
+    y otros estados asociados.
+    """
     try:
-        return listar_tecnicas_con_estado(db, usuario_id)
+        tecnicas = listar_tecnicas_con_estado(db, usuario_id)
+        return tecnicas
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error listando técnicas: {str(e)}")
-
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error listando técnicas: {str(e)}"
+        )
+@router.put("/actualizar_estado/{tecnica_id}")
+def actualizar_estado(
+    tecnica_id: int,
+    usuario_id: int = Query(..., description="ID del usuario"),
+    estrellas: int | None = Query(None, ge=1, le=5, description="Nueva calificación (1-5)"),
+    favorita: bool | None = Query(None, description="True para marcar como favorita, False para quitar"),
+    db: Session = Depends(get_db)
+):
+    """
+    Permite al usuario actualizar la calificación y/o el estado de favorita de una técnica.
+    Solo cambia los valores que se envíen.
+    """
+    try:
+        resultado = actualizar_estado_tecnica(db, usuario_id, tecnica_id, estrellas, favorita)
+        return resultado
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

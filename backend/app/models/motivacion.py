@@ -1,4 +1,3 @@
-# models/motivacion.py
 from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -18,6 +17,7 @@ class Motivacion(Base):
     descripcion = Column(Text, nullable=True)
     esFavorita = Column(Boolean, default=False)
     activo = Column(Boolean, default=True)
+    imagen = Column(String(500), nullable=True)  # ✅ campo nuevo
 
     # Auditoría
     created_at = Column(DateTime(timezone=True), server_default=func.now())  
