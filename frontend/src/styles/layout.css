@@ -68,9 +68,14 @@
   display: none;
 }
 
-/* RESPONSIVE */
+/* RESPONSIVE - CORREGIDO */
 @media (max-width: 1024px) {
   .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+  
+  .main-content.sidebar-collapsed {
     margin-left: 0;
     width: 100%;
   }
@@ -82,6 +87,11 @@
 
 @media (max-width: 768px) {
   .main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+  
+  .main-content.sidebar-collapsed {
     margin-left: 0 !important;
     width: 100% !important;
   }
@@ -101,6 +111,7 @@
   
   .sidebar-overlay-mobile {
     display: block;
+    top: 55px;
   }
 }
 

@@ -4,7 +4,8 @@ import {
   FaHome, 
   FaBook, 
   FaFirstAid, 
-  FaFlag
+  FaFlag,
+  FaTrash // Agregar el icono de papelera
 } from 'react-icons/fa';
 import './sidebar.css';
 
@@ -63,6 +64,25 @@ const Sidebar = ({ isOpen }) => {
           ))}
         </motion.ul>
       </nav>
+      
+      {/* Sección inferior con el icono de papelera */}
+      <div className="sidebar-bottom">
+        <motion.div
+          variants={itemVariants}
+          initial="hidden"
+          animate={isOpen ? "visible" : "hidden"}
+        >
+          <Link 
+            to="/joven/papelera" 
+            className={`nav-item ${location.pathname === '/joven/papelera' ? 'active' : ''}`}
+          >
+            <span className="nav-icon">
+              <FaTrash />
+            </span>
+            {isOpen && <span className="nav-label">Papelera</span>}
+          </Link>
+        </motion.div>
+      </div>
     </aside>
   );
 };
