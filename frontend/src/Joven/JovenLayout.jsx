@@ -11,9 +11,13 @@ import Home from "./pages/Home";
 import Diario from "./pages/Diario";
 import Afrontamiento from "./pages/Afrontamiento";
 import KitEmergencia from "./pages/KitEmergencia";
+
 import Promesas from "./pages/Promesas";
 import Perfil from "./pages/Perfil";
 import Papelera from "./pages/Papelera";
+import MisMotivaciones from "./pages/MisMotivaciones";
+
+
 
 export default function JovenLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(() => {
@@ -67,7 +71,9 @@ export default function JovenLayout() {
         <Sidebar isOpen={sidebarOpen} />
 
         {/* Overlay para móviles */}
+
         {isMobile && sidebarOpen && (
+
           <div 
             className="sidebar-overlay-mobile"
             onClick={closeSidebar}
@@ -91,6 +97,8 @@ export default function JovenLayout() {
               <Route path="promesas" element={<Promesas />} />
               <Route path="perfil" element={<Perfil />} />
               <Route path="papelera" element={<Papelera />} />
+              <Route path="kit-emergencia/mis-motivaciones" element={<MisMotivaciones />} />
+
             </Routes>
           </main>
         </div>

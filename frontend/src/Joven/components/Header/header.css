@@ -96,6 +96,14 @@
   height: 26px;
 }
 
+.profile-image-header {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
 .profile-dropdown {
   position: absolute;
   right: 0;
@@ -104,7 +112,7 @@
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 0.5rem 0;
-  min-width: 150px;
+  min-width: 200px;
   z-index: 1001;
   display: none;
 }
@@ -113,16 +121,67 @@
   display: block;
 }
 
-.profile-dropdown a {
+.profile-dropdown-info {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eee;
+  gap: 0.75rem;
+}
+
+.profile-image-dropdown {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #4a3fb0;
+}
+
+.profile-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  border: 2px solid #ddd;
+}
+
+.profile-placeholder svg {
+  width: 20px;
+  height: 20px;
+}
+
+.profile-info-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.profile-email {
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.dropdown-link {
   display: block;
   padding: 0.6rem 1rem;
   color: #333;
   text-decoration: none;
   transition: background-color 0.2s;
+  font-size: 0.9rem;
 }
 
-.profile-dropdown a:hover {
+.dropdown-link:hover {
   background-color: #f5f5f5;
+  color: #4a3fb0;
 }
 
 @media (max-width: 768px) {
@@ -138,10 +197,18 @@
   .logo-img {
     width: 120px;
   }
+  
+  .profile-dropdown {
+    min-width: 180px;
+  }
 }
 
 @media (max-width: 480px) {
   .logo-img {
     width: 100px;
+  }
+  
+  .profile-dropdown {
+    min-width: 160px;
   }
 }

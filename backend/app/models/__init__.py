@@ -15,6 +15,6 @@ from .tecnicaafrontamiento import TecnicaAfrontamiento
 from .tecnica_calificacion import TecnicaCalificacion
 from .tecnicaFavorita import TecnicaFavorita
 from .promesa import Promesa
-from .fallos import Fallo
+from .fallo import Fallo
 from .emocion import Emocion 
 from .tipo_emocion import TipoEmocion# Renombrado a singular para el modelo

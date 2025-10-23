@@ -17,7 +17,7 @@ from app.models import (
     notadiario,
     tecnicaafrontamiento,
     promesa,
-    fallos,
+    fallo,
     tipo_emocion,
     tecnicaFavorita, 
     tecnica_calificacion
