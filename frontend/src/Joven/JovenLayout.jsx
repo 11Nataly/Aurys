@@ -11,8 +11,15 @@ import Home from "./pages/Home";
 import Diario from "./pages/Diario";
 import Afrontamiento from "./pages/Afrontamiento";
 import KitEmergencia from "./pages/KitEmergencia";
+
 import Promesas from "./pages/Promesas";
 import Perfil from "./pages/Perfil"; // Importar el componente Perfil
+
+import MisMotivaciones from "./pages/MisMotivaciones";
+
+// ✅ Importa la Papelera
+import TrashSection from "../Joven/components/Papelera/TrashSection";
+
 
 export default function JovenLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -58,6 +65,11 @@ export default function JovenLayout() {
               <Route path="kit-emergencia/afrontamiento" element={<Afrontamiento />} />
               <Route path="promesas" element={<Promesas />} />
               <Route path="perfil" element={<Perfil />} /> {/* Nueva ruta del perfil */}
+
+              <Route path="kit-emergencia/mis-motivaciones" element={<MisMotivaciones />} />
+
+              {/* ✅ Nueva ruta: Papelera */}
+              <Route path="papelera" element={<TrashSection />} />
             </Routes>
           </main>
         </div>

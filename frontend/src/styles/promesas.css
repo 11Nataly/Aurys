@@ -1,0 +1,259 @@
+.promesas-page {
+  background: linear-gradient(135deg, #ffffff 0%, #f9f9fc 100%);
+  min-height: 100vh;
+  padding: 20px 0;
+}
+
+.promesas-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Encabezado General - MODIFICADO */
+.promesas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e9ecef;
+  gap: 20px; /* Espacio entre título y botón */
+}
+
+.header-titles {
+  flex: 1; /* Ocupa el espacio disponible */
+}
+
+.header-titles h1 {
+  color: #4840c2;
+  margin: 0 0 5px 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  color: #000000;
+  font-size: 1.2rem;
+  margin: 0;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* Botón Nueva Promesa - MÁS COMPACTO Y ALINEADO */
+.btn-nueva-promesa {
+  padding: 10px 16px !important;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #4840c2;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(72, 64, 194, 0.3);
+  text-decoration: none;
+  white-space: nowrap;
+  min-width: auto;
+  width: auto;
+  flex-shrink: 0; /* Evita que se reduzca */
+  margin-top: 8px; /* Alinea verticalmente con el título */
+}
+
+.btn-nueva-promesa:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(72, 64, 194, 0.4);
+  background: #3a33a8;
+}
+
+/* Resto del CSS se mantiene igual... */
+.promesas-layout {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+/* Paneles Generales */
+.panel-izquierdo,
+.panel-derecho {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border: 1px solid #e9ecef;
+}
+
+.panel-header {
+  padding: 25px 30px 20px;
+  border-bottom: 2px solid #f8f9fa;
+  background: #ffffff;
+}
+
+.panel-header h2 {
+  color: #000000;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.subtitulo-grafico {
+  color: #4840c2;
+  margin: 8px 0 0 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.panel-content {
+  padding: 0;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+/* Panel Izquierdo Específico */
+.panel-izquierdo .panel-content {
+  padding: 20px;
+}
+
+/* Panel Derecho Específico */
+.panel-derecho .panel-content {
+  padding: 30px;
+}
+
+/* Estado cuando no hay promesa seleccionada */
+.sin-promesa-seleccionada {
+  text-align: center;
+  padding: 60px 20px;
+  color: #000000;
+  opacity: 0.7;
+}
+
+.sin-promesa-seleccionada p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* Filtro de estado */
+.filtro-estado {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+  padding: 15px 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e9ecef;
+}
+
+.filtro-estado label {
+  font-weight: 600;
+  color: #000000;
+  margin: 0;
+}
+
+.filtro-select {
+  padding: 8px 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #000000;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.filtro-select:focus {
+  outline: none;
+  border-color: #4840c2;
+}
+
+.contador-promesas {
+  color: #848ddb;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Botones generales - MÁS COMPACTOS */
+.btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: auto;
+  width: auto;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: #4840c2;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(72, 64, 194, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(72, 64, 194, 0.4);
+  background: #3a33a8;
+}
+
+.btn-secondary {
+  background-color: #848ddb;
+  color: #ffffff;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: #ffffff;
+}
+
+.btn-success {
+  background: #4840c2;
+  color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .promesas-layout {
+    grid-template-columns: 350px 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 968px) {
+  .promesas-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .panel-izquierdo {
+    order: 2;
+  }
+  
+  .panel-derecho {
+    order: 1;
+  }
+  
+  .promesas-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .header-titles h1 {
+    font-size: 2rem;
+  }
+  
+  .btn-nueva-promesa {
+    align-self: flex-start;
+    margin-top: 0; /* Reset en móvil */
+  }
+}
