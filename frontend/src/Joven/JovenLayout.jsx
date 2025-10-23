@@ -11,11 +11,15 @@ import Home from "./pages/Home";
 import Diario from "./pages/Diario";
 import Afrontamiento from "./pages/Afrontamiento";
 import KitEmergencia from "./pages/KitEmergencia";
-import MisMotivaciones from "./pages/MisMotivaciones";
+
 import Promesas from "./pages/Promesas";
+import Perfil from "./pages/Perfil"; // Importar el componente Perfil
+
+import MisMotivaciones from "./pages/MisMotivaciones";
 
 // ✅ Importa la Papelera
 import TrashSection from "../Joven/components/Papelera/TrashSection";
+
 
 export default function JovenLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -29,7 +33,7 @@ export default function JovenLayout() {
   };
 
   return (
-    <div className={`main-layout ${sidebarOpen ? "has-sidebar" : "sidebar-collapsed"}`}>
+    <div className={`main-layout ${sidebarOpen ? 'has-sidebar' : 'sidebar-collapsed'}`}>
       {/* HEADER */}
       <Header onToggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
 
@@ -38,7 +42,12 @@ export default function JovenLayout() {
         <Sidebar isOpen={sidebarOpen} />
 
         {/* Overlay para móviles */}
-        {sidebarOpen && <div className="sidebar-overlay-mobile" onClick={closeSidebar} />}
+        {sidebarOpen && (
+          <div 
+            className="sidebar-overlay-mobile"
+            onClick={closeSidebar}
+          />
+        )}
 
         {/* CONTENEDOR PRINCIPAL */}
         <div className={`main-content ${!sidebarOpen ? 'sidebar-collapsed' : ''}`}>
@@ -54,8 +63,10 @@ export default function JovenLayout() {
               <Route path="afrontamiento" element={<Afrontamiento />} />
               <Route path="kit-emergencia" element={<KitEmergencia />} />
               <Route path="kit-emergencia/afrontamiento" element={<Afrontamiento />} />
+              <Route path="promesas" element={<Promesas />} />
+              <Route path="perfil" element={<Perfil />} /> {/* Nueva ruta del perfil */}
+
               <Route path="kit-emergencia/mis-motivaciones" element={<MisMotivaciones />} />
-             <Route path="promesas" element={<Promesas />} />
 
               {/* ✅ Nueva ruta: Papelera */}
               <Route path="papelera" element={<TrashSection />} />
@@ -63,7 +74,6 @@ export default function JovenLayout() {
           </main>
         </div>
       </div>
-
 
       {/* FOOTER */}
       <Footer />
