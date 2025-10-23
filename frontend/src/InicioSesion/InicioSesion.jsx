@@ -81,7 +81,7 @@ export default function Login() {
         {/* Texto de registro */}
         <p className="register-text">
           ¿No tienes cuenta?{" "}
-          <a href="/register">Regístrate</a>
+          <a href="/register">Regístrate!</a>
         </p>
       </div>
     </div>

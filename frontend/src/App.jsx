@@ -23,7 +23,7 @@ export default function App() {
         <Route path="/ver-recuperar" element={<RecuperarContraseña />} />
         <Route path="/ver-registroexitoso" element={<RegistroExitoso />} />
 
-        {/* 🔒 Rutas protegidas */}
+        {/*Rutas protegidas para la proteccion*/}
         <Route
           path="/admin"
           element={

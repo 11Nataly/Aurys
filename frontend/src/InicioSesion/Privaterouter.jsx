@@ -16,6 +16,6 @@ export default function PrivateRoute({ rol, children }) {
   }
 
 
-  // Si todo está bien, renderizar el layout
+  // Si todo está bien, renderizar el layout y mas
   return children;
 }
