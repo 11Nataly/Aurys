@@ -1,8 +1,8 @@
-# models/usuario.py
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.db import Base
+
 
 class Usuario(Base):
     """
@@ -11,11 +11,14 @@ class Usuario(Base):
     __tablename__ = "usuario"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    nombre = Column(String(255), nullable=False, min_length=1)
+    nombre = Column(String(255), nullable=False)
     correo = Column(String(255), nullable=False, unique=True, index=True)
     contrasena = Column(String(255), nullable=False)
     rol_id = Column(Integer, ForeignKey('rol.id', ondelete="CASCADE"), nullable=False)
     activo = Column(Boolean, default=True)
+
+    # 🆕 Campo opcional para la foto de perfil
+    foto_perfil = Column(String(255), nullable=True)
 
     # Auditoría
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -28,18 +31,9 @@ class Usuario(Base):
     notadiarios = relationship("NotaDiario", back_populates="usuario", cascade="all, delete-orphan")
     tecnicasafrontamiento = relationship("TecnicaAfrontamiento", back_populates="usuario", cascade="all, delete-orphan")
     promesas = relationship("Promesa", back_populates="usuario", cascade="all, delete-orphan")
-    emociones = relationship("Emocion", back_populates="usuario", cascade="all, delete-orphan")  # si existe el modelo
+    emociones = relationship("Emocion", back_populates="usuario", cascade="all, delete-orphan")
     favoritos = relationship("TecnicaFavorita", back_populates="usuario", cascade="all, delete-orphan")
-    # Relación nueva con calificación de efectividad
     calificaciones = relationship("TecnicaCalificacion", back_populates="usuario", cascade="all, delete-orphan")
-    activo = Column(Boolean, default=False)
-
-
 
     def __repr__(self):
         return f"<Usuario(id={self.id}, nombre='{self.nombre}', correo='{self.correo}')>"
-
-
-    #si borras un Usuario, automáticamente se borran todas sus categorías, motivaciones, notas, técnicas, promesas y emociones.
-
-

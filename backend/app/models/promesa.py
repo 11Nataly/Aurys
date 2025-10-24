@@ -1,3 +1,4 @@
+# app/models/promesa.py
 from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, ForeignKey, Enum, Date
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -11,7 +12,7 @@ class Promesa(Base):
     titulo = Column(String(255), nullable=False, index=True)
     descripcion = Column(Text, nullable=True)
     tipo_frecuencia = Column(Enum('Diario', 'Semanal', name='tipo_frecuencia_enum'), nullable=True)
-    num_maximo_recaidas = Column(Integer, nullable=True)
+    num_maximo_recaidas = Column(Integer, nullable=True)  # interpretado según frecuencia o global
     activo = Column(Boolean, default=True)      # papelera o activa
     cumplida = Column(Boolean, default=False)   # finalizada o en progreso
     fecha_inicio = Column(Date, server_default=func.current_date())

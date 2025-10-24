@@ -1,5 +1,6 @@
+# app/dtos/promesa_dtos.py
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List, Dict, Any
 from datetime import datetime, date
 
 class PromesaBaseDTO(BaseModel):
@@ -21,14 +22,26 @@ class PromesaUpdateDTO(PromesaBaseDTO):
 class PromesaPapeleraDTO(BaseModel):
     activo: bool  # True -> restaurar, False -> mover a papelera
 
+class ProgresoDTO(BaseModel):
+    fallosHoy: int = 0
+    fallosSemana: int = 0
+    totalFallos: int = 0
+    diasConsecutivos: int = 0
+    limiteSuperado: Optional[bool] = False
+
+class HistorialFalloItemDTO(BaseModel):
+    fecha: str
+    hora: str
+    cantidad: int
+
 class PromesaResponseDTO(PromesaBaseDTO):
     id: int
     usuario_id: int
     created_at: datetime
     updated_at: datetime
-    estado: str  # calculado dinámicamente
-    fallos_registrados: Optional[int] = 0
-    fallos_hoy: Optional[int] = 0
+    estado: str  # calculado dinámicamente: 'En progreso', 'Finalizada', 'En papelera'
+    progreso: ProgresoDTO
+    historialFallos: Optional[List[HistorialFalloItemDTO]] = []
 
     class Config:
         orm_mode = True
