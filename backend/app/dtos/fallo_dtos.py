@@ -1,3 +1,4 @@
+# app/dtos/fallo_dtos.py
 from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
@@ -10,7 +11,7 @@ class FalloResponseDTO(BaseModel):
     id: int
     promesa_id: int
     descripcion: Optional[str] = None
-    fecha: datetime
+    fecha: datetime  # mapeamos fecha_registro -> fecha
 
     class Config:
         orm_mode = True
