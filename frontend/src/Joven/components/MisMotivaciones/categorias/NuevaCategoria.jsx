@@ -1,6 +1,9 @@
 import { useState } from "react";
 import "./categorias.css";
+import { crearCategoria } from "../../../../services/categoriaService";
 
+// Array con sugerencias de nombres de categorías,
+//  para que el sistema las tome como predeterminadas 
 const sugerencias = [
   "Mensajes", "Recuerdos", "Viajes", "Logros",
   "Familia", "Amigos", "Mascotas", "Momentos"
@@ -8,20 +11,49 @@ const sugerencias = [
 
 const NuevaCategoria = ({ onCerrar, onGuardar }) => {
   const [nombre, setNombre] = useState("");
+  const [cargando, setCargando] = useState(false);
 
-  const handleGuardar = () => {
-    if (!nombre.trim()) return alert("Debes ingresar un nombre de categoría");
-    const usuario_id = localStorage.getItem("id_usuario") || 1;
-    const nuevaCategoria = {
-      id: Date.now(),
-      usuario_id: parseInt(usuario_id),
+  const handleGuardar = async () => {
+    if (!nombre.trim()) {
+      alert("Debes ingresar un nombre de categoría");
+      return;
+    }
+
+    const yaExiste = categorias.some(
+      (cat) => cat.nombre.toLowerCase() === nombre.toLowerCase()
+    );
+    if (yaExiste) {
+      alert("Ya existe una categoría con ese nombre");
+      return;
+    }
+
+    const usuario_id = parseInt(localStorage.getItem("id_usuario")) || 1;
+
+    // 🔹 Detectar si es una sugerencia predeterminada
+    const esPredeterminada = sugerencias.includes(nombre) ? 1 : 0;
+
+    const categoriaData = {
+      usuario_id,
       nombre,
-      esPredeterminada: 0,
+      esPredeterminada,
       activo: 1,
-      create_at: new Date().toISOString(),
-      update_at: new Date().toISOString(),
     };
-    onGuardar(nuevaCategoria);
+
+    try {
+      setCargando(true);
+      const nuevaCategoria = await crearCategoria(categoriaData);
+
+      // Envía la categoría creada al padre (opcional)
+      onGuardar(nuevaCategoria);
+
+      alert("Categoría creada exitosamente");
+      onCerrar();
+    } catch (error) {
+      console.error("Error creando categoría:", error);
+      alert(error.message || "No se pudo crear la categoría");
+    } finally {
+      setCargando(false);
+    }
   };
 
   return (
@@ -39,11 +71,17 @@ const NuevaCategoria = ({ onCerrar, onGuardar }) => {
             placeholder="Escribe un nombre o selecciona una sugerencia..."
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
+            disabled={cargando}
           />
 
           <div className="sugerencias">
             {sugerencias.map((s, i) => (
-              <button key={i} onClick={() => setNombre(s)} className="btn-sugerencia">
+              <button
+                key={i}
+                onClick={() => setNombre(s)}
+                className="btn-sugerencia"
+                disabled={cargando}
+              >
                 {s}
               </button>
             ))}
@@ -51,9 +89,11 @@ const NuevaCategoria = ({ onCerrar, onGuardar }) => {
         </div>
 
         <div className="modal-footer">
-          <button className="btn-cancelar" onClick={onCerrar}>Cancelar</button>
-          <button className="btn-guardar" onClick={handleGuardar}>
-            Crear categoría
+          <button className="btn-cancelar" onClick={onCerrar} disabled={cargando}>
+            Cancelar
+          </button>
+          <button className="btn-guardar" onClick={handleGuardar} disabled={cargando}>
+            {cargando ? "Creando..." : "Crear categoría"}
           </button>
         </div>
       </div>
