@@ -7,7 +7,7 @@ import { crearCategoria } from "../../../../services/categoriaService";
 const sugerencias = [
   "Mensajes", "Recuerdos", "Viajes", "Logros",
   "Familia", "Amigos", "Mascotas", "Momentos"
-];
+]; 
 
 const NuevaCategoria = ({ onCerrar, onGuardar }) => {
   const [nombre, setNombre] = useState("");
