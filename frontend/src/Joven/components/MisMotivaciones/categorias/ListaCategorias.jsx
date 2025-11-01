@@ -5,12 +5,14 @@ import EditarCategoria from "./EditarCategoria";
 import { PencilSquareIcon } from "@heroicons/react/24/outline"; // ✅ nuevo componente
 import "./categorias.css";
 
+import { crearCategoria } from "../../../../services/categoriaService"; // ✅ importar el servicio
+
 const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
   const [categorias, setCategorias] = useState(initialCategorias);
   const [mostrarModal, setMostrarModal] = useState(false);
-  const [mostrarEditar, setMostrarEditar] = useState(false); // ✅
+  const [mostrarEditar, setMostrarEditar] = useState(false);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
-  const [categoriaEditando, setCategoriaEditando] = useState(null); // ✅
+  const [categoriaEditando, setCategoriaEditando] = useState(null);
   const [abierto, setAbierto] = useState(true);
   const [busqueda, setBusqueda] = useState("");
   const [sugerencias, setSugerencias] = useState([]);
@@ -59,9 +61,30 @@ const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
   }, []);
 
   // 🔹 Acciones
-  const agregarCategoria = (nuevaCategoria) => {
-    setCategorias([...categorias, nuevaCategoria]);
-    setMostrarModal(false);
+    // 🔹 Función para crear categoría con manejo de errores del backend
+  const agregarCategoria = async (categoriaData) => {
+    try {
+      const nuevaCategoria = await crearCategoria(categoriaData);
+
+      // Evitar duplicados visuales (en caso de error del backend no detectado)
+      if (categorias.some((c) => c.nombre.toLowerCase() === nuevaCategoria.nombre.toLowerCase())) {
+        alert("Ya existe una categoría con ese nombre");
+        return;
+      }
+
+      setCategorias((prev) => [...prev, nuevaCategoria]);
+      setMostrarModal(false);
+      alert("Categoría creada exitosamente");
+    } catch (error) {
+      console.error("Error al crear categoría:", error);
+
+      // ✅ Detectar error del backend (duplicado)
+      if (error.response?.data?.detail?.includes("Duplicate entry")) {
+        alert("Ya existe una categoría con ese nombre");
+      } else {
+        alert(error.message || "Ocurrió un error al crear la categoría");
+      }
+    }
   };
 
   const eliminarCategoria = (id) => {

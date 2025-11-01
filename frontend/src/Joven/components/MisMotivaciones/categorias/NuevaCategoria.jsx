@@ -2,12 +2,11 @@ import { useState } from "react";
 import "./categorias.css";
 import { crearCategoria } from "../../../../services/categoriaService";
 
-// Array con sugerencias de nombres de categorías,
-//  para que el sistema las tome como predeterminadas 
+// 🔹 Sugerencias que el sistema considera predeterminadas
 const sugerencias = [
   "Mensajes", "Recuerdos", "Viajes", "Logros",
   "Familia", "Amigos", "Mascotas", "Momentos"
-]; 
+];
 
 const NuevaCategoria = ({ onCerrar, onGuardar }) => {
   const [nombre, setNombre] = useState("");
@@ -19,38 +18,23 @@ const NuevaCategoria = ({ onCerrar, onGuardar }) => {
       return;
     }
 
-    const yaExiste = categorias.some(
-      (cat) => cat.nombre.toLowerCase() === nombre.toLowerCase()
-    );
-    if (yaExiste) {
-      alert("Ya existe una categoría con ese nombre");
-      return;
-    }
-
+    // 🔹 Determinar si es una sugerencia predeterminada
+    const esPredeterminada = sugerencias.includes(nombre.trim()) ? 1 : 0;
     const usuario_id = parseInt(localStorage.getItem("id_usuario")) || 1;
-
-    // 🔹 Detectar si es una sugerencia predeterminada
-    const esPredeterminada = sugerencias.includes(nombre) ? 1 : 0;
 
     const categoriaData = {
       usuario_id,
-      nombre,
+      nombre: nombre.trim(),
       esPredeterminada,
       activo: 1,
     };
 
     try {
-      setCargando(true);
-      const nuevaCategoria = await crearCategoria(categoriaData);
-
-      // Envía la categoría creada al padre (opcional)
-      onGuardar(nuevaCategoria);
-
-      alert("Categoría creada exitosamente");
+     setCargando(true);
+      await onGuardar(categoriaData); // ✅ ahora el padre se encarga del fetch y errores
       onCerrar();
     } catch (error) {
       console.error("Error creando categoría:", error);
-      alert(error.message || "No se pudo crear la categoría");
     } finally {
       setCargando(false);
     }
