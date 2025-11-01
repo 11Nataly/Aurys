@@ -22,3 +22,4 @@ class PerfilUpdateDTO(BaseModel):
 
 class PerfilEstadoUpdateDTO(BaseModel):
     activo: bool
+# Todo ese archivo realizado por douglas   

@@ -57,3 +57,4 @@ def mover_a_papelera_endpoint(id: int, db: Session = Depends(get_db)):
 @router.delete("/eliminar/{id}")
 def eliminar_diario_endpoint(id: int, db: Session = Depends(get_db)):
     return eliminar_diario(id, db)
+# Todo ese archivo realizado por douglas   

@@ -9,7 +9,7 @@ class TecnicaAfrontamiento(Base):
     Modelo de SQLAlchemy para la tabla 'tecnicaafrontamiento'.
     """
     __tablename__ = "tecnicaafrontamiento"
-
+# Todo ese archivo realizado por douglas   
     id = Column(Integer, primary_key=True, autoincrement=True)
     usuario_id = Column(Integer, ForeignKey('usuario.id', ondelete="CASCADE"), nullable=False)
     nombre = Column(String(255), nullable=False)
