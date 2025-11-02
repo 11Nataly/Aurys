@@ -1,184 +1,126 @@
-import React, { useState, useRef } from 'react';
-import { FaCamera, FaCheck, FaTimes, FaUpload, FaRedo } from 'react-icons/fa';
-import Modal from 'react-modal';
-import { defaultProfileImage } from '../../../Joven/fake_data/perfilData';
-import './ProfileHeader.css';
+import React, { useState, useRef } from "react";
+import { FaCamera, FaCheck, FaTimes } from "react-icons/fa";
+import Modal from "react-modal";
+import { editarPerfil } from "../../../services/perfilService";
+import { defaultProfileImage } from "../../../Joven/fake_data/perfilData";
+import "./ProfileHeader.css";
 
-// Configurar el elemento root para accesibilidad
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 
 const ProfileHeader = ({ userData, onUpdateUser }) => {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [previewImage, setPreviewImage] = useState(null);
-  const [isEditingPhoto, setIsEditingPhoto] = useState(false);
-  const [error, setError] = useState('');
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [previewImage, setPreviewImage] = useState(userData.foto_perfil || null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState("");
+  const [modalMessage, setModalMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
   const fileInputRef = useRef(null);
 
-  const handleImageSelect = (event) => {
+  const handleFileSelect = (event) => {
     const file = event.target.files[0];
-    processImageFile(file);
-  };
-
-  const processImageFile = (file) => {
     if (!file) return;
 
-    // Validaciones
     if (file.size > 5 * 1024 * 1024) {
-      setError('La imagen no debe superar los 5MB');
+      setError("El archivo no debe superar los 5MB");
       return;
     }
 
-    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-      setError('Solo se permiten archivos JPG, PNG o WebP');
+    const allowed = ["image/jpeg", "image/png", "image/webp"];
+    if (!allowed.includes(file.type)) {
+      setError("Solo se permiten imágenes JPG, PNG o WEBP");
       return;
     }
 
-    setError('');
-    setSelectedImage(file);
-    
-    // Crear preview
-    const reader = new FileReader();
-    reader.onload = (e) => setPreviewImage(e.target.result);
-    reader.readAsDataURL(file);
-    setIsEditingPhoto(true);
+    setError("");
+    setSelectedFile(file);
+    setPreviewImage(URL.createObjectURL(file));
+    setIsEditing(true);
   };
 
-  const handleSavePhoto = () => {
-    if (selectedImage) {
-      onUpdateUser('fotoPerfil', previewImage);
-      setIsEditingPhoto(false);
-      setSelectedImage(null);
-      setShowConfirmModal(true);
+  const handleSave = async () => {
+    try {
+      const updated = await editarPerfil(userData.id, {
+        nombre: userData.nombre,
+        correo: userData.correo,
+        foto: selectedFile,
+      });
+
+      onUpdateUser("foto_perfil", updated.foto_perfil);
+      setModalMessage("Foto de perfil actualizada correctamente");
+      setShowModal(true);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Error al actualizar foto:", error);
+      setError("Error al subir la foto");
     }
   };
 
-  const handleCancelPhoto = () => {
-    setSelectedImage(null);
-    setPreviewImage(null);
-    setIsEditingPhoto(false);
-    setError('');
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
-
-  const triggerFileInput = () => {
-    fileInputRef.current?.click();
-  };
-
-  const closeConfirmModal = () => {
-    setShowConfirmModal(false);
-  };
-
-  const removeProfilePhoto = () => {
-    onUpdateUser('fotoPerfil', null);
-    setPreviewImage(null);
-    setShowConfirmModal(true);
+  const handleCancel = () => {
+    setSelectedFile(null);
+    setPreviewImage(userData.foto_perfil);
+    setIsEditing(false);
   };
 
   return (
     <div className="profile-header">
       <div className="profile-image-section">
         <div className="profile-image-container">
-          <img 
-            src={previewImage || userData.fotoPerfil || defaultProfileImage} 
-            alt="Foto de perfil" 
+          <img
+            src={previewImage || userData.foto_perfil || defaultProfileImage}
+            alt="Foto de perfil"
             className="profile-image"
           />
         </div>
 
-        <div className="photo-actions">
-          {!isEditingPhoto ? (
-            <div className="photo-actions-main">
-              <button 
-                className="photo-action-btn change"
-                onClick={triggerFileInput}
-                aria-label="Cambiar foto de perfil"
-              >
-                <FaCamera className="btn-icon" />
-                Cambiar foto
-              </button>
-              
-              {(userData.fotoPerfil || previewImage) && (
-                <button 
-                  className="photo-action-btn remove"
-                  onClick={removeProfilePhoto}
-                  aria-label="Eliminar foto de perfil"
-                >
-                  <FaTimes className="btn-icon" />
-                  Eliminar
-                </button>
-              )}
-            </div>
-          ) : (
-            <div className="photo-actions-edit">
-              <button 
-                className="photo-action-btn save"
-                onClick={handleSavePhoto}
-                aria-label="Guardar foto"
-              >
-                <FaCheck className="btn-icon" />
-                Guardar
-              </button>
-              <button 
-                className="photo-action-btn cancel"
-                onClick={handleCancelPhoto}
-                aria-label="Cancelar"
-              >
-                <FaTimes className="btn-icon" />
-                Cancelar
-              </button>
-              <button 
-                className="photo-action-btn retry"
-                onClick={triggerFileInput}
-                aria-label="Elegir otra foto"
-              >
-                <FaRedo className="btn-icon" />
-                Otra foto
-              </button>
-            </div>
-          )}
-        </div>
+        {!isEditing ? (
+          <button
+            className="photo-action-btn change"
+            onClick={() => fileInputRef.current.click()}
+          >
+            <FaCamera /> Cambiar foto
+          </button>
+        ) : (
+          <div className="photo-actions">
+            <button className="photo-action-btn save" onClick={handleSave}>
+              <FaCheck /> Guardar
+            </button>
+            <button className="photo-action-btn cancel" onClick={handleCancel}>
+              <FaTimes /> Cancelar
+            </button>
+          </div>
+        )}
 
         <input
           type="file"
           ref={fileInputRef}
-          onChange={handleImageSelect}
-          accept=".jpg,.jpeg,.png,.webp"
-          style={{ display: 'none' }}
+          onChange={handleFileSelect}
+          accept="image/*"
+          style={{ display: "none" }}
         />
       </div>
 
-      {error && (
-        <div className="error-message">
-          <FaTimes className="error-icon" />
-          {error}
-        </div>
-      )}
-      
+      {error && <p className="error-message">{error}</p>}
       <h2 className="profile-name">{userData.nombre}</h2>
       <p className="profile-email">{userData.correo}</p>
 
-      {/* Modal de Confirmación */}
+      {/* Modal de confirmación */}
       <Modal
-        isOpen={showConfirmModal}
-        onRequestClose={closeConfirmModal}
+        isOpen={showModal}
+        onRequestClose={() => setShowModal(false)}
         className="custom-modal"
         overlayClassName="custom-modal-overlay"
       >
         <div className="modal-content">
           <div className="modal-icon success">✓</div>
-          <h3 className="modal-title">¡Foto Actualizada!</h3>
-          <p className="modal-message">Tu foto de perfil ha sido actualizada correctamente.</p>
-          <div className="modal-actions">
-            <button 
-              className="modal-btn modal-btn-primary"
-              onClick={closeConfirmModal}
-            >
-              Aceptar
-            </button>
-          </div>
+          <h3 className="modal-title">¡Éxito!</h3>
+          <p className="modal-message">{modalMessage}</p>
+          <button
+            className="modal-btn modal-btn-primary"
+            onClick={() => setShowModal(false)}
+          >
+            Aceptar
+          </button>
         </div>
       </Modal>
     </div>

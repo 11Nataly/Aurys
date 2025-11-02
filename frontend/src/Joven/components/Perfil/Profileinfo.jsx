@@ -1,154 +1,75 @@
-import React, { useState } from 'react';
-import { FaEdit, FaCheck, FaTimes } from 'react-icons/fa';
-import Modal from 'react-modal';
-import './ProfileInfo.css';
+import React, { useState } from "react";
+import { FaEdit, FaCheck, FaTimes } from "react-icons/fa";
+import Modal from "react-modal";
+import { editarPerfil } from "../../../services/perfilService";
+import "./ProfileInfo.css";
 
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 
-const ProfileInfo = ({ userData, isEditing, onUpdateUser, onEditToggle }) => {
-  const [tempValues, setTempValues] = useState({
+const ProfileInfo = ({ userData, onUpdateUser }) => {
+  const [tempData, setTempData] = useState({
     nombre: userData.nombre,
     correo: userData.correo,
-    contrasena: ''
   });
-  const [errors, setErrors] = useState({});
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
+  const [isEditing, setIsEditing] = useState({ nombre: false, correo: false });
+  const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleInputChange = (field, value) => {
-    setTempValues(prev => ({
-      ...prev,
-      [field]: value
-    }));
-    if (errors[field]) {
-      setErrors(prev => ({
-        ...prev,
-        [field]: ''
-      }));
+    setTempData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleEditToggle = (field) => {
+    setIsEditing((prev) => ({ ...prev, [field]: !prev[field] }));
+    setError("");
+  };
+
+  const handleSave = async (field) => {
+    try {
+      const updated = await editarPerfil(userData.id, {
+        nombre: field === "nombre" ? tempData.nombre : userData.nombre,
+        correo: field === "correo" ? tempData.correo : userData.correo,
+        foto: null,
+      });
+
+      onUpdateUser(field, updated[field]);
+      setSuccessMessage(`${field === "nombre" ? "Nombre" : "Correo"} actualizado correctamente`);
+      setShowModal(true);
+      handleEditToggle(field);
+    } catch (error) {
+      console.error("Error al actualizar perfil:", error);
+      setError("Error al guardar los cambios");
     }
   };
 
-  const validateField = (field, value) => {
-    const newErrors = { ...errors };
-
-    switch (field) {
-      case 'nombre':
-        if (!value.trim()) {
-          newErrors.nombre = 'El nombre no puede estar vacío';
-        } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value)) {
-          newErrors.nombre = 'Solo se permiten letras y espacios';
-        } else {
-          delete newErrors.nombre;
-        }
-        break;
-
-      case 'correo':
-        if (!value.trim()) {
-          newErrors.correo = 'El correo no puede estar vacío';
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-          newErrors.correo = 'Formato de correo inválido';
-        } else {
-          delete newErrors.correo;
-        }
-        break;
-
-      case 'contrasena':
-        if (value && value.length < 6) {
-          newErrors.contrasena = 'La contraseña debe tener al menos 6 caracteres';
-        } else {
-          delete newErrors.contrasena;
-        }
-        break;
-
-      default:
-        break;
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSave = (field) => {
-    if (validateField(field, tempValues[field])) {
-      onUpdateUser(field, tempValues[field]);
-      onEditToggle(field);
-      
-      // Mostrar modal de éxito
-      const fieldNames = {
-        nombre: 'Nombre',
-        correo: 'Correo electrónico',
-        contrasena: 'Contraseña'
-      };
-      setSuccessMessage(`${fieldNames[field]} actualizado correctamente`);
-      setShowSuccessModal(true);
-      
-      // Resetear contraseña después de guardar
-      if (field === 'contrasena') {
-        setTempValues(prev => ({ ...prev, contrasena: '' }));
-      }
-    }
-  };
-
-  const handleCancel = (field) => {
-    setTempValues(prev => ({
-      ...prev,
-      [field]: field === 'contrasena' ? '' : userData[field]
-    }));
-    setErrors(prev => ({ ...prev, [field]: '' }));
-    onEditToggle(field);
-  };
-
-  const handleEditClick = (field) => {
-    setTempValues(prev => ({
-      ...prev,
-      [field]: field === 'contrasena' ? '' : userData[field]
-    }));
-    onEditToggle(field);
-  };
-
-  const closeSuccessModal = () => {
-    setShowSuccessModal(false);
-  };
-
-  const renderField = (field, label, type = 'text') => (
+  const renderField = (field, label) => (
     <div className="profile-field">
       <label className="field-label">{label}</label>
       <div className="field-input-container">
         {isEditing[field] ? (
           <>
             <input
-              type={type}
-              value={tempValues[field]}
+              type="text"
+              value={tempData[field]}
               onChange={(e) => handleInputChange(field, e.target.value)}
-              className={`field-input ${errors[field] ? 'error' : ''}`}
-              placeholder={`Ingresa tu ${label.toLowerCase()}`}
+              className="field-input"
             />
             <div className="field-actions">
-              <button
-                className="action-btn save"
-                onClick={() => handleSave(field)}
-                disabled={!!errors[field]}
-                aria-label="Guardar"
-              >
+              <button className="action-btn save" onClick={() => handleSave(field)}>
                 <FaCheck />
               </button>
-              <button
-                className="action-btn cancel"
-                onClick={() => handleCancel(field)}
-                aria-label="Cancelar"
-              >
+              <button className="action-btn cancel" onClick={() => handleEditToggle(field)}>
                 <FaTimes />
               </button>
             </div>
           </>
         ) : (
           <>
-            <span className="field-value">
-              {field === 'contrasena' ? '••••••••••' : userData[field]}
-            </span>
+            <span className="field-value">{userData[field]}</span>
             <button
               className="edit-btn"
-              onClick={() => handleEditClick(field)}
+              onClick={() => handleEditToggle(field)}
               aria-label={`Editar ${label}`}
             >
               <FaEdit />
@@ -156,22 +77,20 @@ const ProfileInfo = ({ userData, isEditing, onUpdateUser, onEditToggle }) => {
           </>
         )}
       </div>
-      {errors[field] && <div className="field-error">{errors[field]}</div>}
     </div>
   );
 
   return (
     <div className="profile-info">
       <h3 className="info-title">Información Personal</h3>
-      
-      {renderField('nombre', 'Nombre')}
-      {renderField('correo', 'Correo Electrónico')}
-      {renderField('contrasena', 'Contraseña', 'password')}
+      {renderField("nombre", "Nombre")}
+      {renderField("correo", "Correo Electrónico")}
+      {error && <p className="field-error">{error}</p>}
 
-      {/* Modal de Éxito */}
+      {/* Modal de confirmación */}
       <Modal
-        isOpen={showSuccessModal}
-        onRequestClose={closeSuccessModal}
+        isOpen={showModal}
+        onRequestClose={() => setShowModal(false)}
         className="custom-modal"
         overlayClassName="custom-modal-overlay"
       >
@@ -179,14 +98,9 @@ const ProfileInfo = ({ userData, isEditing, onUpdateUser, onEditToggle }) => {
           <div className="modal-icon success">✓</div>
           <h3 className="modal-title">¡Actualizado!</h3>
           <p className="modal-message">{successMessage}</p>
-          <div className="modal-actions">
-            <button 
-              className="modal-btn modal-btn-primary"
-              onClick={closeSuccessModal}
-            >
-              Continuar
-            </button>
-          </div>
+          <button className="modal-btn modal-btn-primary" onClick={() => setShowModal(false)}>
+            Continuar
+          </button>
         </div>
       </Modal>
     </div>
