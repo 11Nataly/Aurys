@@ -50,6 +50,33 @@ app.include_router(fallo_controller.router)
 app.include_router(perfil_controller.router)
 
 
+# ==========================================================
+# 🧹 LIMPIEZA AUTOMÁTICA DE DATOS INACTIVOS
+# ==========================================================
+from apscheduler.schedulers.background import BackgroundScheduler
+from app.db.database import SessionLocal
+from app.services.cleanup_service import limpiar_datos_inactivos
+
+# Crear programador en segundo plano
+scheduler = BackgroundScheduler()
+
+def ejecutar_limpieza():
+    db = SessionLocal()
+    try:
+        limpiar_datos_inactivos(db)
+    finally:
+        db.close()
+
+# Ejecutar todos los días a las 3:00 AM
+scheduler.add_job(ejecutar_limpieza, "cron", hour=3, minute=0)
+scheduler.start()
+
+@app.on_event("shutdown")
+def shutdown_event():
+    scheduler.shutdown()
+
+
+
 # ✅ Ruta de prueba
 @app.get("/")
 def read_root():
