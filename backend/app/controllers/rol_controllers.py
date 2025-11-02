@@ -56,3 +56,4 @@ def actualizar_rol(id: int ):
     return"actualizar rol" + str(id)
 
 
+# Todo ese archivo realizado por douglas   

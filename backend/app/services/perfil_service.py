@@ -86,3 +86,4 @@ class PerfilService:
         foto_url = f"{base_url}/{usuario.foto_perfil}"
 
         return {"mensaje": "Foto actualizada correctamente", "url": foto_url}
+# Todo ese archivo realizado por douglas   

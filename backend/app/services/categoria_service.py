@@ -90,7 +90,7 @@ class CategoriaService:
 
         # Convertir resultado a lista de diccionarios
         return [{"id": c.id, "nombre": c.nombre} for c in categorias]
-
+# Todo ese archivo realizado por douglas   
 
 # Instancia global del servicio (para usar desde los controladores)
 categoria_service = CategoriaService()

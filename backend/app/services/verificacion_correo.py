@@ -7,7 +7,7 @@ import certifi
 import os
 # Asegurar que SendGrid use el certificado correcto
 os.environ['SSL_CERT_FILE'] = certifi.where()
-
+# Todo ese archivo realizado por douglas   
 def enviar_email(db: Session, destinatario: str, asunto: str, contenido_html: str):
     usuario = db.query(Usuario).filter(Usuario.correo == destinatario).first()
     if not usuario:
@@ -16,7 +16,7 @@ def enviar_email(db: Session, destinatario: str, asunto: str, contenido_html: st
     try:
         sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
         message = Mail(
-            from_email=("pruebaantoniobarracuda@gmail.com", 'Soporte Aurys'),
+            from_email=("auryssalud@gmail.com", 'Soporte Aurys'),
             to_emails=destinatario,
             subject=asunto,
             html_content=contenido_html

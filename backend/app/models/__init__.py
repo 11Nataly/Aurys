@@ -18,3 +18,4 @@ from .promesa import Promesa
 from .fallo import Fallo
 from .emocion import Emocion 
 from .tipo_emocion import TipoEmocion# Renombrado a singular para el modelo
+# Todo ese archivo realizado por douglas   

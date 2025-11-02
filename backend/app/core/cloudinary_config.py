@@ -7,3 +7,4 @@ cloudinary.config(
     api_secret=settings.CLOUDINARY_API_SECRET,
     secure=True
 )
+# Todo ese archivo realizado por douglas   

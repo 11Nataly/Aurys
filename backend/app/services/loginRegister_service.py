@@ -11,7 +11,7 @@ from app.models.usuario import Usuario
 from app.models.rol import Rol
 from app.dtos.usuario_dto import UsuarioRegistroDTO, UsuarioLoginDTO, Token
 from app.services.envio_correo import enviar_email
-
+# Todo ese archivo realizado por douglas   
 # Configuración de seguridad
 SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = "HS256"
