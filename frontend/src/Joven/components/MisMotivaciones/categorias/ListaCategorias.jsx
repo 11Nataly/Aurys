@@ -1,3 +1,4 @@
+//frontend/src/Joven/components/MisMotivaciones/categorias/ListaCategorias.jsx
 import { useEffect, useState, useRef } from "react";
 import CategoriaItem from "./CategoriaItem";
 import NuevaCategoria from "./NuevaCategoria";
@@ -6,6 +7,9 @@ import { PencilSquareIcon } from "@heroicons/react/24/outline"; // ✅ nuevo com
 import "./categorias.css";
 
 import { crearCategoria } from "../../../../services/categoriaService"; // ✅ importar el servicio
+import { listarCategorias } from "../../../../services/categoriaService"; // ✅ importar el servicio
+import { listarCategoriasActivas } from "../../../../services/categoriaService"; // ✅ importar el servicio}
+import { cambiarEstadoCategoria } from "../../../../services/categoriaService"; // ✅ importar el servicio
 
 const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
   const [categorias, setCategorias] = useState(initialCategorias);
@@ -19,21 +23,21 @@ const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
   const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
   const inputRef = useRef(null);
 
-  // 🔹 Cargar categorías desde JSON si no hay iniciales
-  useEffect(() => {
-    if (initialCategorias.length === 0) {
-      const cargarDatos = async () => {
-        try {
-          const response = await fetch("/Joven/fake_data/categorias.json");
-          const data = await response.json();
-          setCategorias(data.filter((cat) => cat.activo === 1));
-        } catch (error) {
-          console.error("Error cargando categorías:", error);
-        }
-      };
-      cargarDatos();
+  // 🔹 Cargar categorías desde el backend al montar el componente
+useEffect(() => {
+  const usuario_id = parseInt(localStorage.getItem("id_usuario")) || 1;
+
+  const cargarCategorias = async () => {
+    try {
+      const data = await listarCategorias(usuario_id);
+      setCategorias(data);
+    } catch (error) {
+      console.error("Error cargando categorías:", error);
     }
-  }, [initialCategorias]);
+  };
+
+  cargarCategorias();
+}, []);
 
   // 🔹 Actualizar sugerencias cuando cambia la búsqueda
   useEffect(() => {
@@ -86,9 +90,26 @@ const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
       }
     }
   };
+  //  Maneja eliminación (cambio de estado activo = false)
+ const handleEliminar = async (id) => {
+    try {
+      if (!id) {
+        console.error("❌ ID inválido al eliminar categoría:", id);
+        return;
+      }
 
-  const eliminarCategoria = (id) => {
-    setCategorias(categorias.filter((c) => c.id !== id));
+      console.log("🗑 Eliminando categoría con id:", id);
+
+      await cambiarEstadoCategoria(id, false);
+
+      // ✅ Actualiza inmediatamente el frontend
+      setCategorias((prev) => prev.filter((cat) => cat.id !== id));
+
+      console.log("✅ Categoría eliminada visualmente y en backend");
+    } catch (err) {
+      console.error("⚠️ Error al eliminar categoría:", err);
+      alert(err.response?.data?.detail || "No se pudo eliminar la categoría.");
+    }
   };
 
   const handleSeleccion = (id) => {
@@ -174,7 +195,7 @@ const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
               <CategoriaItem
                 key={cat.id}
                 categoria={cat}
-                onEliminar={eliminarCategoria}
+                onEliminar={() => handleEliminar(cat.id)}
                 onSeleccion={handleSeleccion}
                 onEditar={handleEditar}
                 activa={categoriaSeleccionada === cat.id}
