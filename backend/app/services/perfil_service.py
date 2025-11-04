@@ -43,7 +43,7 @@ class PerfilService:
             "estado_actual": "ACTIVO" if usuario.activo else "INACTIVO"
         }
 
-    # ✅ Actualizar datos de perfil
+    # ✅ Actualizar datos de perfil (solo texto)
     @staticmethod
     def actualizar_perfil(usuario_id: int, dto: PerfilUpdateDTO, db: Session):
         usuario = db.query(Usuario).filter(Usuario.id == usuario_id).first()
@@ -55,11 +55,57 @@ class PerfilService:
         if dto.correo:
             usuario.correo = dto.correo
         if dto.contrasena:
-            usuario.contrasena = dto.contrasena  # ⚠️ En producción, cifrar la contraseña
+            usuario.contrasena = dto.contrasena  # ⚠️ en producción deberías cifrarla
 
         db.commit()
         db.refresh(usuario)
-        return usuario
+
+        return PerfilResponseDTO(
+            id=usuario.id,
+            nombre=usuario.nombre,
+            correo=usuario.correo,
+            foto_perfil=usuario.foto_perfil,
+            fecha_registro=usuario.created_at,
+            estado="ACTIVO" if usuario.activo else "INACTIVO"
+        )
+
+    # ✅ Actualizar perfil completo (nombre, correo y foto) usando FormData
+    @staticmethod
+    async def actualizar_perfil_completo(usuario_id: int, nombre: str, correo: str, foto: UploadFile | None, db: Session):
+        usuario = db.query(Usuario).filter(Usuario.id == usuario_id).first()
+        if not usuario:
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+        # --- Actualizar texto ---
+        usuario.nombre = nombre
+        usuario.correo = correo
+
+        # --- Actualizar imagen si se envía ---
+        if foto:
+            if not os.path.exists(UPLOAD_DIR):
+                os.makedirs(UPLOAD_DIR)
+
+            extension = foto.filename.split(".")[-1]
+            filename = f"{usuario_id}_perfil.{extension}"
+            file_path = os.path.join(UPLOAD_DIR, filename)
+
+            with open(file_path, "wb") as buffer:
+                buffer.write(foto.file.read())
+
+            usuario.foto_perfil = file_path.replace("\\", "/")
+
+        db.commit()
+        db.refresh(usuario)
+
+        # --- Retornar DTO consistente ---
+        return PerfilResponseDTO(
+            id=usuario.id,
+            nombre=usuario.nombre,
+            correo=usuario.correo,
+            foto_perfil=usuario.foto_perfil,
+            fecha_registro=usuario.created_at,
+            estado="ACTIVO" if usuario.activo else "INACTIVO"
+        )
 
     # ✅ Subir o cambiar foto de perfil
     @staticmethod
