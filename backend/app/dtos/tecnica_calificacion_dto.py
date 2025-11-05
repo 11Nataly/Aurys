@@ -23,3 +23,4 @@ class TecnicaCalificacionResponse(TecnicaCalificacionBase):
 
     class Config:
         from_attributes = True
+# Todo ese archivo realizado por douglas   

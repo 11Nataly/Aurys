@@ -6,7 +6,7 @@ export const listarTecnicas = async () => {
     if (!id) throw new Error("ID de usuario no encontrado en localStorage");
 
     const response = await api.get(`/tecnicas/listar_tecnicas?usuario_id=${id}`);
-    return response.data; // aquí llega un array de Técnicas
+    return response.data; // aquí llega un array de Técnicas # Todo ese archivo realizado por douglas   
   } catch (err) {
     console.error("Error al cargar técnicas:", err);
     throw err;

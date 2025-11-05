@@ -4,3 +4,4 @@ from typing import Optional
 
 class CorreoDTO(BaseModel):
     correo: EmailStr
+# Todo ese archivo realizado por douglas   

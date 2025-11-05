@@ -3,12 +3,12 @@ from fastapi import HTTPException, UploadFile, Request
 from sqlalchemy.orm import Session
 from app.models.usuario import Usuario
 from app.dtos.perfil_dto import PerfilResponseDTO, PerfilUpdateDTO
+from app.services.loginRegister_service import get_password_hash  # 🔐 Import para cifrar contraseñas
 
 UPLOAD_DIR = "uploads/fotos"
 
 
 class PerfilService:
-
     # ✅ Listar perfiles (con URL absoluta de imagen)
     @staticmethod
     def listar_perfiles(db: Session, request: Request):
@@ -96,6 +96,16 @@ class PerfilService:
 
         db.commit()
         db.refresh(usuario)
+
+        # --- Retornar DTO consistente ---
+        return PerfilResponseDTO(
+            id=usuario.id,
+            nombre=usuario.nombre,
+            correo=usuario.correo,
+            foto_perfil=usuario.foto_perfil,
+            fecha_registro=usuario.created_at,
+            estado="ACTIVO" if usuario.activo else "INACTIVO"
+        )
 
         # --- Retornar DTO consistente ---
         return PerfilResponseDTO(

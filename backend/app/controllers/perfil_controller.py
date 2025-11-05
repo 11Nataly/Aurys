@@ -46,3 +46,4 @@ def get_foto(nombre_archivo: str):
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="Archivo no encontrado")
     return FileResponse(file_path)
+# Todo ese archivo realizado por douglas   

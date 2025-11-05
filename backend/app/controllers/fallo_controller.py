@@ -65,3 +65,4 @@ def listar_fallos_promesa(promesa_id: int, db: Session = Depends(get_db)):
 @router.delete("/{fallo_id}")
 def eliminar_fallo(fallo_id: int, db: Session = Depends(get_db)):
     return fallo_service.eliminar_fallo(db, fallo_id)
+# Todo ese archivo realizado por douglas   

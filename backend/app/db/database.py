@@ -30,3 +30,4 @@ def get_db():
     finally:
         if db:
             db.close()
+            # Todo ese archivo realizado por douglas   

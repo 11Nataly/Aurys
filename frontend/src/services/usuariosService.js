@@ -15,7 +15,7 @@ export const listarUsuarios = async () => {
 };
 
 //===================================
-// 🔹 Cambiar estado del usuario (activo ↔ inactivo)
+// 🔹 Cambiar estado del usuario (activo ↔ inactivo) # Todo ese archivo realizado por douglas   
 //===================================
 export const cambiarEstadoUsuario = async (id) => {
   try {
