@@ -84,3 +84,6 @@ def listar_categorias_activas(usuario_id: int, db: Session = Depends(get_db)):
     Lista todas las categorías activas de un usuario (solo ID y nombre).
     """
     return categoria_service.listar_nombres_activos(db, usuario_id)
+
+
+# Todo ese archivo realizado por douglas   

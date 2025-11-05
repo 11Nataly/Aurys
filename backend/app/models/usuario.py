@@ -37,3 +37,4 @@ class Usuario(Base):
 
     def __repr__(self):
         return f"<Usuario(id={self.id}, nombre='{self.nombre}', correo='{self.correo}')>"
+# Todo ese archivo realizado por douglas   

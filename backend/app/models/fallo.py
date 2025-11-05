@@ -18,6 +18,6 @@ class Fallo(Base):
     fecha_registro = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     promesa = relationship("Promesa", back_populates="fallos")
-
+# Todo ese archivo realizado por douglas   
     def __repr__(self):
         return f"<Fallo(id={self.id}, promesa_id={self.promesa_id}, fecha={self.fecha_registro})>"

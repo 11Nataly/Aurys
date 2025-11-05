@@ -74,7 +74,7 @@ def eliminar_diario(id: int, db: Session):
     nota = db.query(NotaDiario).filter(NotaDiario.id == id).first()
     if not nota:
         raise HTTPException(status_code=404, detail="Nota no encontrada")
-
+# Todo ese archivo realizado por douglas   
     db.delete(nota)
     db.commit()
     return {"mensaje": "Nota eliminada definitivamente"}

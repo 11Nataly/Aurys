@@ -8,7 +8,7 @@ from app.core.config import settings
 from app.models.usuario import Usuario
 
 os.environ['SSL_CERT_FILE'] = certifi.where()
-
+# Todo ese archivo realizado por douglas   
 def enviar_email(db: Session, destinatario: str, asunto: str, contenido_html: str):
     """
     Envía un correo electrónico a un destinatario específico.
@@ -20,7 +20,7 @@ def enviar_email(db: Session, destinatario: str, asunto: str, contenido_html: st
     try:
         sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
         message = Mail(
-            from_email=("pruebaantoniobarracuda@gmail.com", 'Soporte Aurys'),
+            from_email=("auryssalud@gmail.com", 'Soporte Aurys'),
             to_emails=destinatario,
             subject=asunto,
             html_content=contenido_html

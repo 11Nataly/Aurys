@@ -9,7 +9,7 @@ class Rol(Base):
     Modelo de SQLAlchemy para la tabla 'rol'.
     """
     __tablename__ = "rol"
-
+# Todo ese archivo realizado por douglas   
     id = Column(Integer, primary_key=True, autoincrement=True)
     nombre = Column(String(50), nullable=False, unique=True)
 

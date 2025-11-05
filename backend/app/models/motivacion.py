@@ -26,6 +26,6 @@ class Motivacion(Base):
     # Relaciones
     usuario = relationship("Usuario", back_populates="motivaciones")
     categoria = relationship("Categoria", back_populates="motivaciones")
-
+# Todo ese archivo realizado por douglas   
     def __repr__(self):
         return f"<Motivacion(id={self.id}, titulo='{self.titulo}', usuario_id={self.usuario_id})>"

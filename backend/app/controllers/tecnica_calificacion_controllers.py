@@ -25,3 +25,4 @@ def obtener_calificacion(usuario_id: int, tecnica_id: int, db: Session = Depends
 # @router.get("/promedio/{tecnica_id}")
 # def promedio_calificacion(tecnica_id: int, db: Session = Depends(get_db)):
 #     return {"tecnica_id": tecnica_id, "promedio": service.promedio_tecnica(db, tecnica_id)}
+# Todo ese archivo realizado por douglas   
