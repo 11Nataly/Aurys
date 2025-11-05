@@ -5,7 +5,7 @@
 # ---------------------------------------------------------
 
 from app.db.database import SessionLocal
-from app.services.cleanup_service import limpiar_datos_inactivos
+from Aurys.backend.app.test.cleanup_service import limpiar_datos_inactivos
 
 
 def test_limpieza_manual():

@@ -55,7 +55,7 @@ app.include_router(perfil_controller.router)
 # ==========================================================
 from apscheduler.schedulers.background import BackgroundScheduler
 from app.db.database import SessionLocal
-from app.services.cleanup_service import limpiar_datos_inactivos
+from app.test.cleanup_service import limpiar_datos_inactivos
 
 # Crear programador en segundo plano
 scheduler = BackgroundScheduler()
