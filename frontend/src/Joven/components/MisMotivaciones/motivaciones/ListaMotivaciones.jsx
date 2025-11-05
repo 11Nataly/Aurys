@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 import TarjetaMotivacion from "./TarjetaMotivacion";
 import AgregarMotivacion from "./AgregarMotivacion";
 import FiltrosMotivaciones from "./FiltrosMotivaciones";
+import { listarMotivaciones } from "../../../../services/motivacionService";
 import "./motivaciones.css";
+
 
 const ListaMotivaciones = ({
   initialMotivaciones = [],
@@ -20,22 +22,21 @@ const ListaMotivaciones = ({
 
   // 🔹 Si no hay motivaciones iniciales, carga desde JSON
   useEffect(() => {
-    if (initialMotivaciones.length === 0) {
-      const cargarDatos = async () => {
-        try {
-          const response = await fetch("/Joven/fake_data/motivaciones.json");
-          const data = await response.json();
-          setMotivaciones(data.filter((m) => m.activo === 1));
-        } catch (error) {
-          console.error("Error cargando motivaciones:", error);
-        }
-      };
-      cargarDatos();
-    } else {
-      // si se pasan inicialMotivaciones, mantenlas sincronizadas
-      setMotivaciones(initialMotivaciones);
-    }
-  }, [initialMotivaciones]);
+    const cargarMotivaciones = async () => {
+      try {
+        // 🔸 Asume que ya tienes un usuario logueado y su ID disponible
+        const usuario_id = localStorage.getItem("usuario_id") || 1; // o pásalo por props si prefieres
+        const data = await listarMotivaciones(usuario_id);
+
+        // 🔹 Filtra solo activas (si backend devuelve todas)
+        setMotivaciones(data.filter((m) => m.estado === 1));
+      } catch (error) {
+        console.error("Error al listar motivaciones desde backend:", error);
+      }
+    };
+
+    cargarMotivaciones();
+  }, []);
 
   const agregarMotivacion = (nueva) => {
     setMotivaciones((prev) => [nueva, ...prev]);

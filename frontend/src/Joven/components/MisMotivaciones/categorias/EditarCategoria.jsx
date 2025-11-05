@@ -1,5 +1,7 @@
+// frontend/src/Joven/components/MisMotivaciones/categorias/EditarCategoria.jsx
 import { useState } from "react";
 import "./categorias.css";
+
 
 const EditarCategoria = ({ categoria, onCerrar, onGuardar }) => {
   const [nombre, setNombre] = useState(categoria?.nombre || "");

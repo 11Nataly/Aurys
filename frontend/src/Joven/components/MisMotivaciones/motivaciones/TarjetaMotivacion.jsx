@@ -2,7 +2,6 @@
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 
-
 const TarjetaMotivacion = ({ motivacion, onEliminar, onFavorita, onEditar }) => {
   return (
     <div className="tarjeta-motivacion">
