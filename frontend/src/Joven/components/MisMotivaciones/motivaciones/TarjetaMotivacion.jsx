@@ -1,8 +1,12 @@
-// frontend / src / Joven / components / MisMotivaciones / motivaciones / TarjetaMotivacion.jsx
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 
-const TarjetaMotivacion = ({ motivacion, onEliminar, onFavorita, onEditar }) => {
+const TarjetaMotivacion = ({
+  motivacion,
+  onFavorita,
+  onEditar,
+  onCambiarEstado, // se usa para desactivar (soft delete)
+}) => {
   return (
     <div className="tarjeta-motivacion">
       {/* Imagen */}
@@ -12,13 +16,12 @@ const TarjetaMotivacion = ({ motivacion, onEliminar, onFavorita, onEditar }) => 
             motivacion.imagen?.startsWith("data:")
               ? motivacion.imagen
               : motivacion.imagen?.startsWith("http")
-                ? motivacion.imagen
-                : `${import.meta.env.VITE_API_URL}/static/motivaciones/${motivacion.imagen}`
+              ? motivacion.imagen
+              : `${import.meta.env.VITE_API_URL}/static/motivaciones/${motivacion.imagen}`
           }
           alt={motivacion.titulo}
           className="img-motivacion"
         />
-
       </div>
 
       {/* Contenido */}
@@ -46,7 +49,7 @@ const TarjetaMotivacion = ({ motivacion, onEliminar, onFavorita, onEditar }) => 
       <div className="acciones">
         <button
           className="btn-editar"
-          onClick={() => onEditar(motivacion)} // ✅ enviamos la motivación completa
+          onClick={() => onEditar(motivacion)}
           title="Editar motivación"
         >
           <PencilSquareIcon className="icono-btn" />
@@ -55,7 +58,7 @@ const TarjetaMotivacion = ({ motivacion, onEliminar, onFavorita, onEditar }) => 
 
         <button
           className="btn-eliminar-motivacion"
-          onClick={() => onEliminar(motivacion.id)}
+          onClick={() => onCambiarEstado(motivacion.id, motivacion.activo)} // cambia el estado (soft delete)
           title="Eliminar motivación"
         >
           <TrashIcon className="icono-btn" />

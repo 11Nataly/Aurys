@@ -1,13 +1,15 @@
-// frontend/src/Joven/components/MisMotivaciones/motivaciones/ListaMotivaciones.jsx
 import { useEffect, useState } from "react";
 import TarjetaMotivacion from "./TarjetaMotivacion";
 import AgregarMotivacion from "./AgregarMotivacion";
 import FiltrosMotivaciones from "./FiltrosMotivaciones";
-import { listarMotivaciones, crearMotivacion } from "../../../../services/motivacionService";
+import {
+  listarMotivaciones,
+  crearMotivacion,
+  cambiarEstadoMotivacion,
+} from "../../../../services/motivacionService";
 import "./motivaciones.css";
 
 const ListaMotivaciones = ({
-  onEliminar,
   onToggleFavorita,
   onEditar,
   onRequestAgregar,
@@ -25,7 +27,7 @@ const ListaMotivaciones = ({
         const data = await listarMotivaciones();
         setMotivaciones(data);
       } catch (error) {
-        console.error("Error cargando motivaciones desde backend:", error);
+        console.error("Error cargando motivaciones:", error);
       }
     };
     cargarMotivaciones();
@@ -44,12 +46,6 @@ const ListaMotivaciones = ({
     }
   };
 
-  // 🔹 Eliminar motivación localmente
-  const eliminarMotivacion = (id) => {
-    setMotivaciones((prev) => prev.filter((m) => m.id !== id));
-    onEliminar?.(id);
-  };
-
   // 🔹 Cambiar favorita localmente
   const toggleFavorita = (id) => {
     setMotivaciones((prev) =>
@@ -57,11 +53,24 @@ const ListaMotivaciones = ({
     );
     onToggleFavorita?.(id);
   };
-
   // 🔹 Filtro favoritas
   const filtradas = filtroFavoritas
     ? motivaciones.filter((m) => m.esFavorita)
     : motivaciones;
+
+  // 🔹 Cambiar estado activo/inactivo (PUT al backend - soft delete)
+  const toggleEstado = async (id, estadoActual) => {
+    try {
+      await cambiarEstadoMotivacion(id, !estadoActual);
+      setMotivaciones((prev) =>
+        prev.filter((m) => (estadoActual ? m.id !== id : true))
+      );
+    } catch (error) {
+      console.error("Error cambiando estado:", error);
+    }
+  };
+
+  
 
   return (
     <div className="motivaciones-panel">
@@ -93,9 +102,9 @@ const ListaMotivaciones = ({
           <TarjetaMotivacion
             key={m.id}
             motivacion={m}
-            onEliminar={eliminarMotivacion}
             onFavorita={toggleFavorita}
             onEditar={onEditar}
+            onCambiarEstado={() => toggleEstado(m.id, m.activo)} // usa la función definida arriba
           />
         ))}
       </div>

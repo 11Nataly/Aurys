@@ -8,9 +8,7 @@ export const listarMotivaciones = async () => {
   try {
     const usuario_id = localStorage.getItem("id_usuario");
 
-    if (!usuario_id) {
-      throw new Error("No se encontró id_usuario en localStorage");
-    }
+    if (!usuario_id) throw new Error("No se encontró id_usuario en localStorage");
 
     const response = await api.get(`/motivaciones/listar/${usuario_id}`);
     return response.data; // Devuelve las motivaciones activas del backend
@@ -55,40 +53,15 @@ export const crearMotivacion = async (motivacionData) => {
 };
 
 //===================================
-//  Marcar/desmarcar favorita
+//  Cambiar estado (soft delete)
 //===================================
-export const cambiarFavorita = async (motivacion_id) => {
+export const cambiarEstadoMotivacion = async (motivacion_id) => {
   try {
-    const response = await api.put(`/motivaciones/${motivacion_id}/favorita`);
-    return response.data;
-  } catch (err) {
-    console.error("[servicio] cambiarFavorita error:", err.response?.data || err.message);
-    throw err.response?.data || { message: "Error al cambiar favorita" };
-  }
-};
-
-//===================================
-//  Editar motivación
-//===================================
-export const editarMotivacion = async (motivacion_id, motivacionData) => {
-  try {
-    const response = await api.put(`/motivaciones/${motivacion_id}/editar`, motivacionData);
-    return response.data;
-  } catch (err) {
-    console.error("[servicio] editarMotivacion error:", err.response?.data || err.message);
-    throw err.response?.data || { message: "Error al editar motivación" };
-  }
-};
-
-//===================================
-//  Cambiar estado
-//===================================
-export const cambiarEstadoMotivacion = async (motivacion_id, estado) => {
-  try {
-    const response = await api.put(`/motivaciones/${motivacion_id}/estado?estado=${estado}`);
+    // Siempre se envía estado=false (desactivar)
+    const response = await api.put(`/motivaciones/${motivacion_id}/estado?estado=false`);
     return response.data;
   } catch (err) {
     console.error("[servicio] cambiarEstadoMotivacion error:", err.response?.data || err.message);
-    throw err.response?.data || { message: "Error al cambiar estado" };
+    throw err.response?.data || { message: "Error al desactivar motivación" };
   }
 };
