@@ -53,7 +53,6 @@ class MotivacionService:
                 activo=True,
                 esFavorita=False
             )
-
             db.add(nueva)
             db.commit()
             db.refresh(nueva)
