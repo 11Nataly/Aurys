@@ -8,10 +8,17 @@ const TarjetaMotivacion = ({ motivacion, onEliminar, onFavorita, onEditar }) => 
       {/* Imagen */}
       <div className="img-wrapper">
         <img
-          src={motivacion.imagen}
+          src={
+            motivacion.imagen?.startsWith("data:")
+              ? motivacion.imagen
+              : motivacion.imagen?.startsWith("http")
+                ? motivacion.imagen
+                : `${import.meta.env.VITE_API_URL}/static/motivaciones/${motivacion.imagen}`
+          }
           alt={motivacion.titulo}
           className="img-motivacion"
         />
+
       </div>
 
       {/* Contenido */}

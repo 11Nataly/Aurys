@@ -3,12 +3,10 @@ import { useEffect, useState } from "react";
 import TarjetaMotivacion from "./TarjetaMotivacion";
 import AgregarMotivacion from "./AgregarMotivacion";
 import FiltrosMotivaciones from "./FiltrosMotivaciones";
-import { listarMotivaciones } from "../../../../services/motivacionService";
+import { listarMotivaciones, crearMotivacion } from "../../../../services/motivacionService";
 import "./motivaciones.css";
 
-
 const ListaMotivaciones = ({
-  initialMotivaciones = [],
   onEliminar,
   onToggleFavorita,
   onEditar,
@@ -16,49 +14,53 @@ const ListaMotivaciones = ({
   query,
   setQuery,
 }) => {
-  const [motivaciones, setMotivaciones] = useState(initialMotivaciones);
+  const [motivaciones, setMotivaciones] = useState([]);
   const [mostrarModal, setMostrarModal] = useState(false);
   const [filtroFavoritas, setFiltroFavoritas] = useState(false);
 
-  // 🔹 Si no hay motivaciones iniciales, carga desde JSON
+  // 🔹 Cargar motivaciones al montar el componente
   useEffect(() => {
     const cargarMotivaciones = async () => {
       try {
-        // 🔸 Asume que ya tienes un usuario logueado y su ID disponible
-        const usuario_id = localStorage.getItem("usuario_id") || 1; // o pásalo por props si prefieres
-        const data = await listarMotivaciones(usuario_id);
-
-        // 🔹 Filtra solo activas (si backend devuelve todas)
-        setMotivaciones(data.filter((m) => m.estado === 1));
+        const data = await listarMotivaciones();
+        setMotivaciones(data);
       } catch (error) {
-        console.error("Error al listar motivaciones desde backend:", error);
+        console.error("Error cargando motivaciones desde backend:", error);
       }
     };
-
     cargarMotivaciones();
   }, []);
 
-  const agregarMotivacion = (nueva) => {
-    setMotivaciones((prev) => [nueva, ...prev]);
-    setMostrarModal(false);
+  // 🔹 Agregar nueva motivación
+  const agregarMotivacion = async (nueva) => {
+    try {
+      await crearMotivacion(nueva);
+      const data = await listarMotivaciones();
+      setMotivaciones(data);
+    } catch (error) {
+      console.error("Error agregando motivación:", error);
+    } finally {
+      setMostrarModal(false);
+    }
   };
 
+  // 🔹 Eliminar motivación localmente
   const eliminarMotivacion = (id) => {
     setMotivaciones((prev) => prev.filter((m) => m.id !== id));
     onEliminar?.(id);
   };
 
+  // 🔹 Cambiar favorita localmente
   const toggleFavorita = (id) => {
     setMotivaciones((prev) =>
-      prev.map((m) =>
-        m.id === id ? { ...m, esFavorita: m.esFavorita ? 0 : 1 } : m
-      )
+      prev.map((m) => (m.id === id ? { ...m, esFavorita: !m.esFavorita } : m))
     );
     onToggleFavorita?.(id);
   };
 
+  // 🔹 Filtro favoritas
   const filtradas = filtroFavoritas
-    ? motivaciones.filter((m) => m.esFavorita === 1)
+    ? motivaciones.filter((m) => m.esFavorita)
     : motivaciones;
 
   return (
@@ -71,7 +73,6 @@ const ListaMotivaciones = ({
         <button
           className="btn-nueva-motivacion"
           onClick={() => {
-            // si el padre quiere manejar agregar globalmente, llama onRequestAgregar
             if (onRequestAgregar) return onRequestAgregar();
             setMostrarModal(true);
           }}

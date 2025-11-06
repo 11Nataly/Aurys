@@ -2,12 +2,18 @@
 import api from "./api";
 
 //===================================
-//  Listar motivaciones por usuario
+//  Listar motivaciones activas del usuario logueado
 //===================================
-export const listarMotivaciones = async (usuario_id) => {
+export const listarMotivaciones = async () => {
   try {
+    const usuario_id = localStorage.getItem("id_usuario");
+
+    if (!usuario_id) {
+      throw new Error("No se encontró id_usuario en localStorage");
+    }
+
     const response = await api.get(`/motivaciones/listar/${usuario_id}`);
-    return response.data;
+    return response.data; // Devuelve las motivaciones activas del backend
   } catch (err) {
     console.error("[servicio] listarMotivaciones error:", err.response?.data || err.message);
     throw err.response?.data || { message: "Error al listar motivaciones" };
@@ -17,24 +23,22 @@ export const listarMotivaciones = async (usuario_id) => {
 //===================================
 //  Crear nueva motivación
 //===================================
-
-// se cambio para enviar la petición con un FormData() porque el backend usó multipart/form-data en lugar de un json
 export const crearMotivacion = async (motivacionData) => {
   try {
     const formData = new FormData();
     formData.append("titulo", motivacionData.titulo);
     formData.append("descripcion", motivacionData.descripcion);
     formData.append("id_categoria", motivacionData.id_categoria);
-    formData.append("id_usuario", motivacionData.id_usuario);
 
-    // 🔥 Imagen: acepta File o Base64
+    // 🔹 Tomamos usuario automáticamente del localStorage
+    const usuario_id = localStorage.getItem("id_usuario");
+    formData.append("id_usuario", usuario_id);
+
     if (motivacionData.imagen) {
       if (typeof motivacionData.imagen === "string" && motivacionData.imagen.startsWith("data:")) {
-        // Si es base64 → convertir a blob
         const blob = await fetch(motivacionData.imagen).then((res) => res.blob());
         formData.append("imagen", blob, "imagen.jpg");
       } else if (motivacionData.imagen instanceof File) {
-        // Si es un archivo directo del input
         formData.append("imagen", motivacionData.imagen);
       }
     }
@@ -50,9 +54,8 @@ export const crearMotivacion = async (motivacionData) => {
   }
 };
 
-
 //===================================
-//  Marcar o desmarcar como favorita
+//  Marcar/desmarcar favorita
 //===================================
 export const cambiarFavorita = async (motivacion_id) => {
   try {
@@ -65,7 +68,7 @@ export const cambiarFavorita = async (motivacion_id) => {
 };
 
 //===================================
-//  Editar motivación existente
+//  Editar motivación
 //===================================
 export const editarMotivacion = async (motivacion_id, motivacionData) => {
   try {
@@ -78,14 +81,14 @@ export const editarMotivacion = async (motivacion_id, motivacionData) => {
 };
 
 //===================================
-//  Cambiar estado (activar/desactivar)
+//  Cambiar estado
 //===================================
-export const cambiarEstadoMotivacion = async (motivacion_id) => {
+export const cambiarEstadoMotivacion = async (motivacion_id, estado) => {
   try {
-    const response = await api.put(`/motivaciones/${motivacion_id}/estado`);
+    const response = await api.put(`/motivaciones/${motivacion_id}/estado?estado=${estado}`);
     return response.data;
   } catch (err) {
     console.error("[servicio] cambiarEstadoMotivacion error:", err.response?.data || err.message);
-    throw err.response?.data || { message: "Error al cambiar estado de motivación" };
+    throw err.response?.data || { message: "Error al cambiar estado" };
   }
 };
