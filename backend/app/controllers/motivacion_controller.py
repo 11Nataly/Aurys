@@ -60,4 +60,15 @@ def editar_motivacion(
 @router.put("/{motivacion_id}/estado", response_model=MotivacionResponseDTO)
 def cambiar_estado(motivacion_id: int, estado: bool, db: Session = Depends(get_db)):
     return MotivacionService.cambiar_estado(motivacion_id, estado, db)
+
+
+# ✅ PUT - Editar solo la imagen
+@router.put("/{motivacion_id}/editar-imagen", response_model=MotivacionResponseDTO)
+def editar_imagen_motivacion(
+    motivacion_id: int,
+    imagen: UploadFile = File(...),
+    db: Session = Depends(get_db)
+):
+    return MotivacionService.editar_imagen(db, motivacion_id, imagen)
+
 # Todo ese archivo realizado por douglas   

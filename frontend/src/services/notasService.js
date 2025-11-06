@@ -6,7 +6,7 @@ import api from "./api";
 //===================================
 export const crearNota = async (notaData) => {
   try {
-    const response = await api.post("/diario/crear_diario", notaData);
+    const response = await api.post("/diario/crear", notaData);
     return response.data;
   } catch (err) {
     console.error("[servicio] crearNota error:", err.response?.data || err.message || err);

@@ -18,6 +18,7 @@ from app.controllers import (
     promesa_controller,
     fallo_controller,
     perfil_controller,
+    papelera_controller
 )
 
 app = FastAPI()
@@ -48,6 +49,7 @@ app.include_router(diario_controllers.router)
 app.include_router(promesa_controller.router)
 app.include_router(fallo_controller.router)
 app.include_router(perfil_controller.router)
+app.include_router(papelera_controller.router)
 
 
 # ==========================================================
