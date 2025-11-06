@@ -7,9 +7,11 @@ import { PencilSquareIcon } from "@heroicons/react/24/outline"; // ✅ nuevo com
 import "./categorias.css";
 
 import { crearCategoria } from "../../../../services/categoriaService"; // ✅ importar el servicio
+// ESTE ENDPOINT HACE LO MISMO QUE EL QUE USE PARA FILTRAR CATEGORÍAS
+//import { listarCategoriasActivas } from "../../../../services/categoriaService"; // ✅ importar el servicio
 import { listarCategorias } from "../../../../services/categoriaService"; // ✅ importar el servicio
-import { listarCategoriasActivas } from "../../../../services/categoriaService"; // ✅ importar el servicio}
 import { cambiarEstadoCategoria } from "../../../../services/categoriaService"; // ✅ importar el servicio
+
 
 const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
   const [categorias, setCategorias] = useState(initialCategorias);
