@@ -1,7 +1,7 @@
 // src/Joven/components/Diario/HistorialEntradas.jsx
 import { useState, useEffect } from 'react';
 import BuscarEntrada from './BuscarEntrada';
-import { obtenerNotasPorUsuario } from '../../../services/notasService';
+import { obtenerNotasPorUsuario, moverNotaAPapelera } from '../../../services/notasService';
 import './HistorialEntradas.css';
 
 const HistorialEntradas = ({ onEditar, onEliminar, onVolver }) => {
@@ -30,7 +30,8 @@ const HistorialEntradas = ({ onEditar, onEliminar, onVolver }) => {
         setEntradasFiltradas(data);
       } catch (err) {
         console.error('❌ Error cargando notas:', err);
-        setError('No se pudieron cargar las entradas del diario.');
+        // err puede venir con { detail: "..."} o con message
+        setError(err?.detail || err?.message || 'No se pudieron cargar las entradas del diario.');
       } finally {
         setCargando(false);
       }
@@ -38,6 +39,29 @@ const HistorialEntradas = ({ onEditar, onEliminar, onVolver }) => {
 
     cargarNotas();
   }, []);
+
+  // 🔹 Mover una entrada a la papelera
+  const handleMoverAPapelera = async (id) => {
+    const confirmar = window.confirm("¿Quieres mover esta entrada a la papelera?");
+    if (!confirmar) return;
+
+    try {
+      await moverNotaAPapelera(id);
+      // Opcional: llamar callback onEliminar si el padre necesita saberlo
+      if (typeof onEliminar === 'function') {
+        try { onEliminar(id); } catch (e) { /* no bloquear si el padre falla */ }
+      }
+
+      // Actualizar lista local sin la nota movida
+      setEntradas((prev) => prev.filter((entrada) => entrada.id !== id));
+      setEntradasFiltradas((prev) => prev.filter((entrada) => entrada.id !== id));
+
+      alert("Entrada movida a la papelera exitosamente.");
+    } catch (err) {
+      console.error("❌ Error moviendo a papelera:", err);
+      alert(err?.detail || err?.message || "No se pudo mover la entrada a la papelera.");
+    }
+  };
 
   // 🔹 Alternar expansión de una entrada
   const toggleExpandirEntrada = (id) => {
@@ -118,8 +142,8 @@ const HistorialEntradas = ({ onEditar, onEliminar, onVolver }) => {
                   </button>
                   <button
                     className="btn-eliminar"
-                    onClick={() => onEliminar(entrada.id)}
-                    title="Eliminar entrada"
+                    onClick={() => handleMoverAPapelera(entrada.id)}
+                    title="Mover a papelera"
                   >
                     🗑️
                   </button>
