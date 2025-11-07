@@ -42,35 +42,52 @@ const EditorDiario = ({ nota, onGuardar, onCancelar }) => {
   };
 
   return (
-    <div className="historial-header">
-      <div className="editor-header">
-        <input
-          type="text"
-          value={titulo}
-          onChange={(e) => setTitulo(e.target.value)}
-          className="entrada-titulo-input"
-          placeholder="Título de la nota"
-        />
+  <div className="agregar-entrada-componente">
+    <div className="componente-header">
+      <h2>Editar Entrada</h2>
+    </div>
 
-        <div className="acciones">
-          <button onClick={handleGuardar} disabled={cargando}>
-            💾 Guardar
-          </button>
-          <button onClick={onCancelar} disabled={cargando}>
-            ❌ Cancelar
-          </button>
-        </div>
-      </div>
+    <div className="componente-body">
+      <input
+        type="text"
+        placeholder="Título de la nota"
+        value={titulo}
+        onChange={(e) => setTitulo(e.target.value)}
+        className="input-titulo"
+        disabled={cargando}
+      />
 
       <textarea
+        placeholder="Escribe aquí tu contenido..."
         value={contenido}
         onChange={(e) => setContenido(e.target.value)}
-        rows="8"
-        className="entrada-textarea"
-        placeholder="Escribe aquí tu contenido..."
-      />
+        className="textarea-contenido"
+        rows="12"
+        disabled={cargando}
+      ></textarea>
     </div>
-  );
-};
+
+    <div className="componente-footer">
+      <div className="entrada-acciones">
+        <button 
+          onClick={onCancelar} 
+          disabled={!titulo.trim() || !contenido.trim() || cargando}
+          className="boton-cancelar"
+        >
+           cancelar
+        </button>
+
+        <button 
+          onClick={handleGuardar} 
+          disabled={cargando}
+          className="boton-guardar"
+        >
+          guardar
+        </button>
+      </div>
+    </div>
+  </div>
+);
+}
 
 export default EditorDiario;
