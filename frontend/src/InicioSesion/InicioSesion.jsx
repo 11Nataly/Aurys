@@ -89,9 +89,18 @@ export default function Login() {
           {/* Error */}
           {error && <p className="error-text">{error}</p>}
 
-          {/* Recuperar contraseña */}
+          {/* Recuperar contraseña - ESTILO ORIGINAL */}
           <div className="forgot-password">
-            <a href="/login/recuperar">¿Olvidaste tu contraseña?</a>
+            <a 
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/login/recuperar");
+              }}
+              className="forgot-password-link"
+            >
+              ¿Olvidaste tu contraseña?
+            </a>
           </div>
 
           {/* Botón */}
