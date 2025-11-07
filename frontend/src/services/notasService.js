@@ -27,6 +27,22 @@ export const obtenerNotasPorUsuario = async (usuarioId) => {
   }
 };
 
+
+// 🔹 Editar nota por ID
+export const editarNota = async (id, notaData) => {
+  try {
+    const response = await api.put(`/diario/editar/${id}`, {
+      titulo: notaData.titulo,
+      contenido: notaData.contenido,
+    });
+    return response.data;
+  } catch (err) {
+    console.error("[servicio] editarNota error:", err.response?.data || err.message || err);
+    throw err.response?.data || { message: err.message || "Error editando nota" };
+  }
+};
+
+
 //===================================
 // 🔹 Mover nota a papelera
 //===================================
