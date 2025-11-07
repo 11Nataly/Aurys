@@ -84,7 +84,7 @@ def registrar_usuario_service(usuario_dto: UsuarioRegistroDTO, db: Session):
         "expires": datetime.utcnow() + timedelta(minutes=EMAIL_CONFIRMATION_EXPIRE_MINUTES)
     }
 
-    confirmation_url = f"http://localhost:8000/auth/confirm-email?token={confirmation_token}"
+    confirmation_url = f"{settings.Settings_Frontend_URL}/ver-registroexitoso"
     html_content = f"""
         <html>
         <body>

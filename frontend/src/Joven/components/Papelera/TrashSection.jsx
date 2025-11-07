@@ -1,69 +1,93 @@
 import React, { useState, useEffect } from "react";
 import "./TrashSection.css";
+import {
+  obtenerPromesasPapelera,
+  obtenerNotasPapelera,
+  obtenerMotivacionesPapelera,
+  restaurarElemento,
+  eliminarDefinitivo,
+} from "../../../services/papeleraService.js";
 
-export default function TrashSection() {
-  const [isEmpty, setIsEmpty] = useState(false);
+export default function TrashSection({ usuarioId = 1 }) {
   const [activeTab, setActiveTab] = useState("Promesas");
-  const [trashItems, setTrashItems] = useState([]);
+  const [trashItems, setTrashItems] = useState({
+    Promesas: [],
+    "Entradas de Diario": [],
+    Motivaciones: [],
+  });
   const [loading, setLoading] = useState(true);
+  const [notif, setNotif] = useState(null);
+  const [error, setError] = useState(null);
 
   const categories = ["Promesas", "Entradas de Diario", "Motivaciones"];
 
-  // 🔹 1. Obtener los datos del backend
-  useEffect(() => {
-    const fetchTrashItems = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/api/trash"); 
-        if (!response.ok) throw new Error("Error al obtener los datos");
-        const data = await response.json();
-        setTrashItems(data);
-      } catch (error) {
-        console.error("Error al cargar papelera:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // ===============================
+  // 🔹 Cargar datos iniciales
+  // ===============================
+  const fetchTrash = async () => {
+    setLoading(true);
+    setError(null);
 
-    fetchTrashItems();
+    try {
+      const [promesas, diarios, motivaciones] = await Promise.all([
+        obtenerPromesasPapelera(usuarioId).catch(() => []), // Si hay error, devuelve vacío
+        obtenerNotasPapelera(usuarioId).catch(() => []),
+        obtenerMotivacionesPapelera(usuarioId).catch(() => []),
+      ]);
+
+      setTrashItems({
+        Promesas: promesas || [],
+        "Entradas de Diario": diarios || [],
+        Motivaciones: motivaciones || [],
+      });
+    } catch (err) {
+      // ⚠️ Si no hay datos, no mostramos error general
+      setError("No hay elementos en la papelera");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTrash();
   }, []);
 
-  // 🔹 2. Restaurar elemento (PUT o POST según tu API)
-  const handleRestore = async (id) => {
+  // ===============================
+  // 🔹 Restaurar elemento
+  // ===============================
+  const handleRestore = async (item, category) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/trash/${id}/restore`, {
-        method: "PUT",
-      });
-      if (!response.ok) throw new Error("Error al restaurar");
-      setTrashItems((prev) => prev.filter((item) => item.id !== id));
-    } catch (error) {
-      console.error("Error al restaurar elemento:", error);
+      await restaurarElemento(category, item.id);
+      setTrashItems((prev) => ({
+        ...prev,
+        [category]: prev[category].filter((x) => x.id !== item.id),
+      }));
+      setNotif("✅ Elemento restaurado correctamente");
+    } catch (err) {
+      setNotif("❌ Error al restaurar: " + (err.message || "Error desconocido"));
     }
   };
 
-  // 🔹 3. Eliminar definitivamente elemento (DELETE)
-  const handleDelete = async (id) => {
+  // ===============================
+  // 🔹 Eliminar definitivamente
+  // ===============================
+  const handleDelete = async (item, category) => {
+    if (!window.confirm("¿Eliminar definitivamente este elemento?")) return;
     try {
-      const response = await fetch(`http://localhost:5000/api/trash/${id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) throw new Error("Error al eliminar");
-      setTrashItems((prev) => prev.filter((item) => item.id !== id));
-    } catch (error) {
-      console.error("Error al eliminar elemento:", error);
+      await eliminarDefinitivo(category, item.id);
+      setTrashItems((prev) => ({
+        ...prev,
+        [category]: prev[category].filter((x) => x.id !== item.id),
+      }));
+      setNotif("🗑️ Elemento eliminado permanentemente");
+    } catch (err) {
+      setNotif("❌ Error al eliminar: " + (err.message || "Error desconocido"));
     }
   };
 
-  const toggleTrashView = () => setIsEmpty(!isEmpty);
-
-  // 🔹 4. Agrupar elementos por categoría
-  const groupedItems = trashItems.reduce((groups, item) => {
-    const cat = item.category;
-    if (!groups[cat]) groups[cat] = [];
-    groups[cat].push(item);
-    return groups;
-  }, {});
-
-  // 🔹 5. Mostrar estado de carga
+  // ===============================
+  // 🔹 UI
+  // ===============================
   if (loading) {
     return (
       <div className="container">
@@ -73,83 +97,73 @@ export default function TrashSection() {
     );
   }
 
+  const currentItems = trashItems[activeTab] || [];
+  const isEmpty = currentItems.length === 0;
+
   return (
     <div className="container">
       <h1>Papelera</h1>
 
-      {!isEmpty ? (
-        <>
-          {/* 🔹 Pestañas */}
-          <div className="tabs">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                className={`tab-btn ${activeTab === cat ? "active" : ""}`}
-                onClick={() => setActiveTab(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          {/* 🔹 Contenido de la pestaña activa */}
-          <div className="trash-section">
-            <div className="category-group">
-              <h2 className="category-title">{activeTab}</h2>
-              <div className="trash-items">
-                {groupedItems[activeTab] && groupedItems[activeTab].length > 0 ? (
-                  groupedItems[activeTab].map((item) => (
-                    <div key={item.id} className="trash-item">
-                      <div className="item-title">{item.title}</div>
-                      <div className="item-meta">
-                        <div className="meta-left">
-                          <span className="item-date">
-                            Eliminado: {item.dateDeleted}
-                          </span>
-                          <span className="item-dae">
-                            {item.daysRemaining} días para eliminación permanente
-                          </span>
-                        </div>
-                        <span className="item-type">{item.type}</span>
-                      </div>
-                      <div className="item-actions">
-                        <button
-                          className="btn btn-restore"
-                          onClick={() => handleRestore(item.id)}
-                        >
-                          Restaurar
-                        </button>
-                        <button
-                          className="btn btn-delete"
-                          onClick={() => handleDelete(item.id)}
-                        >
-                          Eliminar
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className="empty-category">
-                    No hay elementos eliminados en esta sección
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-        </>
-      ) : (
-        <div className="empty-trash">
-          <div className="empty-trash-icon">🗑️</div>
-          <div className="empty-trash-message">
-            No tienes elementos eliminados por ahora
-          </div>
+      {/* 🔹 Notificación simple */}
+      {notif && (
+        <div className="notif" onClick={() => setNotif(null)}>
+          {notif}
         </div>
       )}
 
-      {/* 🔹 Botón flotante */}
-      <button className="btn-trash" onClick={toggleTrashView}>
-        {isEmpty ? "Ver elementos eliminados" : "Ver papelera vacía"}
-      </button>
+      {/* 🔹 Tabs */}
+      <div className="tabs">
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            className={`tab-btn ${activeTab === cat ? "active" : ""}`}
+            onClick={() => setActiveTab(cat)}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      {/* 🔹 Contenido */}
+      <div className="trash-section">
+        <h2 className="category-title">{activeTab}</h2>
+
+        {isEmpty ? (
+          <p className="empty-category">
+            {activeTab === "Entradas de Diario"
+              ? "No hay notas de usuario"
+              : `No hay ${activeTab.toLowerCase()} eliminadas`}
+          </p>
+        ) : (
+          currentItems.map((item) => (
+            <div key={item.id} className="trash-item">
+              <div className="item-title">{item.titulo || item.nombre}</div>
+              <div className="item-meta">
+                <span className="item-date">
+                  Eliminado:{" "}
+                  {item.updated_at
+                    ? new Date(item.updated_at).toLocaleDateString()
+                    : "—"}
+                </span>
+              </div>
+              <div className="item-actions">
+                <button
+                  className="btn btn-restore"
+                  onClick={() => handleRestore(item, activeTab)}
+                >
+                  Restaurar
+                </button>
+                <button
+                  className="btn btn-delete"
+                  onClick={() => handleDelete(item, activeTab)}
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 }
