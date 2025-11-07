@@ -1,0 +1,15 @@
+# Dependencias de Vite
+.vite/
+.vite/deps/
+
+# Configuración de VS Code
+.vscode/
+
+# Archivo de sistema Windows
+desktop.ini
+
+# Otros archivos/directorios comunes a ignorar
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp

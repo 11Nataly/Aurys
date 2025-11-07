@@ -19,7 +19,7 @@
   left: 0;
   top: 60px;
   padding: 1rem;
-  transition: width var(--transition-speed) ease-in-out;
+  transition: all var(--transition-speed) ease-in-out;
   overflow: hidden;
   z-index: 900;
   box-sizing: border-box;
@@ -71,6 +71,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 40px;
 }
 
 .nav-label {
@@ -89,44 +90,92 @@
   pointer-events: none;
 }
 
+/* Estilos para la sección inferior del sidebar */
 .sidebar-bottom {
-  border-top: 1px solid rgba(132, 141, 219, 0.3);
+  margin-top: auto;
   padding-top: 1rem;
+  border-top: 1px solid rgba(132, 141, 219, 0.3);
 }
 
-.logout-btn {
-  background: none;
-  border: none;
-  width: 100%;
-  cursor: pointer;
-  text-align: left;
-  color: var(--text-color-dark);
+.sidebar-bottom .nav-item {
   display: flex;
   align-items: center;
   gap: 1.2rem;
   padding: 0.8rem 1rem;
   margin: 0.5rem 0;
+  text-decoration: none;
+  color: var(--text-color-dark);
   border-radius: 12px;
   transition: all var(--transition-speed) ease;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
-.logout-btn:hover {
+.sidebar-bottom .nav-item:hover {
   background-color: rgba(132, 141, 219, 0.2);
+  color: var(--primary-color);
   transform: translateX(5px);
 }
 
-/* Media Queries para pantallas pequeñas */
+.sidebar-bottom .nav-item.active {
+  background-color: var(--primary-color);
+  color: var(--text-color-light);
+  box-shadow: 0 4px 10px rgba(72, 64, 194, 0.3);
+}
+
+.sidebar-bottom .nav-icon {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+}
+
+.sidebar.closed .sidebar-bottom .nav-label {
+  opacity: 0;
+  transform: translateX(-100%);
+  position: absolute;
+  left: 80px;
+  pointer-events: none;
+}
+
+/* Media Queries para pantallas pequeñas - CORREGIDO */
 @media (max-width: 768px) {
   .sidebar {
-    width: 0;
+    width: 280px;
     top: 55px;
     height: calc(100vh - 55px);
     transition: transform var(--transition-speed) ease-in-out;
     transform: translateX(-100%);
+    z-index: 1000;
   }
   
   .sidebar.open {
-    width: var(--sidebar-width);
     transform: translateX(0);
+  }
+  
+  /* En móvil, ignoramos la clase closed para la transformación */
+  .sidebar.closed {
+    transform: translateX(-100%);
+    width: 280px;
+  }
+
+  /* Los labels siempre ocultos en móvil cuando sidebar está "cerrado" (transformado) */
+  .sidebar:not(.open) .nav-label,
+  .sidebar:not(.open) .sidebar-bottom .nav-label {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
+/* Para pantallas grandes */
+@media (min-width: 769px) {
+  .sidebar {
+    transform: translateX(0) !important;
+  }
+  
+  .sidebar.closed {
+    transform: translateX(0) !important;
+    width: var(--sidebar-collapsed-width);
   }
 }

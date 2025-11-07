@@ -1,0 +1,11 @@
+export const userProfileData = {
+  id: 1,
+  nombre: "Ana García",
+  correo: "ana.garcia@ejemplo.com",
+  contrasena: "********",
+  rol_id: 2,
+  activo: true,
+  fotoPerfil: null
+};
+
+export const defaultProfileImage = "https://placehold.co/150x150/007bff/ffffff?text=Usuario";

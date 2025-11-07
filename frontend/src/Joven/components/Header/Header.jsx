@@ -1,77 +1,56 @@
-
-// src/Joven/components/Header.jsx
-import { useState, useRef, useEffect } from 'react';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
-import { FaUser, FaBars, FaChevronRight } from 'react-icons/fa';
-
-import logoaurys from './logoaurys.png';
-import './header.css';
+import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { FaUser, FaBars } from "react-icons/fa";
+import { listarPerfiles } from "../../../services/perfilService"; // ✅ usa el servicio real
+import { jwtDecode } from "jwt-decode";
+import logoaurys from "./logoaurys.png";
+import "./header.css";
 
 const Header = ({ onToggleSidebar, isSidebarOpen }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [userData, setUserData] = useState(null);
   const profileRef = useRef(null);
 
-  const location = useLocation();
-  const navigate = useNavigate();
+  // ✅ Cargar datos reales del usuario autenticado
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
 
-  // 🔹 Cerrar menú de perfil al hacer clic fuera
+        const decoded = jwtDecode(token);
+        const userId = Number(decoded.sub || decoded.id || decoded.user_id);
 
+        const perfiles = await listarPerfiles();
+        const user = perfiles.find((p) => Number(p.id) === userId);
+
+        if (user) setUserData(user);
+      } catch (error) {
+        console.error("Error cargando usuario:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  // 🔹 Cerrar el menú si se hace clic fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profileRef.current && !profileRef.current.contains(event.target)) {
         setIsProfileOpen(false);
       }
     };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
-
-
-  // 🔹 Cerrar sesión: limpiar localStorage y redirigir al login
-  const handleCerrarSesion = () => {
-    localStorage.clear(); // 🧹 borra todo
-    setIsProfileOpen(false);
-    navigate('/login'); // 🔁 redirige al login
-  };
-
-  // 🔹 Generar las migas de pan
-  const getBreadcrumbItems = () => {
-    const breadcrumbItems = [];
-    breadcrumbItems.push({ name: 'Home', path: '/joven/home', isActive: false });
-
-    if (location.pathname === '/joven/diario') {
-      breadcrumbItems.push({ name: 'Diario', path: '/joven/diario', isActive: true });
-    } else if (location.pathname === '/joven/kit-emergencia') {
-      breadcrumbItems.push({ name: 'Kit de emergencia', path: '/joven/kit-emergencia', isActive: true });
-    } else if (
-      location.pathname.includes('/joven/kit-emergencia/afrontamiento') ||
-      location.pathname === '/joven/afrontamiento'
-    ) {
-      breadcrumbItems.push({ name: 'Kit de emergencia', path: '/joven/kit-emergencia', isActive: false });
-      breadcrumbItems.push({
-        name: 'Afrontamiento',
-        path: location.pathname.includes('/joven/kit-emergencia/afrontamiento')
-          ? '/joven/kit-emergencia/afrontamiento'
-          : '/joven/afrontamiento',
-        isActive: true,
-      });
-    } else if (location.pathname === '/joven/promesas') {
-      breadcrumbItems.push({ name: 'Promesas', path: '/joven/promesas', isActive: true });
-    }
-
-    return breadcrumbItems;
-  };
-
-  const breadcrumbItems = getBreadcrumbItems();
-  const showBreadcrumb = breadcrumbItems.length > 1 && location.pathname !== '/joven/home';
 
   return (
     <header className="header">
       <div className="header-left">
-        {/* Botón hamburger */}
         <button
-          className={`hamburger-btn ${isSidebarOpen ? 'active' : ''}`}
+          className={`hamburger-btn ${isSidebarOpen ? "active" : ""}`}
           onClick={onToggleSidebar}
           aria-label="Toggle menu"
         >
@@ -81,49 +60,65 @@ const Header = ({ onToggleSidebar, isSidebarOpen }) => {
         <div className="logo">
           <img src={logoaurys} alt="Aurys Logo" className="logo-img" />
         </div>
-
-
-        {/* Migas de pan */}
-        {showBreadcrumb && (
-          <nav className="breadcrumb" aria-label="Migas de pan">
-            {breadcrumbItems.map((item, index) => (
-              <span key={index} className="breadcrumb-item-container">
-                {index > 0 && (
-                  <span className="breadcrumb-separator">
-                    <FaChevronRight />
-                  </span>
-                )}
-                {item.isActive ? (
-                  <span className="breadcrumb-item active">{item.name}</span>
-                ) : (
-                  <Link to={item.path} className="breadcrumb-item">
-                    {item.name}
-                  </Link>
-                )}
-              </span>
-            ))}
-          </nav>
-        )}
-
       </div>
 
       <div className="header-right">
         <div className="profile-menu" ref={profileRef}>
           <button
-            className={`profile-button ${isProfileOpen ? 'active' : ''}`}
+            className={`profile-button ${isProfileOpen ? "active" : ""}`}
             onClick={() => setIsProfileOpen(!isProfileOpen)}
             aria-label="Menú de perfil"
           >
-            <FaUser className="profile-icon" />
+            {userData?.foto_perfil ? (
+              <img
+                src={userData.foto_perfil}
+                alt="Foto de perfil"
+                className="profile-image-header"
+              />
+            ) : (
+              <FaUser className="profile-icon" />
+            )}
           </button>
 
-          <div className={`profile-dropdown ${isProfileOpen ? 'show' : ''}`}>
-            <Link to="/perfil" onClick={() => setIsProfileOpen(false)}>
+          <div className={`profile-dropdown ${isProfileOpen ? "show" : ""}`}>
+            <div className="profile-dropdown-info">
+              {userData?.foto_perfil ? (
+                <img
+                  src={userData.foto_perfil}
+                  alt="Foto de perfil"
+                  className="profile-image-dropdown"
+                />
+              ) : (
+                <div className="profile-placeholder">
+                  <FaUser />
+                </div>
+              )}
+
+              <div className="profile-info-text">
+                <span className="profile-name">
+                  {userData?.nombre || "Usuario"}
+                </span>
+                <span className="profile-email">
+                  {userData?.correo || "usuario@ejemplo.com"}
+                </span>
+              </div>
+            </div>
+
+            <Link
+              to="/joven/perfil"
+              className="dropdown-link"
+              onClick={() => setIsProfileOpen(false)}
+            >
               Mi Perfil
             </Link>
-            <button className="logout-btn" onClick={handleCerrarSesion}>
+
+            <Link
+              to="/logout"
+              className="dropdown-link"
+              onClick={() => setIsProfileOpen(false)}
+            >
               Cerrar Sesión
-            </button>
+            </Link>
           </div>
         </div>
       </div>
