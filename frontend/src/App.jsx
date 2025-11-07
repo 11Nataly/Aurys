@@ -5,9 +5,12 @@ import Login from "./InicioSesion/InicioSesion";
 import Register from "./Registro/Registro";
 import LandingPage from "./LandingPage/LandingPage";
 import Admin from "./Admin/pages/Admin";
+
 import RecuperarContraseña from "./InicioSesion/RecuperarContraseña"; // Importa el componente tempralmente para provar  se tiene que quitar
 import  RegistroExitoso from "./Registro/RegistroExitoso"; // Importa el componente tempralmente para provar  se tiene que quitar
 import EnviarCorreoCard from "./InicioSesion/EnviarCorreo";
+import ProtectedRoute from "./ProtectedRoute";
+
 
 export default function App() {
   return (
@@ -15,13 +18,33 @@ export default function App() {
       <Routes>
         {/* Redirección automática de / a /home */}
         <Route path="/" element={<Navigate to="/home" replace />} />
-        
-        {/* Landing Page */}
+
+        {/* Páginas públicas */}
         <Route path="/home" element={<LandingPage />} />
-        
-        {/* Login y Registro */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/ver-recuperar" element={<RecuperarContraseña />} />
+        <Route path="/ver-registroexitoso" element={<RegistroExitoso />} />
+
+        {/*Rutas protegidas para la proteccion*/}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <Admin />
+            </ProtectedRoute>
+          }
+        />
+
+
+        <Route
+          path="/joven/*"
+          element={
+            <ProtectedRoute>
+              <JovenLayout />
+            </ProtectedRoute>
+          }
+        />
 
          <Route path="/ver-recuperar" element={<RecuperarContraseña />} />
          <Route path="/login/recuperar" element={<EnviarCorreoCard />} />
@@ -29,9 +52,7 @@ export default function App() {
         
         {/* Admin */}
         <Route path="/admin" element={<Admin />} />
-        
-        {/* Layout Joven con todas sus rutas internas */}
-        <Route path="/joven/*" element={<JovenLayout />} />
+     
       </Routes>
     </BrowserRouter>
   );

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mail, Lock } from "lucide-react";
 import { login } from "../services/authService";
-import "../styles/login.css";
+import "../styles/login.css"
 
 export default function Login() {
   const navigate = useNavigate();
@@ -17,12 +17,10 @@ export default function Login() {
     try {
       const data = await login(correo, contrasena);
 
-      // Guardar datos en localStorage
       localStorage.setItem("token", data.access_token);
       localStorage.setItem("id_usuario", data.id);
       localStorage.setItem("rol", data.nombre_rol);
 
-      // Redirección según el rol
       if (data.nombre_rol === "usuario") {
         navigate("/joven");
       } else if (data.nombre_rol === "administrador") {
@@ -30,28 +28,8 @@ export default function Login() {
       } else {
         navigate("/");
       }
-
     } catch (err) {
-      // Si el backend devuelve un mensaje específico, úsalo
-      if (err?.response?.data?.detail) {
-        const detail = err.response.data.detail;
-
-        // Detectar el tipo de error y mostrar mensaje más claro
-        if (detail.includes("Credenciales incorrectas")) {
-          setError("Correo o contraseña incorrectos. Intenta nuevamente.");
-        } else if (detail.includes("bloqueada") || detail.includes("Has superado")) {
-          setError("Tu cuenta ha sido bloqueada temporalmente por intentos fallidos. Intenta más tarde.");
-        } else if (detail.includes("inactivo") || detail.includes("confirmar tu cuenta")) {
-          setError("Tu cuenta no está activa. Revisa tu correo y confirma tu cuenta antes de iniciar sesión.");
-        } else if (detail.includes("Token de confirmación")) {
-          setError("Hubo un problema con tu confirmación de cuenta. Solicita un nuevo enlace.");
-        } else {
-          setError(detail);
-        }
-      } else {
-        // Si no hay detalle, mensaje genérico
-        setError("Ocurrió un error al iniciar sesión. Intenta nuevamente más tarde.");
-      }
+      setError("Credenciales incorrectas o error de servidor");
     }
   };
 
@@ -111,7 +89,8 @@ export default function Login() {
 
         {/* Texto de registro */}
         <p className="register-text">
-          ¿No tienes cuenta? <a href="/register">Regístrate</a>
+          ¿No tienes cuenta?{" "}
+          <a href="/register">Regístrate!</a>
         </p>
       </div>
     </div>
