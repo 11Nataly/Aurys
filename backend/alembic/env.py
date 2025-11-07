@@ -17,8 +17,10 @@ from app.models import (
     notadiario,
     tecnicaafrontamiento,
     promesa,
-    fallos,
-    tipo_emocion
+    fallo,
+    tipo_emocion,
+    tecnicaFavorita, 
+    tecnica_calificacion
 )
 
 # Carga la configuración de Alembic
@@ -68,3 +70,6 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
+
+
+# Todo ese archivo realizado por douglas   

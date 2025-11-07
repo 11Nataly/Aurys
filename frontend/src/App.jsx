@@ -1,32 +1,36 @@
 // src/App.jsx
-import { Routes, Route, Link } from 'react-router-dom';
-// Ahora importamos los componentes individuales con la capitalización correcta
-import Index from './pages/Index';
-import Login from './pages/Login.jsx';
-import Register from './pages/Register.jsx';
-import Admin from './pages/Admin';
-import './App.css';
+import JovenLayout from "./Joven/JovenLayout";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./InicioSesion/InicioSesion";
+import Register from "./Registro/Registro";
+import LandingPage from "./LandingPage/LandingPage";
+import Admin from "./Admin/pages/Admin";
+import RecuperarContraseña from "./InicioSesion/RecuperarContraseña"; // Importa el componente tempralmente para provar  se tiene que quitar
+import  RegistroExitoso from "./Registro/RegistroExitoso"; // Importa el componente tempralmente para provar  se tiene que quitar
 
 export default function App() {
   return (
-    // Se ha eliminado BrowserRouter de aquí, ya que está en main.jsx
-    <div>
-      <nav>
-        {/* Los enlaces ahora dirigen a las rutas de las páginas individuales */}
-        <Link to="/">Inicio</Link> | <Link to="/login">Login</Link> | <Link to="/register">Registro</Link> | <Link to="/admin">Admin</Link>
-      </nav>
-      
-      {/* Aquí van las rutas */}
+    <BrowserRouter>
       <Routes>
-        {/* Página principal */}
-        <Route path="/" element={<Index />} />
-        {/* Página de Login */}
+        {/* Redirección automática de / a /home */}
+        <Route path="/" element={<Navigate to="/home" replace />} />
+        
+        {/* Landing Page */}
+        <Route path="/home" element={<LandingPage />} />
+        
+        {/* Login y Registro */}
         <Route path="/login" element={<Login />} />
-        {/* Página de Registro */}
         <Route path="/register" element={<Register />} />
-        {/* Página de Admin */}
+
+         <Route path="/ver-recuperar" element={<RecuperarContraseña />} />
+         <Route path="/ver-registroexitoso" element={<RegistroExitoso />} />
+        
+        {/* Admin */}
         <Route path="/admin" element={<Admin />} />
+        
+        {/* Layout Joven con todas sus rutas internas */}
+        <Route path="/joven/*" element={<JovenLayout />} />
       </Routes>
-    </div>
+    </BrowserRouter>
   );
 }

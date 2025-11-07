@@ -1,0 +1,186 @@
+/* ===============================
+   🌌 MODAL NUEVA MOTIVACIÓN (SCROLLABLE + IMAGE)
+   =============================== */
+
+.modal-fondo {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+  backdrop-filter: blur(3px);
+  overflow-y: auto; /* permite desplazamiento si el modal es más alto que la pantalla */
+  padding: 2rem 1rem;
+}
+
+.modal-motivacion {
+  background: #fff;
+  border-radius: 16px;
+  width: 720px;
+  max-width: 95%;
+  max-height: 90vh; /* evita que se salga de pantalla */
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 25px rgba(72, 64, 194, 0.25);
+  animation: fadeIn 0.3s ease-in-out;
+  overflow: hidden; /* mantiene los bordes redondeados */
+}
+
+/* ===== HEADER ===== */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem 0.75rem;
+  border-bottom: 1px solid #ecebfd;
+}
+.modal-header h3 {
+  font-size: 1.25rem;
+  color: #2d2d2d;
+  font-weight: 600;
+}
+.btn-cerrar {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.btn-cerrar:hover {
+  color: #4840c2;
+}
+
+/* ===== BODY (ahora scrollable) ===== */
+.modal-body {
+  flex: 1;
+  overflow-y: auto; /* permite hacer scroll solo dentro del contenido */
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: #b4b4e7 transparent;
+}
+
+/* Campos base */
+.modal-body input[type="text"],
+.modal-body textarea,
+.modal-body select {
+  width: 100%;
+  border: 1px solid #c7c8f4;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  background: #fafaff;
+  transition: all 0.2s ease;
+}
+.modal-body input:focus,
+.modal-body textarea:focus,
+.modal-body select:focus {
+  outline: none;
+  border-color: #4840c2;
+  box-shadow: 0 0 0 2px rgba(132, 141, 219, 0.3);
+}
+.modal-body textarea {
+  resize: none;
+  min-height: 60px;
+}
+
+
+/* ======== IMAGEN ======== */
+.contenedor-imagen {
+  border: 2px dashed #848ddb;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  color: #777;
+  font-size: 0.9rem;
+  background-color: #fafaff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+}
+.contenedor-imagen:hover {
+  background-color: rgba(132, 141, 219, 0.05);
+}
+.contenedor-imagen.dragover {
+  border-color: #4840c2;
+  background-color: rgba(132, 141, 219, 0.1);
+}
+.contenedor-imagen input[type="file"] {
+  display: none;
+}
+.vista-previa-imagen {
+  margin-top: 10px;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+.vista-previa-imagen img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* ===== FOOTER ===== */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #ecebfd;
+  background: #fcfcff;
+}
+.btn-cancelar,
+.btn-guardar {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+}
+.btn-cancelar {
+  background: #f2f2f2;
+  color: #000;
+}
+.btn-cancelar:hover {
+  background: #e6e6e6;
+}
+.btn-guardar {
+  background: linear-gradient(90deg, #4840c2, #848ddb);
+  color: white;
+  font-weight: 500;
+}
+.btn-guardar:hover {
+  opacity: 0.9;
+}
+
+/* ===== Animación ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+  .modal-motivacion {
+    width: 92%;
+    max-height: 95vh;
+  }
+  .modal-body {
+    padding: 1rem;
+  }
+}

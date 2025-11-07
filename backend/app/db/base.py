@@ -4,3 +4,4 @@ from sqlalchemy.ext.declarative import declarative_base
 #heredar las clases los modelos
 
 Base = declarative_base()
+# Todo ese archivo realizado por douglas   

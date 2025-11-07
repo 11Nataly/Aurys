@@ -1,0 +1,110 @@
+[
+  {
+    "id": 1,
+    "usuario_id": 1,
+    "nombre": "Bienestar",
+    "esPredeterminada": 1,
+    "activo": 1,
+    "create_at": "2025-09-01T10:00:00Z",
+    "update_at": "2025-10-01T10:00:00Z"
+  },
+  {
+    "id": 2,
+    "usuario_id": 1,
+    "nombre": "Familia",
+    "esPredeterminada": 1,
+    "activo": 1,
+    "create_at": "2025-09-01T10:00:00Z",
+    "update_at": "2025-10-01T10:00:00Z"
+  },
+  {
+    "id": 3,
+    "usuario_id": 1,
+    "nombre": "Aprendizaje",
+    "esPredeterminada": 1,
+    "activo": 1,
+    "create_at": "2025-09-01T10:00:00Z",
+    "update_at": "2025-10-01T10:00:00Z"
+  },
+  {
+    "id": 4,
+    "usuario_id": 1,
+    "nombre": "Viajes",
+    "esPredeterminada": 1,
+    "activo": 1,
+    "create_at": "2025-09-01T10:00:00Z",
+    "update_at": "2025-10-01T10:00:00Z"
+  },
+  {
+    "id": 5,
+    "usuario_id": 1,
+    "nombre": "Contribución",
+    "esPredeterminada": 1,
+    "activo": 1,
+    "create_at": "2025-09-01T10:00:00Z",
+    "update_at": "2025-10-01T10:00:00Z"
+  },
+  {
+    "id": 6,
+    "usuario_id": 1,
+    "nombre": "Recuerdos",
+    "esPredeterminada": 1,
+    "activo": 1,
+    "create_at": "2025-09-01T10:00:00Z",
+    "update_at": "2025-10-01T10:00:00Z"
+  },
+  {
+    "id": 7,
+    "usuario_id": 1,
+    "nombre": "Mascotas",
+    "esPredeterminada": 1,
+    "activo": 1,
+    "create_at": "2025-09-01T10:00:00Z",
+    "update_at": "2025-10-01T10:00:00Z"
+  },
+  {
+    "id": 8,
+    "usuario_id": 1,
+    "nombre": "Amigos",
+    "esPredeterminada": 1,
+    "activo": 1,
+    "create_at": "2025-09-01T10:00:00Z",
+    "update_at": "2025-10-01T10:00:00Z"
+  },
+  {
+    "id": 9,
+    "usuario_id": 1,
+    "nombre": "Logros",
+    "esPredeterminada": 1,
+    "activo": 1,
+    "create_at": "2025-09-01T10:00:00Z",
+    "update_at": "2025-10-01T10:00:00Z"
+  },
+  {
+    "id": 10,
+    "usuario_id": 1,
+    "nombre": "Momentos especiales",
+    "esPredeterminada": 1,
+    "activo": 1,
+    "create_at": "2025-09-01T10:00:00Z",
+    "update_at": "2025-10-01T10:00:00Z"
+  },
+  {
+    "id": 11,
+    "usuario_id": 1,
+    "nombre": "Crecimiento personal",
+    "esPredeterminada": 0,
+    "activo": 1,
+    "create_at": "2025-10-05T09:30:00Z",
+    "update_at": "2025-10-05T09:30:00Z"
+  },
+  {
+    "id": 12,
+    "usuario_id": 1,
+    "nombre": "Metas 2025",
+    "esPredeterminada": 0,
+    "activo": 2,
+    "create_at": "2025-09-20T14:00:00Z",
+    "update_at": "2025-09-25T09:00:00Z"
+  }
+]

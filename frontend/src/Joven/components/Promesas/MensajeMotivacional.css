@@ -1,0 +1,106 @@
+.mensaje-motivacional {
+  padding: 25px;
+  border-radius: 12px;
+  margin-top: 20px;
+  border-left: 6px solid;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.mensaje-motivacional.excelente {
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  border-left-color: #28a745;
+  color: #155724;
+}
+
+.mensaje-motivacional.bueno {
+  background: linear-gradient(135deg, #e7f3ff, #d6e9ff);
+  border-left-color: #007bff;
+  color: #004085;
+}
+
+.mensaje-motivacional.mejorable {
+  background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+  border-left-color: #ffc107;
+  color: #856404;
+}
+
+.mensaje-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.mensaje-emoji {
+  font-size: 2rem;
+  margin-right: 15px;
+}
+
+.mensaje-header h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.mensaje-texto {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.estadisticas-rapidas {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.estadisticas-rapidas h4 {
+  margin: 0 0 15px 0;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.estadisticas-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.estadistica {
+  text-align: center;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.estadistica .numero {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.estadistica .label {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .estadisticas-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .mensaje-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .mensaje-emoji {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
