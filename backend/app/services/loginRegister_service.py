@@ -11,7 +11,7 @@ from app.models.usuario import Usuario
 from app.models.rol import Rol
 from app.dtos.usuario_dto import UsuarioRegistroDTO, UsuarioLoginDTO, Token
 from app.services.envio_correo import enviar_email
-
+# Todo ese archivo realizado por douglas   
 # Configuración de seguridad
 SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = "HS256"
@@ -84,7 +84,7 @@ def registrar_usuario_service(usuario_dto: UsuarioRegistroDTO, db: Session):
         "expires": datetime.utcnow() + timedelta(minutes=EMAIL_CONFIRMATION_EXPIRE_MINUTES)
     }
 
-    confirmation_url = f"http://localhost:8000/auth/confirm-email?token={confirmation_token}"
+    confirmation_url = f"{settings.Settings_Frontend_URL}/ver-registroexitoso"
     html_content = f"""
         <html>
         <body>

@@ -6,9 +6,23 @@ export const listarTecnicas = async () => {
     if (!id) throw new Error("ID de usuario no encontrado en localStorage");
 
     const response = await api.get(`/tecnicas/listar_tecnicas?usuario_id=${id}`);
-    return response.data; // aquí llega un array de Técnicas
+    return response.data; // aquí llega un array de Técnicas # Todo ese archivo realizado por douglas   
   } catch (err) {
     console.error("Error al cargar técnicas:", err);
     throw err;
+  }
+};
+
+export const actualizarEstadoTecnica = async (tecnicaId, usuarioId, estrellas = null, favorita = null) => {
+  try {
+    const params = new URLSearchParams({ usuario_id: usuarioId });
+    if (estrellas !== null) params.append("estrellas", estrellas);
+    if (favorita !== null) params.append("favorita", favorita);
+
+    const res = await api.put(`/tecnicas/actualizar_estado/${tecnicaId}?${params.toString()}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error actualizando estado de técnica:", error);
+    throw error;
   }
 };

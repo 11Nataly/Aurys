@@ -2,11 +2,11 @@
 import api from "./api";
 
 //===================================
-// 🔹 Crear una nueva nota
+// 🔹 Crear una nueva nota # Todo ese archivo realizado por douglas   
 //===================================
 export const crearNota = async (notaData) => {
   try {
-    const response = await api.post("/diario/crear_diario", notaData);
+    const response = await api.post("/diario/crear", notaData);
     return response.data;
   } catch (err) {
     console.error("[servicio] crearNota error:", err.response?.data || err.message || err);

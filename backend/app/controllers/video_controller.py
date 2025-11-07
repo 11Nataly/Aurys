@@ -44,3 +44,4 @@ async def upload_video(tecnica_id: int, file: UploadFile = File(...), db: Sessio
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al subir video: {str(e)}")
+# Todo ese archivo realizado por douglas   

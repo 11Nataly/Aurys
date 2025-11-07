@@ -15,3 +15,4 @@ def recuperar_contrasena(request: ForgotPasswordRequest, db: Session = Depends(g
 @router.post("/restablecer-contrasena/{token}")
 def restablecer_contra(token: str, request: ResetPasswordRequest, db: Session = Depends(get_db)):
     return restablecer_contrasena(token, request.nueva_contrasena, db)
+    # Todo ese archivo realizado por douglas   
