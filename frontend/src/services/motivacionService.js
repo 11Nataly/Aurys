@@ -53,6 +53,23 @@ export const crearMotivacion = async (motivacionData) => {
 };
 
 //===================================
+//  Cambiar estado favorita
+//===================================
+export const favoritosMotivacion = async (motivacion_id, favorita) => {
+  try {
+    const response = await api.put(
+      `/motivaciones/${motivacion_id}/favorita?favorita=${favorita}`
+    );
+    return response.data;
+  } catch (err) {
+    console.error("[servicio] favoritosMotivacion error:", err.response?.data || err.message);
+    throw err.response?.data || { message: "Error al cambiar estado favorito de motivación" };
+  }
+};
+
+
+
+//===================================
 //  Cambiar estado (soft delete)
 //===================================
 export const cambiarEstadoMotivacion = async (motivacion_id) => {

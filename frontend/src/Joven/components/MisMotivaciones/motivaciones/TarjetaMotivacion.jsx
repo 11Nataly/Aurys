@@ -30,8 +30,8 @@ const TarjetaMotivacion = ({
           <h4>{motivacion.titulo}</h4>
 
           <button
-            className={`btn-favorito ${motivacion.esFavorita ? "activo" : ""}`}
-            onClick={() => onFavorita(motivacion.id)}
+            className={`btn-favorito ${motivacion.esFavorita ? "esFavorita" : ""}`}
+            onClick={() => onFavorita(motivacion.id, motivacion.esFavorita)}
             title={
               motivacion.esFavorita
                 ? "Quitar de favoritos"

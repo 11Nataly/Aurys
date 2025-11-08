@@ -1,3 +1,4 @@
+//frontend / src/ joven/ components/MisMotivaciones/motivaciones/listarMotivaciones.jsx
 import { useEffect, useState } from "react";
 import TarjetaMotivacion from "./TarjetaMotivacion";
 import AgregarMotivacion from "./AgregarMotivacion";
@@ -6,11 +7,11 @@ import {
   listarMotivaciones,
   crearMotivacion,
   cambiarEstadoMotivacion,
+  favoritosMotivacion
 } from "../../../../services/motivacionService";
 import "./motivaciones.css";
 
 const ListaMotivaciones = ({
-  onToggleFavorita,
   onEditar,
   onRequestAgregar,
   query,
@@ -46,14 +47,26 @@ const ListaMotivaciones = ({
     }
   };
 
+  
   // 🔹 Cambiar favorita localmente
-  const toggleFavorita = (id) => {
-    setMotivaciones((prev) =>
-      prev.map((m) => (m.id === id ? { ...m, esFavorita: !m.esFavorita } : m))
+
+  const toggleFavorita = async (id, esFavorita) => {
+    try {
+      //guardar una nueva favorita, si no, no se guarda
+      const nuevaFavorita = !esFavorita;
+      await favoritosMotivacion(id, nuevaFavorita);
+      //actualiza localmente el estado favorita
+       setMotivaciones((prev) =>
+      prev.map((m) =>
+        m.id === id ? { ...m, esFavorita: nuevaFavorita } : m
+      )
     );
-    onToggleFavorita?.(id);
+    } catch (error) {
+      console.error("Error cambiando a favorito estado:", error);
+    }
   };
-  // 🔹 Filtro favoritas
+
+    // 🔹 Filtro favoritas
   const filtradas = filtroFavoritas
     ? motivaciones.filter((m) => m.esFavorita)
     : motivaciones;
