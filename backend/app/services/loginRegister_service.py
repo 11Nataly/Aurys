@@ -1,18 +1,23 @@
 from datetime import datetime, timedelta
 from typing import Optional
 import re
+from urllib.parse import quote_plus
+
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
-from fastapi import HTTPException, status
+from fastapi import HTTPException
 
-from app.core.config import settings
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail, Email, To, Content
+
 from app.models.usuario import Usuario
-from app.models.rol import Rol
-from app.dtos.usuario_dto import UsuarioRegistroDTO, UsuarioLoginDTO, Token
-from app.services.envio_correo import enviar_email
-# Todo ese archivo realizado por douglas   
-# Configuración de seguridad
+from app.dtos.usuario_dto import UsuarioRegistroDTO, UsuarioLoginDTO
+from app.core.config import settings  # SECRET_KEY y SENDGRID_API_KEY
+
+# ======================
+# Configuración
+# ======================
 SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
@@ -20,13 +25,15 @@ EMAIL_CONFIRMATION_EXPIRE_MINUTES = 60
 MAX_LOGIN_ATTEMPTS = 3
 LOCKOUT_TIME_MINUTES = 15
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+SETTINGS_BACKEND_URL = "http://localhost:8000"
+SETTINGS_FRONTEND_URL = "http://localhost:5173"
 
-# Diccionarios en memoria para la lógica temporal
-confirmation_tokens_in_memory = {}
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 login_attempts_in_memory = {}
 
-# --- Funciones de seguridad ---
+# ======================
+# Seguridad
+# ======================
 def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
@@ -35,34 +42,42 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-# --- Funciones de usuario ---
+# ======================
+# Envío de correo con SendGrid
+# ======================
+def enviar_email(to_email: str, subject: str, html_content: str):
+    try:
+        message = Mail(
+            from_email=Email("auryssalud@gmail.com", "Soporte Aurys"),
+            to_emails=To(to_email),
+            subject=subject,
+            html_content=Content("text/html", html_content)
+        )
+        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+        response = sg.send(message)
+        print(f"✅ Correo enviado a {to_email}, status: {response.status_code}")
+        return True
+    except Exception as e:
+        print(f"❌ Error al enviar correo a {to_email}: {e}")
+        return False
+
+# ======================
+# Registro de usuario
+# ======================
 def registrar_usuario_service(usuario_dto: UsuarioRegistroDTO, db: Session):
     if not re.match(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$', usuario_dto.contrasena):
-        raise HTTPException(
-            status_code=400,
-            detail="La contraseña debe tener mínimo 5 caracteres, incluir letras, números y un caracter especial."
-        )
+        raise HTTPException(status_code=400, detail="Contraseña inválida.")
 
     db_usuario = db.query(Usuario).filter(Usuario.correo == usuario_dto.correo).first()
     if db_usuario and db_usuario.activo:
-        raise HTTPException(status_code=409, detail="El correo ya está registrado y activo.")
+        raise HTTPException(status_code=409, detail="Correo ya registrado y activo.")
 
-    # Se inicializa la variable 'usuario_a_enviar' fuera de los bloques condicionales.
-    usuario_a_enviar = None
-
-    if db_usuario and not db_usuario.activo:
-        # Si el usuario existe pero no está activo, lo re-usamos.
-        usuario_a_enviar = db_usuario
-    else:
-        # Si el usuario no existe, creamos uno nuevo.
+    usuario_a_enviar = db_usuario if db_usuario and not db_usuario.activo else None
+    if not usuario_a_enviar:
         hashed_password = get_password_hash(usuario_dto.contrasena)
         nuevo_usuario = Usuario(
             nombre=usuario_dto.nombre,
@@ -76,106 +91,71 @@ def registrar_usuario_service(usuario_dto: UsuarioRegistroDTO, db: Session):
         db.refresh(nuevo_usuario)
         usuario_a_enviar = nuevo_usuario
 
-    confirmation_token_data = {"sub": str(usuario_a_enviar.id)}
-    confirmation_token = jwt.encode(confirmation_token_data, SECRET_KEY, algorithm=ALGORITHM)
-    
-    confirmation_tokens_in_memory[usuario_a_enviar.id] = {
-        "token": confirmation_token,
-        "expires": datetime.utcnow() + timedelta(minutes=EMAIL_CONFIRMATION_EXPIRE_MINUTES)
-    }
+    # Token de confirmación
+    token = jwt.encode({"sub": str(usuario_a_enviar.id)}, SECRET_KEY, algorithm=ALGORITHM)
+    token_url_safe = quote_plus(token)
+    confirmation_url = f"{SETTINGS_BACKEND_URL}/auth/confirmar-email?token={token_url_safe}"
 
-    confirmation_url = f"{settings.Settings_Frontend_URL}/ver-registroexitoso"
     html_content = f"""
-        <html>
-        <body>
-            <h2>¡Bienvenido!</h2>
-            <p>Gracias por registrarte. Por favor, haz clic en el siguiente enlace para confirmar tu correo electrónico:</p>
-            <p><a href="{confirmation_url}">Confirmar mi cuenta</a></p>
-            <p>Este enlace expirará en {EMAIL_CONFIRMATION_EXPIRE_MINUTES} minutos.</p>
-        </body>
-        </html>
+        <h2>¡Bienvenido!</h2>
+        <p>Haz clic en el enlace para confirmar tu correo:</p>
+        <p><a href="{confirmation_url}">Confirmar mi cuenta</a></p>
+        <p>Expira en {EMAIL_CONFIRMATION_EXPIRE_MINUTES} minutos.</p>
     """
-    enviar_email(db, usuario_a_enviar.correo, "Confirma tu cuenta", html_content)
-    
-    return {"message": "Usuario registrado exitosamente. Por favor, revisa tu correo para confirmar tu cuenta."}
+    enviar_email(usuario_a_enviar.correo, "Confirma tu cuenta", html_content)
+    return {"message": "Usuario registrado. Revisa tu correo para confirmar la cuenta."}
 
+# ======================
+# Confirmación de correo
+# ======================
 def confirm_email_service(token: str, db: Session):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id: int = int(payload.get("sub"))
+        user_id = int(payload.get("sub"))
     except (JWTError, ValueError):
-        raise HTTPException(status_code=400, detail="Token de confirmación no válido.")
+        raise HTTPException(status_code=400, detail="Token inválido.")
 
-    if user_id not in confirmation_tokens_in_memory or confirmation_tokens_in_memory[user_id]["token"] != token:
-        raise HTTPException(status_code=400, detail="Token de confirmación no válido.")
-    
-    if confirmation_tokens_in_memory[user_id]["expires"] < datetime.utcnow():
-        raise HTTPException(status_code=400, detail="Token de confirmación expirado.")
-        
     usuario = db.query(Usuario).filter(Usuario.id == user_id).first()
     if not usuario:
         raise HTTPException(status_code=404, detail="Usuario no encontrado.")
 
     if usuario.activo:
-        return {"message": "El correo ya ha sido confirmado."}
+        return {"message": "Correo ya confirmado."}
 
     usuario.activo = True
     db.commit()
     db.refresh(usuario)
+    return {"message": "Correo confirmado. Ahora puedes iniciar sesión."}
 
-    del confirmation_tokens_in_memory[user_id]
-    
-    return {"message": "Correo confirmado exitosamente. Ahora puedes iniciar sesión."}
-
-
+# ======================
+# Login de usuario
+# ======================
 def login_usuario_service(usuario_dto: UsuarioLoginDTO, db: Session):
     usuario = db.query(Usuario).filter(Usuario.correo == usuario_dto.correo).first()
     user_email = usuario_dto.correo
-    
+
     if user_email in login_attempts_in_memory:
-        attempts_info = login_attempts_in_memory[user_email]
-        if attempts_info["count"] >= MAX_LOGIN_ATTEMPTS:
-            time_since_last_attempt = datetime.utcnow() - attempts_info["last_attempt"]
-            if time_since_last_attempt < timedelta(minutes=LOCKOUT_TIME_MINUTES):
-                remaining_time = timedelta(minutes=LOCKOUT_TIME_MINUTES) - time_since_last_attempt
-                raise HTTPException(
-                    status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                    detail=f"Cuenta bloqueada temporalmente. Intenta de nuevo en {int(remaining_time.total_seconds() // 60)} minutos."
-                )
+        info = login_attempts_in_memory[user_email]
+        if info["count"] >= MAX_LOGIN_ATTEMPTS:
+            tiempo = datetime.utcnow() - info["last_attempt"]
+            if tiempo < timedelta(minutes=LOCKOUT_TIME_MINUTES):
+                remaining = timedelta(minutes=LOCKOUT_TIME_MINUTES) - tiempo
+                raise HTTPException(status_code=429, detail=f"Cuenta bloqueada. Intenta en {int(remaining.total_seconds()//60)} min.")
             else:
                 del login_attempts_in_memory[user_email]
 
     if not usuario or not verify_password(usuario_dto.contrasena, usuario.contrasena):
         if user_email not in login_attempts_in_memory:
-            login_attempts_in_memory[user_email] = {"count": 0, "last_attempt": datetime.utcnow()}
-        
+            login_attempts_in_memory[user_email] = {"count":0, "last_attempt": datetime.utcnow()}
         login_attempts_in_memory[user_email]["count"] += 1
         login_attempts_in_memory[user_email]["last_attempt"] = datetime.utcnow()
-        
-        if login_attempts_in_memory[user_email]["count"] >= MAX_LOGIN_ATTEMPTS:
-            raise HTTPException(
-                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                detail="Has superado el número de intentos. Tu cuenta ha sido bloqueada por 15 minutos."
-            )
-            
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Credenciales incorrectas",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    
+        raise HTTPException(status_code=401, detail="Credenciales incorrectas.")
+
     if not usuario.activo:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Usuario inactivo. Por favor, revisa tu correo para confirmar tu cuenta."
-        )
+        raise HTTPException(status_code=403, detail="Usuario inactivo. Revisa tu correo para confirmar la cuenta.")
 
     if user_email in login_attempts_in_memory:
         del login_attempts_in_memory[user_email]
-        
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": str(usuario.id)}, expires_delta=access_token_expires
-    )
-    
+
+    access_token = create_access_token({"sub": str(usuario.id)})
     return {"access_token": access_token, "token_type": "bearer", "id": usuario.id, "nombre_rol": usuario.rol.nombre}

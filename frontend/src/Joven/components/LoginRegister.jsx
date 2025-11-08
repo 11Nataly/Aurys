@@ -1,87 +1,86 @@
-import React, { useState } from 'react';
-
-const backendURL = "http://127.0.0.1:8000"; // Cambia si quieres
+import React, { useState } from "react";
+import { login, register } from "../services/authService";
 
 export default function LoginRegister() {
-  const [loginUsuario, setLoginUsuario] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
+  const [loginUsuario, setLoginUsuario] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
 
-  const [regUsuario, setRegUsuario] = useState('');
-  const [regPassword, setRegPassword] = useState('');
-  const [regEmail, setRegEmail] = useState('');
+  const [regUsuario, setRegUsuario] = useState("");
+  const [regPassword, setRegPassword] = useState("");
+  const [regEmail, setRegEmail] = useState("");
 
-  const [mensaje, setMensaje] = useState('');
-  const [tipoMensaje, setTipoMensaje] = useState('info');
+  const [mensaje, setMensaje] = useState("");
+  const [tipoMensaje, setTipoMensaje] = useState("info");
   const [cargando, setCargando] = useState(false);
 
-  const mostrarMensaje = (texto, tipo = 'info', duracion = 3000) => {
+  const mostrarMensaje = (texto, tipo = "info", duracion = 3000) => {
     setMensaje(texto);
     setTipoMensaje(tipo);
-    if (duracion > 0) {
-      setTimeout(() => setMensaje(''), duracion);
-    }
+    if (duracion > 0) setTimeout(() => setMensaje(""), duracion);
   };
 
+  // 🔹 LOGIN
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!loginUsuario.trim() || !loginPassword.trim()) {
-      mostrarMensaje('⚠️ Por favor completa todos los campos', 'error');
+      mostrarMensaje("⚠️ Completa todos los campos", "error");
       return;
     }
+
     setCargando(true);
     try {
-      const response = await fetch(`${backendURL}/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ correo: loginUsuario.trim(), contrasena: loginPassword.trim() }),
-      });
+      // 👇 Llamada al servicio de login (usa /auth/login)
+      const data = await login(loginUsuario.trim(), loginPassword.trim());
 
-      if (!response.ok) {
-        mostrarMensaje('❌ Usuario o contraseña incorrectos', 'error');
-        return;
+      // ✅ Guardar datos en localStorage
+      if (data?.access_token && data?.id) {
+        localStorage.setItem("token", data.access_token);
+        localStorage.setItem(
+          "usuario",
+          JSON.stringify({
+            id: data.id,
+            rol: data.nombre_rol,
+          })
+        );
+
+        mostrarMensaje("✅ Inicio de sesión exitoso", "success");
+
+        // 🔁 Redirigir a la papelera (o página principal)
+        setTimeout(() => (window.location.href = "/papelera"), 1000);
+      } else {
+        mostrarMensaje("❌ Credenciales incorrectas", "error");
       }
-      const data = await response.json();
-
-      // Guardar token si el backend lo envía
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-      }
-
-      mostrarMensaje(`✅ Bienvenido, ${data.correo || loginUsuario}`, 'success');
     } catch (error) {
-      mostrarMensaje('🚨 Error de conexión con el servidor', 'error');
       console.error(error);
+      mostrarMensaje("🚨 Error al conectar con el servidor", "error");
     } finally {
       setCargando(false);
     }
   };
 
+  // 🔹 REGISTRO
   const handleRegister = async (e) => {
     e.preventDefault();
     if (!regUsuario.trim() || !regPassword.trim() || !regEmail.trim()) {
-      mostrarMensaje('⚠️ Por favor completa todos los campos', 'error');
+      mostrarMensaje("⚠️ Completa todos los campos", "error");
       return;
     }
+
     setCargando(true);
     try {
-      const response = await fetch(`${backendURL}/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre: regUsuario.trim(), contrasena: regPassword.trim(), correo: regEmail.trim() }),
+      const data = await register({
+        nombre: regUsuario.trim(),
+        contrasena: regPassword.trim(),
+        correo: regEmail.trim(),
       });
 
-      if (!response.ok) {
-        mostrarMensaje('❌ Error al registrar usuario', 'error');
-        return;
-      }
-      const data = await response.json();
-      mostrarMensaje(`✅ Usuario ${data.nombre || regUsuario} registrado con éxito`, 'success');
-      setRegUsuario('');
-      setRegPassword('');
-      setRegEmail('');
+      mostrarMensaje(`✅ Usuario ${data.nombre} registrado con éxito`, "success");
+      setRegUsuario("");
+      setRegPassword("");
+      setRegEmail("");
     } catch (error) {
-      mostrarMensaje('🚨 Error de conexión con el servidor', 'error');
       console.error(error);
+      mostrarMensaje("🚨 Error al registrar usuario", "error");
     } finally {
       setCargando(false);
     }
@@ -92,8 +91,8 @@ export default function LoginRegister() {
       <h2>🔐 Iniciar sesión</h2>
       <form onSubmit={handleLogin} className="form-box">
         <input
-          type="text"
-          placeholder="Usuario o correo"
+          type="email"
+          placeholder="Correo"
           value={loginUsuario}
           onChange={(e) => setLoginUsuario(e.target.value)}
         />
@@ -104,7 +103,7 @@ export default function LoginRegister() {
           onChange={(e) => setLoginPassword(e.target.value)}
         />
         <button type="submit" disabled={cargando}>
-          {cargando ? 'Cargando...' : 'Entrar'}
+          {cargando ? "Cargando..." : "Entrar"}
         </button>
       </form>
 
@@ -112,13 +111,13 @@ export default function LoginRegister() {
       <form onSubmit={handleRegister} className="form-box">
         <input
           type="text"
-          placeholder="Usuario"
+          placeholder="Nombre de usuario"
           value={regUsuario}
           onChange={(e) => setRegUsuario(e.target.value)}
         />
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Correo electrónico"
           value={regEmail}
           onChange={(e) => setRegEmail(e.target.value)}
         />
@@ -129,15 +128,11 @@ export default function LoginRegister() {
           onChange={(e) => setRegPassword(e.target.value)}
         />
         <button type="submit" disabled={cargando}>
-          {cargando ? 'Cargando...' : 'Registrar'}
+          {cargando ? "Cargando..." : "Registrar"}
         </button>
       </form>
 
-      {mensaje && (
-        <p className={`mensaje ${tipoMensaje}`}>
-          {mensaje}
-        </p>
-      )}
+      {mensaje && <p className={`mensaje ${tipoMensaje}`}>{mensaje}</p>}
     </div>
   );
 }
