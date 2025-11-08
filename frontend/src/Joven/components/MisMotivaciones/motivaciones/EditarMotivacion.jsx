@@ -1,20 +1,15 @@
+// src/joven/components/MisMotivaciones/motivaciones/EditarMotivacion.jsx
 import { useState, useEffect } from "react";
 import NuevaCategoria from "../categorias/NuevaCategoria";
-import { editarMotivacion } from "../../../../services/motivacionService"; // ✅ importa aquí
+import { editarMotivacion } from "../../../../services/motivacionService";
 import "./AgregarMotivacion.css"; // Reutiliza los mismos estilos
 
-const EditarMotivacion = ({ motivacion, onCerrar, onGuardar }) => {
+const EditarMotivacion = ({ motivacion, onCerrar, onGuardar, categorias }) => {
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [categoria, setCategoria] = useState("");
+  const [imagenPreview, setImagenPreview] = useState(null);
   const [mostrarModalCategoria, setMostrarModalCategoria] = useState(false);
-  const [categorias, setCategorias] = useState([
-    { id: 1, nombre: "Bienestar" },
-    { id: 2, nombre: "Familia" },
-    { id: 3, nombre: "Aprendizaje" },
-    { id: 4, nombre: "Aventura" },
-    { id: 5, nombre: "Contribución" },
-  ]);
 
   // ✅ Cargar datos existentes
   useEffect(() => {
@@ -22,12 +17,11 @@ const EditarMotivacion = ({ motivacion, onCerrar, onGuardar }) => {
       setTitulo(motivacion.titulo || "");
       setDescripcion(motivacion.descripcion || "");
       setCategoria(motivacion.categoria_id?.toString() || "");
-      setImagen(motivacion.imagen || "");
-
+      setImagenPreview(motivacion.imagen || null);
     }
   }, [motivacion]);
 
-  // � Guardar cambios
+  // ✅ Guardar cambios (sin imagen)
   const handleGuardar = async () => {
     if (!titulo.trim() || !descripcion.trim() || !categoria.trim()) {
       alert("Completa todos los campos antes de guardar.");
@@ -35,16 +29,13 @@ const EditarMotivacion = ({ motivacion, onCerrar, onGuardar }) => {
     }
 
     try {
-      const usuario_id = localStorage.getItem("id_usuario");
       const datosActualizados = {
         titulo,
         descripcion,
         categoria_id: parseInt(categoria),
-        usuario_id: parseInt(usuario_id),
       };
 
       const respuesta = await editarMotivacion(motivacion.id, datosActualizados);
-      console.log("✅ Motivación actualizada:", respuesta);
       alert("Motivación actualizada correctamente.");
       onGuardar(respuesta);
     } catch (err) {
@@ -53,9 +44,22 @@ const EditarMotivacion = ({ motivacion, onCerrar, onGuardar }) => {
     }
   };
 
-  const handleAgregarCategoria = (nuevaCategoria) => {
-    setCategorias([...categorias, nuevaCategoria]);
-    setMostrarModalCategoria(false);
+  // ✅ Drag & Drop (solo UI, no se envía)
+  const handleImageDrop = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setImagenPreview(previewUrl);
+    }
+  };
+
+  const handleImageSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setImagenPreview(previewUrl);
+    }
   };
 
   return (
@@ -69,6 +73,30 @@ const EditarMotivacion = ({ motivacion, onCerrar, onGuardar }) => {
 
         {/* BODY */}
         <div className="modal-body">
+          {/* Imagen Drag & Drop */}
+          <div
+            className="dropzone"
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={handleImageDrop}
+          >
+            {imagenPreview ? (
+              <img
+                src={imagenPreview}
+                alt="Vista previa"
+                className="preview-imagen"
+              />
+            ) : (
+              <p>Arrastra una imagen aquí o haz clic para seleccionar</p>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageSelect}
+              className="input-imagen"
+            />
+          </div>
+
+          {/* Campos */}
           <div className="campos-superiores">
             <input
               type="text"
@@ -91,7 +119,9 @@ const EditarMotivacion = ({ motivacion, onCerrar, onGuardar }) => {
               >
                 <option value="">Selecciona categoría</option>
                 {categorias.map((c) => (
-                  <option key={c.id} value={c.id}>{c.nombre}</option>
+                  <option key={c.id} value={c.id}>
+                    {c.nombre}
+                  </option>
                 ))}
               </select>
 
@@ -115,7 +145,10 @@ const EditarMotivacion = ({ motivacion, onCerrar, onGuardar }) => {
         {mostrarModalCategoria && (
           <NuevaCategoria
             onCerrar={() => setMostrarModalCategoria(false)}
-            onGuardar={handleAgregarCategoria}
+            onGuardar={(nueva) => {
+              categorias.push(nueva);
+              setMostrarModalCategoria(false);
+            }}
           />
         )}
       </div>

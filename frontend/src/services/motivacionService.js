@@ -52,7 +52,7 @@ export const crearMotivacion = async (motivacionData) => {
   }
 };
 
-
+//serviceMotivacion
 //===================================
 //  Editar motivación (sin imagen)
 //===================================
@@ -73,9 +73,6 @@ export const editarMotivacion = async (motivacion_id, motivacionData) => {
     throw err.response?.data || { message: "Error al editar motivación" };
   }
 };
-
-
-
 
 
 //===================================
