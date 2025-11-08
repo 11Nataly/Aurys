@@ -1,4 +1,10 @@
-from fastapi import APIRouter, Depends
+
+#backend/app/controllers/categoria_controller.py    
+# ============================================================
+# CONTROLADOR: CATEGORÍAS
+# ============================================================
+from fastapi import APIRouter, Depends, HTTPException
+
 from sqlalchemy.orm import Session
 from typing import List
 

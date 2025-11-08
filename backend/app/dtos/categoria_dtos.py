@@ -1,3 +1,4 @@
+# backend/app/dtos/categoria_dtos
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime

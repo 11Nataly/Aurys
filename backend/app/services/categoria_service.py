@@ -1,3 +1,5 @@
+#backend/app/services/categoria_service.py
+
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from app.models.categoria import Categoria

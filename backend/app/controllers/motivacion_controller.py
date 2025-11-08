@@ -1,3 +1,4 @@
+
 from fastapi import APIRouter, Depends, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from typing import List
@@ -62,6 +63,8 @@ def cambiar_estado(motivacion_id: int, estado: bool, db: Session = Depends(get_d
     # 🔧 Orden de parámetros corregido (antes causaba el error)
     return MotivacionService.cambiar_estado(db, motivacion_id, estado)
 
+    return MotivacionService.cambiar_estado(motivacion_id, estado, db)
+
 
 # ✅ PUT - Editar solo la imagen
 @router.put("/{motivacion_id}/editar-imagen", response_model=MotivacionResponseDTO)
@@ -71,6 +74,7 @@ def editar_imagen_motivacion(
     db: Session = Depends(get_db)
 ):
     return MotivacionService.editar_imagen(db, motivacion_id, imagen)
+
 
 # ✅ DELETE - Eliminar una motivación
 # ✅ DELETE - Eliminar una motivación
@@ -86,4 +90,4 @@ def eliminar_motivacion(
     return MotivacionService.eliminar_motivacion(db, motivacion_id)
 
 
-# Todo ese archivo realizado por Douglas
+
