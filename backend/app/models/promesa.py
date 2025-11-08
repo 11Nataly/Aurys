@@ -6,7 +6,7 @@ from app.db import Base
 
 class Promesa(Base):
     __tablename__ = "promesa"
-
+# Todo ese archivo realizado por douglas   
     id = Column(Integer, primary_key=True, autoincrement=True)
     usuario_id = Column(Integer, ForeignKey('usuario.id', ondelete="CASCADE"), nullable=False)
     titulo = Column(String(255), nullable=False, index=True)

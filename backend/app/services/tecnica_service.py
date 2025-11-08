@@ -12,7 +12,7 @@ from app.dtos.tecnica_dto import (
 import cloudinary.uploader
 import re
 
-
+# Todo ese archivo realizado por douglas   
 # ==============================
 #   CALIFICACIONES
 # ==============================

@@ -92,7 +92,34 @@ class CategoriaService:
 
         # Convertir resultado a lista de diccionarios
         return [{"id": c.id, "nombre": c.nombre} for c in categorias]
+    
+        # -------------------------------------------------------
+    # EDITAR SOLO EL NOMBRE DE UNA CATEGORÍA
+    # -------------------------------------------------------
+    @staticmethod
+    def editar_nombre(db: Session, categoria_id: int, usuario_id: int, nombre: str):
+        """
+        Edita únicamente el nombre de una categoría,
+        verificando que pertenezca al usuario.
+        """
+        categoria = db.query(Categoria).filter(
+            Categoria.id == categoria_id,
+            Categoria.usuario_id == usuario_id
+        ).first()
+
+        if not categoria:
+            raise HTTPException(status_code=404, detail="Categoría no encontrada para este usuario")
+
+        categoria.nombre = nombre
+        db.commit()
+        db.refresh(categoria)
+
+        return categoria
+
+# Todo ese archivo realizado por douglas   
 
 
 # Instancia global del servicio (para usar desde los controladores)
 categoria_service = CategoriaService()
+
+    

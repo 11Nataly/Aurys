@@ -7,7 +7,7 @@ from app.dtos.usuario_dto import UsuarioResponseDTO
 def listar_usuarios(db: Session):
     usuarios = db.query(Usuario).all()
 
-    return [
+    return [# Todo ese archivo realizado por douglas   
         UsuarioResponseDTO(
             id=u.id,
             nombre=u.nombre,

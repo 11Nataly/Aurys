@@ -8,4 +8,4 @@ export const userProfileData = {
   fotoPerfil: null
 };
 
-export const defaultProfileImage = "https://via.placeholder.com/150/007bff/ffffff?text=Usuario";
+export const defaultProfileImage = "https://placehold.co/150x150/007bff/ffffff?text=Usuario";
