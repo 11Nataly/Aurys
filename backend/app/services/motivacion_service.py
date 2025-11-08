@@ -53,7 +53,7 @@ class MotivacionService:
                 activo=True,
                 esFavorita=False
             )
-# Todo ese archivo realizado por douglas   
+
             db.add(nueva)
             db.commit()
             db.refresh(nueva)
@@ -78,7 +78,10 @@ class MotivacionService:
 
         db.commit()
         db.refresh(motivacion)
-        return {"message": "Estado de favorita actualizado correctamente", "esFavorita": motivacion.esFavorita}
+        return {
+            "message": "Estado de favorita actualizado correctamente",
+            "esFavorita": motivacion.esFavorita
+        }
 
     # -------------------------------------------------------
     # PUT - Editar texto
@@ -147,9 +150,6 @@ class MotivacionService:
         db.refresh(motivacion)
         return motivacion
 
-
-
-
     # -------------------------------------------------------
     # PUT - Actualizar solo la imagen
     # -------------------------------------------------------
@@ -162,22 +162,53 @@ class MotivacionService:
         if not imagen:
             raise HTTPException(status_code=400, detail="Debe enviar una imagen para actualizar")
 
-        # Eliminar imagen anterior si existe
         if motivacion.imagen:
             nombre_antiguo = motivacion.imagen.split("/")[-1]
             ruta_antigua = os.path.join(UPLOAD_DIR, nombre_antiguo)
             if os.path.exists(ruta_antigua):
                 os.remove(ruta_antigua)
 
-        # Guardar la nueva imagen
         nombre_nueva = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{imagen.filename}"
         ruta_guardado = os.path.join(UPLOAD_DIR, nombre_nueva)
         with open(ruta_guardado, "wb") as buffer:
             shutil.copyfileobj(imagen.file, buffer)
 
-        # Actualizar URL en base de datos
         motivacion.imagen = f"http://127.0.0.1:8000/static/motivaciones/{nombre_nueva}"
 
         db.commit()
         db.refresh(motivacion)
         return motivacion
+
+    # -------------------------------------------------------
+    # DELETE - Eliminar definitivamente una motivación
+    # -------------------------------------------------------
+    # -------------------------------------------------------
+    # DELETE - Eliminar una motivación (definitivamente)
+    # -------------------------------------------------------
+    @staticmethod
+    def eliminar_motivacion(db: Session, motivacion_id: int):
+        """
+        Elimina una motivación permanentemente de la base de datos
+        sin eliminar ni afectar su categoría asociada.
+        """
+        motivacion = db.query(Motivacion).filter(Motivacion.id == motivacion_id).first()
+        if not motivacion:
+            raise HTTPException(status_code=404, detail="Motivación no encontrada")
+
+        # 🗑 Eliminar imagen asociada si existe
+        if motivacion.imagen:
+            nombre_archivo = motivacion.imagen.split("/")[-1]
+            ruta_archivo = os.path.join(UPLOAD_DIR, nombre_archivo)
+            if os.path.exists(ruta_archivo):
+                os.remove(ruta_archivo)
+
+        db.delete(motivacion)
+        db.commit()
+
+        return {"mensaje": f"Motivación {motivacion_id} eliminada permanentemente"}
+
+
+
+
+# ✅ Instancia global del servicio
+motivacion_service = MotivacionService()

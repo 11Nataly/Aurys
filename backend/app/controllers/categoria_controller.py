@@ -1,8 +1,4 @@
-# ============================================================
-# CONTROLADOR: CATEGORÍAS
-# ============================================================
-
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -16,6 +12,9 @@ from app.dtos.categoria_dtos import (
     CategoriaEstadoDTO
 )
 
+# Modelos
+from app.models.motivacion import Motivacion  # 🔹 Importar directamente
+
 # Servicio
 from app.services.categoria_service import categoria_service
 
@@ -28,18 +27,11 @@ router = APIRouter(
 )
 
 
-# ============================================================
-# ENDPOINTS
-# ============================================================
-
 # ------------------------------------------------------------
 # GET - Listar categorías activas por usuario
 # ------------------------------------------------------------
 @router.get("/listar/{usuario_id}", response_model=List[CategoriaResponseDTO])
 def listar_categorias(usuario_id: int, db: Session = Depends(get_db)):
-    """
-    Retorna las categorías activas de un usuario (activo=1).
-    """
     return categoria_service.listar_por_usuario(db, usuario_id)
 
 
@@ -48,20 +40,13 @@ def listar_categorias(usuario_id: int, db: Session = Depends(get_db)):
 # ------------------------------------------------------------
 @router.post("/agregar", response_model=CategoriaResponseDTO)
 def agregar_categoria(dto: CategoriaCreateDTO, db: Session = Depends(get_db)):
-    """
-    Crea una nueva categoría recibiendo JSON con:
-    - usuario_id
-    - nombre
-    - esPredeterminada (opcional)
-    - activo (opcional)
-    """
     return categoria_service.agregar_categoria(db, dto)
 
 
 # ------------------------------------------------------------
 # PUT - Cambiar estado (activo/inactivo)
 # ------------------------------------------------------------
-@router.put("/{categoria_id}/estado", response_model=CategoriaResponseDTO)
+@router.put("/{categoria_id}/estado")
 def cambiar_estado_categoria(
     categoria_id: int,
     dto: CategoriaEstadoDTO,
@@ -72,7 +57,21 @@ def cambiar_estado_categoria(
     Si se desactiva, desactiva las motivaciones asociadas.
     Si se reactiva, también las vuelve a activar.
     """
-    return categoria_service.cambiar_estado_categoria(db, categoria_id, dto)
+    categoria = categoria_service.cambiar_estado_categoria(db, categoria_id, dto)
+
+    motivaciones_afectadas = db.query(Motivacion).filter(
+        Motivacion.categoria_id == categoria_id
+    ).count()
+
+    return {
+        "mensaje": (
+            "Categoría reactivada correctamente"
+            if dto.activo else
+            "Categoría desactivada correctamente"
+        ),
+        "categoria": categoria.id,
+        "motivaciones_afectadas": motivaciones_afectadas
+    }
 
 
 # ------------------------------------------------------------
@@ -80,10 +79,8 @@ def cambiar_estado_categoria(
 # ------------------------------------------------------------
 @router.get("/{usuario_id}/activas")
 def listar_categorias_activas(usuario_id: int, db: Session = Depends(get_db)):
-    """
-    Lista todas las categorías activas de un usuario (solo ID y nombre).
-    """
     return categoria_service.listar_nombres_activos(db, usuario_id)
+
 
 # ------------------------------------------------------------
 # PUT - Editar solo el nombre de una categoría
@@ -95,12 +92,12 @@ def editar_nombre_categoria(
     nombre: str,
     db: Session = Depends(get_db)
 ):
-    """
-    Edita únicamente el nombre de una categoría.
-    Recibe el ID de la categoría, el ID del usuario y el nuevo nombre.
-    """
     return categoria_service.editar_nombre(db, categoria_id, usuario_id, nombre)
 
 
-
-# Todo ese archivo realizado por douglas   
+# ------------------------------------------------------------
+# DELETE - Eliminar categoría y sus motivaciones
+# ------------------------------------------------------------
+@router.delete("/{categoria_id}")
+def eliminar_categoria(categoria_id: int, db: Session = Depends(get_db)):
+    return categoria_service.eliminar_categoria(db, categoria_id)

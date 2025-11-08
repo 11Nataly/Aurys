@@ -53,13 +53,14 @@ def editar_motivacion(
     dto: MotivacionUpdateDTO,
     db: Session = Depends(get_db)
 ):
-    return MotivacionService.editar(motivacion_id, dto, db)
+    return MotivacionService.editar(db, motivacion_id, dto)
 
 
 # ✅ PUT - Cambiar estado
 @router.put("/{motivacion_id}/estado", response_model=MotivacionResponseDTO)
 def cambiar_estado(motivacion_id: int, estado: bool, db: Session = Depends(get_db)):
-    return MotivacionService.cambiar_estado(motivacion_id, estado, db)
+    # 🔧 Orden de parámetros corregido (antes causaba el error)
+    return MotivacionService.cambiar_estado(db, motivacion_id, estado)
 
 
 # ✅ PUT - Editar solo la imagen
@@ -71,4 +72,18 @@ def editar_imagen_motivacion(
 ):
     return MotivacionService.editar_imagen(db, motivacion_id, imagen)
 
-# Todo ese archivo realizado por douglas   
+# ✅ DELETE - Eliminar una motivación
+# ✅ DELETE - Eliminar una motivación
+# ✅ DELETE - Eliminar motivación definitivamente
+@router.delete("/{motivacion_id}")
+def eliminar_motivacion(
+    motivacion_id: int,
+    db: Session = Depends(get_db)
+):
+    """
+    Elimina una motivación permanentemente sin eliminar su categoría.
+    """
+    return MotivacionService.eliminar_motivacion(db, motivacion_id)
+
+
+# Todo ese archivo realizado por Douglas
