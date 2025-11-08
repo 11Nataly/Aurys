@@ -43,7 +43,7 @@ class PerfilService:
             "estado_actual": "ACTIVO" if usuario.activo else "INACTIVO"
         }
 
-    # ✅ Actualizar datos de perfil (nombre, correo, contraseña)
+    # ✅ Actualizar datos de perfil (solo texto)
     @staticmethod
     def actualizar_perfil(usuario_id: int, dto: PerfilUpdateDTO, db: Session):
         usuario = db.query(Usuario).filter(Usuario.id == usuario_id).first()
@@ -55,8 +55,7 @@ class PerfilService:
         if dto.correo:
             usuario.correo = dto.correo
         if dto.contrasena:
-            # 🔐 Encriptar antes de guardar
-            usuario.contrasena = get_password_hash(dto.contrasena)
+            usuario.contrasena = dto.contrasena  # ⚠️ en producción deberías cifrarla
 
         db.commit()
         db.refresh(usuario)
@@ -70,15 +69,9 @@ class PerfilService:
             estado="ACTIVO" if usuario.activo else "INACTIVO"
         )
 
-    # ✅ Actualizar perfil completo (nombre, correo, foto) vía FormData
+    # ✅ Actualizar perfil completo (nombre, correo y foto) usando FormData
     @staticmethod
-    async def actualizar_perfil_completo(
-        usuario_id: int,
-        nombre: str,
-        correo: str,
-        foto: UploadFile | None,
-        db: Session
-    ):
+    async def actualizar_perfil_completo(usuario_id: int, nombre: str, correo: str, foto: UploadFile | None, db: Session):
         usuario = db.query(Usuario).filter(Usuario.id == usuario_id).first()
         if not usuario:
             raise HTTPException(status_code=404, detail="Usuario no encontrado")
@@ -103,6 +96,16 @@ class PerfilService:
 
         db.commit()
         db.refresh(usuario)
+
+        # --- Retornar DTO consistente ---
+        return PerfilResponseDTO(
+            id=usuario.id,
+            nombre=usuario.nombre,
+            correo=usuario.correo,
+            foto_perfil=usuario.foto_perfil,
+            fecha_registro=usuario.created_at,
+            estado="ACTIVO" if usuario.activo else "INACTIVO"
+        )
 
         # --- Retornar DTO consistente ---
         return PerfilResponseDTO(
