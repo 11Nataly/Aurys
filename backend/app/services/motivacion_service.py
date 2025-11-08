@@ -53,7 +53,6 @@ class MotivacionService:
                 activo=True,
                 esFavorita=False
             )
-# Todo ese archivo realizado por douglas   
             db.add(nueva)
             db.commit()
             db.refresh(nueva)
@@ -137,7 +136,8 @@ class MotivacionService:
     # PUT - Cambiar estado activo/inactivo
     # -------------------------------------------------------
     @staticmethod
-    def cambiar_estado(db: Session, motivacion_id: int, estado: bool):
+    
+    def cambiar_estado(motivacion_id: int, estado: bool, db: Session):
         motivacion = db.query(Motivacion).filter(Motivacion.id == motivacion_id).first()
         if not motivacion:
             raise HTTPException(status_code=404, detail="Motivación no encontrada")
@@ -145,6 +145,7 @@ class MotivacionService:
         motivacion.activo = estado
         db.commit()
         db.refresh(motivacion)
+
         return motivacion
 
 
@@ -181,3 +182,4 @@ class MotivacionService:
         db.commit()
         db.refresh(motivacion)
         return motivacion
+

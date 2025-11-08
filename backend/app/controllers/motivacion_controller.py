@@ -1,3 +1,4 @@
+
 from fastapi import APIRouter, Depends, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from typing import List
@@ -59,6 +60,8 @@ def editar_motivacion(
 # ✅ PUT - Cambiar estado
 @router.put("/{motivacion_id}/estado", response_model=MotivacionResponseDTO)
 def cambiar_estado(motivacion_id: int, estado: bool, db: Session = Depends(get_db)):
+    return MotivacionService.cambiar_estado(motivacion_id, estado, db)
+
     return MotivacionService.cambiar_estado(motivacion_id, estado, db)
 
 
