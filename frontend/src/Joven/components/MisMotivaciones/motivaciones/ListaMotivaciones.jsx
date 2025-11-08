@@ -2,12 +2,14 @@
 import { useEffect, useState } from "react";
 import TarjetaMotivacion from "./TarjetaMotivacion";
 import AgregarMotivacion from "./AgregarMotivacion";
+import EditarMotivacion from "./EditarMotivacion";
 import FiltrosMotivaciones from "./FiltrosMotivaciones";
 import {
   listarMotivaciones,
   crearMotivacion,
   cambiarEstadoMotivacion,
-  favoritosMotivacion
+  favoritosMotivacion,
+  editarMotivacion
 } from "../../../../services/motivacionService";
 import "./motivaciones.css";
 
@@ -18,20 +20,27 @@ const ListaMotivaciones = ({
   setQuery,
 }) => {
   const [motivaciones, setMotivaciones] = useState([]);
-  const [mostrarModal, setMostrarModal] = useState(false);
+  const [mostrarModalAgregar, setMostrarModalAgregar] = useState(false);
+  const [mostrarModalEditar, setMostrarModalEditar] = useState(false);
+  const [motivacionSeleccionada, setMotivacionSeleccionada] = useState(null);
   const [filtroFavoritas, setFiltroFavoritas] = useState(false);
+  const [categorias, setCategorias] = useState([]);
 
-  // 🔹 Cargar motivaciones al montar el componente
+  // 🔹 Cargar categorías y motivaciones al montar
   useEffect(() => {
-    const cargarMotivaciones = async () => {
+    const cargarDatos = async () => {
       try {
-        const data = await listarMotivaciones();
-        setMotivaciones(data);
+        const [cats, motivs] = await Promise.all([
+          listarCategoriasActivas(),
+          listarMotivaciones(),
+        ]);
+        setCategorias(cats);
+        setMotivaciones(motivs);
       } catch (error) {
-        console.error("Error cargando motivaciones:", error);
+        console.error("Error cargando datos:", error);
       }
     };
-    cargarMotivaciones();
+    cargarDatos();
   }, []);
 
   // 🔹 Agregar nueva motivación
@@ -47,7 +56,24 @@ const ListaMotivaciones = ({
     }
   };
 
-  
+  // 🔹 Editar motivación existente
+  const handleEditar = (motivacion) => {
+    setMotivacionSeleccionada(motivacion);
+    setMostrarModalEditar(true);
+  };
+
+  const guardarEdicion = async (motivacionEditada) => {
+    try {
+      await editarMotivacion(motivacionEditada.id, motivacionEditada);
+      const data = await listarMotivaciones();
+      setMotivaciones(data);
+      setMostrarModalEditar(false);
+      setMotivacionSeleccionada(null);
+    } catch (error) {
+      console.error("Error actualizando motivación:", error);
+    }
+  };
+
   // 🔹 Cambiar favorita localmente
 
   const toggleFavorita = async (id, esFavorita) => {
@@ -56,17 +82,17 @@ const ListaMotivaciones = ({
       const nuevaFavorita = !esFavorita;
       await favoritosMotivacion(id, nuevaFavorita);
       //actualiza localmente el estado favorita
-       setMotivaciones((prev) =>
-      prev.map((m) =>
-        m.id === id ? { ...m, esFavorita: nuevaFavorita } : m
-      )
-    );
+      setMotivaciones((prev) =>
+        prev.map((m) =>
+          m.id === id ? { ...m, esFavorita: nuevaFavorita } : m
+        )
+      );
     } catch (error) {
       console.error("Error cambiando a favorito estado:", error);
     }
   };
 
-    // 🔹 Filtro favoritas
+  // 🔹 Filtro favoritas
   const filtradas = filtroFavoritas
     ? motivaciones.filter((m) => m.esFavorita)
     : motivaciones;
@@ -83,7 +109,7 @@ const ListaMotivaciones = ({
     }
   };
 
-  
+
 
   return (
     <div className="motivaciones-panel">
@@ -116,16 +142,37 @@ const ListaMotivaciones = ({
             key={m.id}
             motivacion={m}
             onFavorita={toggleFavorita}
-            onEditar={onEditar}
+            onEditar={() => handleEditar(m)}
             onCambiarEstado={() => toggleEstado(m.id, m.activo)} // usa la función definida arriba
           />
         ))}
       </div>
 
-      {mostrarModal && (
+          {/* Modal para agregar motivación */}
+      {mostrarModalAgregar && (
         <AgregarMotivacion
-          onCerrar={() => setMostrarModal(false)}
+          onCerrar={() => setMostrarModalAgregar(false)}
           onGuardar={agregarMotivacion}
+          categorias={categorias}
+        />
+      )}
+
+       {/* Modal para agregar motivación */}
+      {mostrarModalAgregar && (
+        <AgregarMotivacion
+          onCerrar={() => setMostrarModalAgregar(false)}
+          onGuardar={agregarMotivacion}
+          categorias={categorias}
+        />
+      )}
+
+      {/* Modal para editar motivación */}
+      {mostrarModalEditar && motivacionSeleccionada && (
+        <EditarMotivacion
+          motivacion={motivacionSeleccionada}
+          onCerrar={() => setMostrarModalEditar(false)}
+          onGuardar={guardarEdicion}
+          categorias={categorias}
         />
       )}
     </div>

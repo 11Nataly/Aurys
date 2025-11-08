@@ -117,6 +117,7 @@
   color: indianred;
 }
 
+//se agrega cuando cambia a favorita
 .btn-favorito.esFavorita {
   color: #ff5a5f;
 }
