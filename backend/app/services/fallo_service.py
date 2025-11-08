@@ -97,5 +97,5 @@ class FalloService:
         db.delete(fallo)
         db.commit()
         return {"mensaje": "Fallo eliminado correctamente"}
-
+# Todo ese archivo realizado por douglas   
 fallo_service = FalloService()

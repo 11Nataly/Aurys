@@ -96,3 +96,4 @@ class CategoriaService:
 
 # Instancia del servicio para importar fácilmente
 categoria_service = CategoriaService()
+# Todo ese archivo realizado por douglas   

@@ -114,3 +114,4 @@ class TecnicaCard(BaseModel):
     duracion: Optional[str] = None  
     calificacion: Optional[int] = None
     favorita: bool
+    # Todo ese archivo realizado por douglas   

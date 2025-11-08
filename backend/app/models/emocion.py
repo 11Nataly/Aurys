@@ -6,7 +6,7 @@ from sqlalchemy.sql import func
 
 class Emocion(Base):
     __tablename__ = "emocion"
-
+# Todo ese archivo realizado por douglas   
     id = Column(Integer, primary_key=True, autoincrement=True)
     usuario_id = Column(Integer, ForeignKey("usuario.id", ondelete="CASCADE"), nullable=False)
     tipo_emocion_id = Column(Integer, ForeignKey("tipo_emocion.id", ondelete="CASCADE"), nullable=False)

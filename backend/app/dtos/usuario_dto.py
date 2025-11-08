@@ -43,3 +43,4 @@ class UsuarioResponseDTO(BaseModel):
 # ✅ DTO para actualizar el estado (PUT)
 class UsuarioEstadoUpdateDTO(BaseModel):
     activo: bool
+    # Todo ese archivo realizado por douglas   

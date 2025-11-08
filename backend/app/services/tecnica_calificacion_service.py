@@ -10,7 +10,7 @@ from sqlalchemy import func
 
 
 def crear_o_actualizar_calificacion(db: Session, calificacion_data: TecnicaCalificacionCreate):
-    """
+    """# Todo ese archivo realizado por douglas   
     Calificar una técnica de 1 a 5 estrellas para un usuario.
     O cambiar la calificación dada
     """
