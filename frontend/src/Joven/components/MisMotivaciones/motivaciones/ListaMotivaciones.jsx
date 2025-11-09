@@ -1,5 +1,5 @@
-//frontend / src/ joven/ components/MisMotivaciones/motivaciones/listarMotivaciones.jsx
-import { useEffect, useState } from "react";
+// frontend/src/joven/components/MisMotivaciones/motivaciones/listarMotivaciones.jsx
+import { useEffect, useState, useMemo } from "react";
 import TarjetaMotivacion from "./TarjetaMotivacion";
 import AgregarMotivacion from "./AgregarMotivacion";
 import FiltrosMotivaciones from "./FiltrosMotivaciones";
@@ -7,17 +7,13 @@ import {
   listarMotivaciones,
   crearMotivacion,
   cambiarEstadoMotivacion,
-  favoritosMotivacion
+  favoritosMotivacion,
 } from "../../../../services/motivacionService";
 import "./motivaciones.css";
 
-const ListaMotivaciones = ({
-  onEditar,
-  onRequestAgregar,
-  query,
-  setQuery,
-}) => {
+const ListaMotivaciones = ({ onEditar, onRequestAgregar }) => {
   const [motivaciones, setMotivaciones] = useState([]);
+  const [motivacionesFiltradas, setMotivacionesFiltradas] = useState([]);
   const [mostrarModal, setMostrarModal] = useState(false);
   const [filtroFavoritas, setFiltroFavoritas] = useState(false);
 
@@ -27,6 +23,7 @@ const ListaMotivaciones = ({
       try {
         const data = await listarMotivaciones();
         setMotivaciones(data);
+        setMotivacionesFiltradas(data); // ← también guardamos las iniciales para el filtro
       } catch (error) {
         console.error("Error cargando motivaciones:", error);
       }
@@ -40,6 +37,7 @@ const ListaMotivaciones = ({
       await crearMotivacion(nueva);
       const data = await listarMotivaciones();
       setMotivaciones(data);
+      setMotivacionesFiltradas(data);
     } catch (error) {
       console.error("Error agregando motivación:", error);
     } finally {
@@ -47,35 +45,34 @@ const ListaMotivaciones = ({
     }
   };
 
-  
   // 🔹 Cambiar favorita localmente
-
   const toggleFavorita = async (id, esFavorita) => {
     try {
-      //guardar una nueva favorita, si no, no se guarda
       const nuevaFavorita = !esFavorita;
       await favoritosMotivacion(id, nuevaFavorita);
-      //actualiza localmente el estado favorita
-       setMotivaciones((prev) =>
-      prev.map((m) =>
-        m.id === id ? { ...m, esFavorita: nuevaFavorita } : m
-      )
-    );
+      setMotivaciones((prev) =>
+        prev.map((m) =>
+          m.id === id ? { ...m, esFavorita: nuevaFavorita } : m
+        )
+      );
+      setMotivacionesFiltradas((prev) =>
+        prev.map((m) =>
+          m.id === id ? { ...m, esFavorita: nuevaFavorita } : m
+        )
+      );
     } catch (error) {
-      console.error("Error cambiando a favorito estado:", error);
+      console.error("Error cambiando favorito:", error);
     }
   };
 
-    // 🔹 Filtro favoritas
-  const filtradas = filtroFavoritas
-    ? motivaciones.filter((m) => m.esFavorita)
-    : motivaciones;
-
-  // 🔹 Cambiar estado activo/inactivo (PUT al backend - soft delete)
+  // 🔹 Cambiar estado activo/inactivo (soft delete)
   const toggleEstado = async (id, estadoActual) => {
     try {
       await cambiarEstadoMotivacion(id, !estadoActual);
       setMotivaciones((prev) =>
+        prev.filter((m) => (estadoActual ? m.id !== id : true))
+      );
+      setMotivacionesFiltradas((prev) =>
         prev.filter((m) => (estadoActual ? m.id !== id : true))
       );
     } catch (error) {
@@ -83,7 +80,10 @@ const ListaMotivaciones = ({
     }
   };
 
-  
+  // 🔹 Aplicar filtro de favoritas
+  const listaFinal = filtroFavoritas
+    ? motivacionesFiltradas.filter((m) => m.esFavorita)
+    : motivacionesFiltradas;
 
   return (
     <div className="motivaciones-panel">
@@ -103,25 +103,28 @@ const ListaMotivaciones = ({
         </button>
       </div>
 
+      {/* 🔹 Filtro con búsqueda por palabra clave y favoritas */}
       <FiltrosMotivaciones
+        motivaciones={motivaciones} // 👈 Se pasa la lista completa
+        onResultados={setMotivacionesFiltradas} // 👈 Recibe resultados filtrados
         filtroFavoritas={filtroFavoritas}
         setFiltroFavoritas={setFiltroFavoritas}
-        query={query}
-        setQuery={setQuery}
       />
 
+      {/* 🔹 Mostrar tarjetas filtradas */}
       <div className="motivaciones-grid">
-        {filtradas.map((m) => (
+        {listaFinal.map((m) => (
           <TarjetaMotivacion
             key={m.id}
             motivacion={m}
             onFavorita={toggleFavorita}
             onEditar={onEditar}
-            onCambiarEstado={() => toggleEstado(m.id, m.activo)} // usa la función definida arriba
+            onCambiarEstado={() => toggleEstado(m.id, m.activo)}
           />
         ))}
       </div>
 
+      {/* 🔹 Modal de agregar motivación */}
       {mostrarModal && (
         <AgregarMotivacion
           onCerrar={() => setMostrarModal(false)}
