@@ -10,6 +10,7 @@ import RecuperarContraseña from "./InicioSesion/RecuperarContraseña"; // Impor
 import  RegistroExitoso from "./Registro/RegistroExitoso"; // Importa el componente tempralmente para provar  se tiene que quitar
 import EnviarCorreoCard from "./InicioSesion/EnviarCorreo";
 import ProtectedRoute from "./ProtectedRoute";
+import AdminPerfil from "./Admin/pages/AdminPerfil";
 
 
 export default function App() {
@@ -52,6 +53,7 @@ export default function App() {
         
         {/* Admin */}
         <Route path="/admin" element={<Admin />} />
+        <Route path="admin/perfil" element={<AdminPerfil />} />
      
       </Routes>
     </BrowserRouter>
