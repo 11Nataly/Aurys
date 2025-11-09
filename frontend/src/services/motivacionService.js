@@ -54,31 +54,6 @@ export const crearMotivacion = async (motivacionData) => {
 
 
 //===================================
-//  Editar motivación (sin imagen)
-//===================================
-export const editarMotivacion = async (motivacion_id, motivacionData) => {
-  try {
-    // Solo enviamos los campos necesarios
-    const payload = {
-      titulo: motivacionData.titulo,
-      descripcion: motivacionData.descripcion,
-      categoria_id: motivacionData.categoria_id,
-      usuario_id: localStorage.getItem("id_usuario"),
-    };
-
-    const response = await api.put(`/motivaciones/${motivacion_id}/editar`, payload);
-    return response.data;
-  } catch (err) {
-    console.error("[servicio] editarMotivacion error:", err.response?.data || err.message);
-    throw err.response?.data || { message: "Error al editar motivación" };
-  }
-};
-
-
-
-
-
-//===================================
 //  Cambiar estado favorita
 //===================================
 export const favoritosMotivacion = async (motivacion_id, favorita) => {
@@ -92,7 +67,6 @@ export const favoritosMotivacion = async (motivacion_id, favorita) => {
     throw err.response?.data || { message: "Error al cambiar estado favorito de motivación" };
   }
 };
-
 
 
 //===================================
