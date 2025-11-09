@@ -95,8 +95,8 @@ class MotivacionService:
             motivacion.titulo = data.titulo
         if data.descripcion:
             motivacion.descripcion = data.descripcion
-        if data.id_categoria:
-            motivacion.categoria_id = data.id_categoria
+        if getattr(data, "categoria_id", None):
+            motivacion.categoria_id = data.categoria_id
 
         db.commit()
         db.refresh(motivacion)
@@ -111,6 +111,7 @@ class MotivacionService:
         if not motivacion:
             raise HTTPException(status_code=404, detail="Motivación no encontrada")
 
+        # Procesar nueva imagen si se envía
         if imagen:
             if motivacion.imagen:
                 nombre_antiguo = motivacion.imagen.split("/")[-1]
@@ -128,8 +129,8 @@ class MotivacionService:
             motivacion.titulo = data.titulo
         if data.descripcion:
             motivacion.descripcion = data.descripcion
-        if data.id_categoria:
-            motivacion.categoria_id = data.id_categoria
+        if getattr(data, "categoria_id", None):
+            motivacion.categoria_id = data.categoria_id
 
         db.commit()
         db.refresh(motivacion)
@@ -139,7 +140,6 @@ class MotivacionService:
     # PUT - Cambiar estado activo/inactivo
     # -------------------------------------------------------
     @staticmethod
-    
     def cambiar_estado(motivacion_id: int, estado: bool, db: Session):
         motivacion = db.query(Motivacion).filter(Motivacion.id == motivacion_id).first()
         if not motivacion:
@@ -183,9 +183,6 @@ class MotivacionService:
     # -------------------------------------------------------
     # DELETE - Eliminar definitivamente una motivación
     # -------------------------------------------------------
-    # -------------------------------------------------------
-    # DELETE - Eliminar una motivación (definitivamente)
-    # -------------------------------------------------------
     @staticmethod
     def eliminar_motivacion(db: Session, motivacion_id: int):
         """
@@ -207,8 +204,6 @@ class MotivacionService:
         db.commit()
 
         return {"mensaje": f"Motivación {motivacion_id} eliminada permanentemente"}
-
-
 
 
 # ✅ Instancia global del servicio
