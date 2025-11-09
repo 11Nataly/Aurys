@@ -84,23 +84,3 @@ def listar_categorias_activas(usuario_id: int, db: Session = Depends(get_db)):
     Lista todas las categorías activas de un usuario (solo ID y nombre).
     """
     return categoria_service.listar_nombres_activos(db, usuario_id)
-
-# ------------------------------------------------------------
-# PUT - Editar solo el nombre de una categoría
-# ------------------------------------------------------------
-@router.put("/{categoria_id}/editar-nombre/{usuario_id}", response_model=CategoriaResponseDTO)
-def editar_nombre_categoria(
-    categoria_id: int,
-    usuario_id: int,
-    nombre: str,
-    db: Session = Depends(get_db)
-):
-    """
-    Edita únicamente el nombre de una categoría.
-    Recibe el ID de la categoría, el ID del usuario y el nuevo nombre.
-    """
-    return categoria_service.editar_nombre(db, categoria_id, usuario_id, nombre)
-
-
-
-# Todo ese archivo realizado por douglas   

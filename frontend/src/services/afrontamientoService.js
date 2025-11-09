@@ -54,7 +54,7 @@ export const afrontamientoService = {
         return { success: true };
       }
       
-      // En producción, hacer la petición real # Todo ese archivo realizado por douglas   
+      // En producción, hacer la petición real
       const response = await api.post(`/tecnicas/${tecnicaId}/calificar`, { calificacion });
       return response.data;
     } catch (error) {

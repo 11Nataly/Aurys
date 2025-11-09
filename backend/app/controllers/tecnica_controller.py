@@ -184,4 +184,3 @@ def actualizar_estado(
         return resultado
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-# Todo ese archivo realizado por douglas   

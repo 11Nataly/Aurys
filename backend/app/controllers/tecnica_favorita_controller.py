@@ -71,4 +71,3 @@ def listar_favoritas_endpoint(
         )
         for t in tecnicas
     ]
-# Todo ese archivo realizado por douglas   

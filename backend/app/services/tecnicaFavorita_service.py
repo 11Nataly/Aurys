@@ -14,7 +14,7 @@ def marcar_favorita(db: Session, favorita: TecnicaFavoritaCreate):
         usuario_id=favorita.usuario_id,
         tecnica_id=favorita.tecnica_id
     ).first()
-# Todo ese archivo realizado por douglas   
+
     if existe:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

@@ -34,4 +34,3 @@ class NotaDiarioResponse(NotaDiarioBase):
 
     class Config:
         orm_mode = True
-# Todo ese archivo realizado por douglas   

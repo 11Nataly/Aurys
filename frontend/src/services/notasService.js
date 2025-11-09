@@ -2,7 +2,7 @@
 import api from "./api";
 
 //===================================
-// 🔹 Crear una nueva nota # Todo ese archivo realizado por douglas   
+// 🔹 Crear una nueva nota
 //===================================
 export const crearNota = async (notaData) => {
   try {

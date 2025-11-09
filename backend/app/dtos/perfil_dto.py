@@ -11,13 +11,13 @@ class PerfilResponseDTO(BaseModel):
     estado: str
 
     class Config:
-        from_attributes = True  # Cambiado de orm_mode para Pydantic v2
+        orm_mode = True
 
 
 class PerfilUpdateDTO(BaseModel):
-    nombre: Optional[str] = None  # Hacer explícito que puede ser None
-    correo: Optional[EmailStr] = None
-    contrasena: Optional[str] = None  # Asegurar que sea opcional
+    nombre: Optional[str]
+    correo: Optional[EmailStr]
+    contrasena: Optional[str]
 
 
 class PerfilEstadoUpdateDTO(BaseModel):

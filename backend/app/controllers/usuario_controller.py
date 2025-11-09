@@ -38,4 +38,3 @@ def get_usuarios(db: Session = Depends(get_db)):
 def put_cambiar_estado(usuario_id: int, db: Session = Depends(get_db)):
     return cambiar_estado_usuario(usuario_id, db)
 
-# Todo ese archivo realizado por douglas   

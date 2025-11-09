@@ -1,158 +1,177 @@
-import React, { useState } from "react";
-import { FaEdit, FaCheck, FaTimes } from "react-icons/fa";
-import Modal from "react-modal";
-import "./ProfileInfo.css";
-import { actualizarPerfil } from "../../../services/perfilService";
+import React, { useState } from 'react';
+import { FaEdit, FaCheck, FaTimes } from 'react-icons/fa';
+import Modal from 'react-modal';
+import './ProfileInfo.css';
 
-Modal.setAppElement("#root");
+Modal.setAppElement('#root');
 
 const ProfileInfo = ({ userData, isEditing, onUpdateUser, onEditToggle }) => {
   const [tempValues, setTempValues] = useState({
     nombre: userData.nombre,
     correo: userData.correo,
-    contrasena: "",
+    contrasena: ''
   });
   const [errors, setErrors] = useState({});
-  const [showModal, setShowModal] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleInputChange = (field, value) => {
-    setTempValues((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: "" }));
+    setTempValues(prev => ({
+      ...prev,
+      [field]: value
+    }));
+    if (errors[field]) {
+      setErrors(prev => ({
+        ...prev,
+        [field]: ''
+      }));
+    }
   };
 
   const validateField = (field, value) => {
-    let msg = "";
-    
-    if (field === "nombre") {
-      if (!value || value.trim() === "") {
-        msg = "El nombre es requerido";
-      } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value)) {
-        msg = "Solo se permiten letras y espacios";
-      }
+    const newErrors = { ...errors };
+
+    switch (field) {
+      case 'nombre':
+        if (!value.trim()) {
+          newErrors.nombre = 'El nombre no puede estar vacío';
+        } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value)) {
+          newErrors.nombre = 'Solo se permiten letras y espacios';
+        } else {
+          delete newErrors.nombre;
+        }
+        break;
+
+      case 'correo':
+        if (!value.trim()) {
+          newErrors.correo = 'El correo no puede estar vacío';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          newErrors.correo = 'Formato de correo inválido';
+        } else {
+          delete newErrors.correo;
+        }
+        break;
+
+      case 'contrasena':
+        if (value && value.length < 6) {
+          newErrors.contrasena = 'La contraseña debe tener al menos 6 caracteres';
+        } else {
+          delete newErrors.contrasena;
+        }
+        break;
+
+      default:
+        break;
     }
-    
-    if (field === "correo") {
-      if (!value || value.trim() === "") {
-        msg = "El correo es requerido";
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-        msg = "Correo inválido";
-      }
-    }
-    
-    if (field === "contrasena" && value && value.length < 6) {
-      msg = "Debe tener al menos 6 caracteres";
-    }
-    
-    setErrors((prev) => ({ ...prev, [field]: msg }));
-    return !msg;
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleSave = async (field) => {
-    const value = tempValues[field]?.trim();
-    
-    // Para contraseña, si está vacía, no enviar
-    if (field === "contrasena" && (!value || value === "")) {
-      setErrors((prev) => ({ ...prev, [field]: "La contraseña no puede estar vacía" }));
-      return;
-    }
-
-    if (!validateField(field, value)) return;
-
-    // Preparar datos para enviar
-    const data = { [field]: value };
-
-    try {
-      console.log("📤 Enviando actualización:", data);
-      const response = await actualizarPerfil(userData.id, data);
-      console.log("✅ Respuesta backend:", response);
-
-      // Actualizar solo si el campo no es contraseña (ya que el backend no la retorna)
-      if (field !== "contrasena") {
-        onUpdateUser(field, response[field] || value);
-      }
-
-      setSuccessMessage(
-        field === "contrasena" 
-          ? "Contraseña actualizada correctamente" 
-          : `${field.charAt(0).toUpperCase() + field.slice(1)} actualizado correctamente`
-      );
-      setShowModal(true);
-      
-      // Limpiar contraseña después de guardar
-      if (field === "contrasena") {
-        setTempValues(prev => ({ ...prev, contrasena: "" }));
-      }
-      
+  const handleSave = (field) => {
+    if (validateField(field, tempValues[field])) {
+      onUpdateUser(field, tempValues[field]);
       onEditToggle(field);
-    } catch (error) {
-      console.error("❌ Error al actualizar perfil:", error);
-      const errorDetail = error.response?.data?.detail;
-      let errorMessage = "Error al guardar los cambios";
       
-      if (Array.isArray(errorDetail)) {
-        errorMessage = errorDetail.map(err => err.msg).join(", ");
-      } else if (typeof errorDetail === 'string') {
-        errorMessage = errorDetail;
+      // Mostrar modal de éxito
+      const fieldNames = {
+        nombre: 'Nombre',
+        correo: 'Correo electrónico',
+        contrasena: 'Contraseña'
+      };
+      setSuccessMessage(`${fieldNames[field]} actualizado correctamente`);
+      setShowSuccessModal(true);
+      
+      // Resetear contraseña después de guardar
+      if (field === 'contrasena') {
+        setTempValues(prev => ({ ...prev, contrasena: '' }));
       }
-      
-      setErrors((prev) => ({ ...prev, [field]: errorMessage }));
     }
   };
 
   const handleCancel = (field) => {
-    setTempValues((prev) => ({
+    setTempValues(prev => ({
       ...prev,
-      [field]: field === "contrasena" ? "" : userData[field],
+      [field]: field === 'contrasena' ? '' : userData[field]
     }));
-    setErrors((prev) => ({ ...prev, [field]: "" }));
+    setErrors(prev => ({ ...prev, [field]: '' }));
     onEditToggle(field);
   };
+
+  const handleEditClick = (field) => {
+    setTempValues(prev => ({
+      ...prev,
+      [field]: field === 'contrasena' ? '' : userData[field]
+    }));
+    onEditToggle(field);
+  };
+
+  const closeSuccessModal = () => {
+    setShowSuccessModal(false);
+  };
+
+  const renderField = (field, label, type = 'text') => (
+    <div className="profile-field">
+      <label className="field-label">{label}</label>
+      <div className="field-input-container">
+        {isEditing[field] ? (
+          <>
+            <input
+              type={type}
+              value={tempValues[field]}
+              onChange={(e) => handleInputChange(field, e.target.value)}
+              className={`field-input ${errors[field] ? 'error' : ''}`}
+              placeholder={`Ingresa tu ${label.toLowerCase()}`}
+            />
+            <div className="field-actions">
+              <button
+                className="action-btn save"
+                onClick={() => handleSave(field)}
+                disabled={!!errors[field]}
+                aria-label="Guardar"
+              >
+                <FaCheck />
+              </button>
+              <button
+                className="action-btn cancel"
+                onClick={() => handleCancel(field)}
+                aria-label="Cancelar"
+              >
+                <FaTimes />
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <span className="field-value">
+              {field === 'contrasena' ? '••••••••••' : userData[field]}
+            </span>
+            <button
+              className="edit-btn"
+              onClick={() => handleEditClick(field)}
+              aria-label={`Editar ${label}`}
+            >
+              <FaEdit />
+            </button>
+          </>
+        )}
+      </div>
+      {errors[field] && <div className="field-error">{errors[field]}</div>}
+    </div>
+  );
 
   return (
     <div className="profile-info">
       <h3 className="info-title">Información Personal</h3>
+      
+      {renderField('nombre', 'Nombre')}
+      {renderField('correo', 'Correo Electrónico')}
+      {renderField('contrasena', 'Contraseña', 'password')}
 
-      {["nombre", "correo", "contrasena"].map((field) => (
-        <div key={field} className="profile-field">
-          <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
-          <div className="field-input-container">
-            {isEditing[field] ? (
-              <>
-                <input
-                  type={field === "contrasena" ? "password" : "text"}
-                  value={tempValues[field]}
-                  onChange={(e) => handleInputChange(field, e.target.value)}
-                  className={`field-input ${errors[field] ? "error" : ""}`}
-                  placeholder={field === "contrasena" ? "Nueva contraseña..." : ""}
-                />
-                <div className="field-actions">
-                  <button className="action-btn save" onClick={() => handleSave(field)}>
-                    <FaCheck />
-                  </button>
-                  <button className="action-btn cancel" onClick={() => handleCancel(field)}>
-                    <FaTimes />
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <span className="field-value">
-                  {field === "contrasena" ? "••••••••" : userData[field]}
-                </span>
-                <button className="edit-btn" onClick={() => onEditToggle(field)}>
-                  <FaEdit />
-                </button>
-              </>
-            )}
-          </div>
-          {errors[field] && <div className="field-error">{errors[field]}</div>}
-        </div>
-      ))}
-
+      {/* Modal de Éxito */}
       <Modal
-        isOpen={showModal}
-        onRequestClose={() => setShowModal(false)}
+        isOpen={showSuccessModal}
+        onRequestClose={closeSuccessModal}
         className="custom-modal"
         overlayClassName="custom-modal-overlay"
       >
@@ -160,9 +179,14 @@ const ProfileInfo = ({ userData, isEditing, onUpdateUser, onEditToggle }) => {
           <div className="modal-icon success">✓</div>
           <h3 className="modal-title">¡Actualizado!</h3>
           <p className="modal-message">{successMessage}</p>
-          <button className="modal-btn modal-btn-primary" onClick={() => setShowModal(false)}>
-            Continuar
-          </button>
+          <div className="modal-actions">
+            <button 
+              className="modal-btn modal-btn-primary"
+              onClick={closeSuccessModal}
+            >
+              Continuar
+            </button>
+          </div>
         </div>
       </Modal>
     </div>

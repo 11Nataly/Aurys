@@ -9,7 +9,7 @@ class TecnicaFavorita(Base):
     Tabla intermedia que almacena qué usuario marcó como favorita una técnica.
     """
     __tablename__ = "tecnica_favorita"
-    # Todo ese archivo realizado por douglas   
+    
     usuario_id = Column(Integer, ForeignKey('usuario.id', ondelete="CASCADE"), primary_key=True)
     tecnica_id = Column(Integer, ForeignKey("tecnicaafrontamiento.id", ondelete="CASCADE"), primary_key=True)
 

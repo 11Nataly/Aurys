@@ -9,7 +9,7 @@ class TecnicaCalificacion(Base):
     Modelo de SQLAlchemy para la tabla 'tecnicas_calificaciones' .
     """
     __tablename__ = "tecnicas_calificaciones"
-# Todo ese archivo realizado por douglas   
+
     # Dejo Id por si algún día queremos permitir
     # historial de calificaciones (ej: mismo usuario calificó varias veces en distintas fechas).
     id = Column(Integer, primary_key=True, index=True)

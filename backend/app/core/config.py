@@ -4,7 +4,6 @@ class Settings(BaseSettings):
     SENDGRID_API_KEY: str
     SECRET_KEY: str
     
-    Settings_Frontend_URL: str = "http://localhost:5173"
     # Credenciales Cloudinary
     CLOUDINARY_CLOUD_NAME: str
     CLOUDINARY_API_KEY: str
@@ -14,8 +13,4 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
 
-
-
 settings = Settings()
-
-# Todo ese archivo realizado por douglas   

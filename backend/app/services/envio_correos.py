@@ -32,10 +32,8 @@ def enviar_correo_recuperacion(correo: str, db: Session):
     if not usuario:
         raise HTTPException(status_code=404, detail="Usuario no encontrado.")
 
-#Token de autentificacion token que se utiliza 
-
     token = generar_token_email(correo)
-    enlace = f"{settings.Settings_Frontend_URL}/ver-recuperar"
+    enlace = f"http://localhost:8000/auth/restablecer-contrasena/{token}"
 
     asunto = "Recuperación de contraseña"
     cuerpo_html = f"""
@@ -60,7 +58,3 @@ def restablecer_contrasena(token: str, nueva_contrasena: str, db: Session):
     usuario.contrasena = hash_password(nueva_contrasena)
     db.commit()
     return {"msg": "Contraseña restablecida con éxito."}
-
-
-
-# Todo ese archivo realizado por douglas   

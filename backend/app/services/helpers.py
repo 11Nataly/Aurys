@@ -55,4 +55,3 @@ def dias_consecutivos_sin_fallo(db: Session, promesa_id: int, fecha_hasta: date 
         else:
             break
     return consecutivos
-# Todo ese archivo realizado por douglas   

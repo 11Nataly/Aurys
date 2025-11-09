@@ -22,7 +22,7 @@ export const subirVideo = async (tecnicaId, file) => {
 };
 
 //===============
-// Listar técnica # Todo ese archivo realizado por douglas   
+// Listar técnica
 //===============
 
 

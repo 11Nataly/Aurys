@@ -9,7 +9,7 @@ message = Mail(
     to_emails='to@example.com',
     subject='Sending with Twilio SendGrid is Fun',
     html_content='<strong>and easy to do anywhere, even with Python</strong>')
-try:# Todo ese archivo realizado por douglas   
+try:
     sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
     # sg.set_sendgrid_data_residency("eu")
     # uncomment the above line if you are sending mail using a regional EU subuser

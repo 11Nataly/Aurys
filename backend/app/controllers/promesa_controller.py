@@ -49,4 +49,3 @@ def marcar_cumplida(promesa_id: int, cumplida: bool, db: Session = Depends(get_d
 @router.delete("/{promesa_id}", status_code=200)
 def eliminar_promesa(promesa_id: int, db: Session = Depends(get_db)):
     return PromesaService.eliminar_definitivo(db, promesa_id)
-# Todo ese archivo realizado por douglas   

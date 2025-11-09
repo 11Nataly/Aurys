@@ -54,7 +54,7 @@ class PromesaService:
         }
 
         historial = listar_historial(db, promesa.id, limit=50)
-# Todo ese archivo realizado por douglas   
+
         prom_dict = {
             "id": promesa.id,
             "usuario_id": promesa.usuario_id,

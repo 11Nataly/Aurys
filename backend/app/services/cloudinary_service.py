@@ -8,7 +8,7 @@ cloudinary.config(
     api_key = settings.CLOUDINARY_API_KEY, 
     api_secret = settings.CLOUDINARY_API_SECRET,
     secure=True
-)# Todo ese archivo realizado por douglas   
+)
 
 def upload_video(file_path: str):
     """Sube un video a Cloudinary y devuelve la URL segura."""

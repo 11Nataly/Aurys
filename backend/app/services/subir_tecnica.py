@@ -185,7 +185,7 @@ def actualizar_estado_tecnica(db, usuario_id: int, tecnica_id: int, estrellas: i
             db.query(TecnicaFavorita)
             .filter_by(usuario_id=usuario_id, tecnica_id=tecnica_id)
             .first()
-        )# Todo ese archivo realizado por douglas   
+        )
         if favorita and not favorito:
             db.add(TecnicaFavorita(usuario_id=usuario_id, tecnica_id=tecnica_id))
         elif not favorita and favorito:

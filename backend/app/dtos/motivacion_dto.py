@@ -36,5 +36,3 @@ class MotivacionResponseDTO(MotivacionBaseDTO):
 
     class Config:
         orm_mode = True
-
-   

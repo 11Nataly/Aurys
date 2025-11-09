@@ -1,91 +1,70 @@
-import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { FaUser, FaBars } from "react-icons/fa";
-import { listarPerfiles } from "../../../services/perfilService"; // ✅ usa el servicio real
-import { jwtDecode } from "jwt-decode";
-import logoaurys from "./logoaurys.png";
-import "./header.css";
+// src/Joven/components/Header/Header.jsx
+import { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { FaUser, FaBars } from 'react-icons/fa';
+import { userProfileData } from '../../fake_data/perfilData'; // ← RUTA CORRECTA
+import logoaurys from './logoaurys.png';
+import './header.css';
 
 const Header = ({ onToggleSidebar, isSidebarOpen }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [userData, setUserData] = useState(null);
   const profileRef = useRef(null);
+  
+  const userData = userProfileData;
 
-  // ✅ Cargar datos reales del usuario autenticado
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-
-        const decoded = jwtDecode(token);
-        const userId = Number(decoded.sub || decoded.id || decoded.user_id);
-
-        const perfiles = await listarPerfiles();
-        const user = perfiles.find((p) => Number(p.id) === userId);
-
-        if (user) setUserData(user);
-      } catch (error) {
-        console.error("Error cargando usuario:", error);
-      }
-    };
-
-    fetchUser();
-  }, []);
-
-  // 🔹 Cerrar el menú si se hace clic fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profileRef.current && !profileRef.current.contains(event.target)) {
         setIsProfileOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
+
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
   return (
     <header className="header">
       <div className="header-left">
-        <button
-          className={`hamburger-btn ${isSidebarOpen ? "active" : ""}`}
+        <button 
+          className={`hamburger-btn ${isSidebarOpen ? 'active' : ''}`}
           onClick={onToggleSidebar}
           aria-label="Toggle menu"
         >
           <FaBars className="hamburger-icon" />
         </button>
-
+        
         <div className="logo">
           <img src={logoaurys} alt="Aurys Logo" className="logo-img" />
         </div>
       </div>
-
+      
       <div className="header-right">
         <div className="profile-menu" ref={profileRef}>
-          <button
-            className={`profile-button ${isProfileOpen ? "active" : ""}`}
+          <button 
+            className={`profile-button ${isProfileOpen ? 'active' : ''}`}
             onClick={() => setIsProfileOpen(!isProfileOpen)}
             aria-label="Menú de perfil"
           >
-            {userData?.foto_perfil ? (
-              <img
-                src={userData.foto_perfil}
-                alt="Foto de perfil"
+            {userData?.fotoPerfil ? (
+              <img 
+                src={userData.fotoPerfil} 
+                alt="Foto de perfil" 
                 className="profile-image-header"
               />
             ) : (
               <FaUser className="profile-icon" />
             )}
           </button>
-
-          <div className={`profile-dropdown ${isProfileOpen ? "show" : ""}`}>
+          
+          <div className={`profile-dropdown ${isProfileOpen ? 'show' : ''}`}>
             <div className="profile-dropdown-info">
-              {userData?.foto_perfil ? (
-                <img
-                  src={userData.foto_perfil}
-                  alt="Foto de perfil"
+              {userData?.fotoPerfil ? (
+                <img 
+                  src={userData.fotoPerfil} 
+                  alt="Foto de perfil" 
                   className="profile-image-dropdown"
                 />
               ) : (
@@ -93,27 +72,20 @@ const Header = ({ onToggleSidebar, isSidebarOpen }) => {
                   <FaUser />
                 </div>
               )}
-
               <div className="profile-info-text">
-                <span className="profile-name">
-                  {userData?.nombre || "Usuario"}
-                </span>
-                <span className="profile-email">
-                  {userData?.correo || "usuario@ejemplo.com"}
-                </span>
+                <span className="profile-name">{userData?.nombre || "Usuario"}</span>
+                <span className="profile-email">{userData?.correo || "usuario@ejemplo.com"}</span>
               </div>
             </div>
-
-            <Link
-              to="/joven/perfil"
+            <Link 
+              to="/joven/perfil" 
               className="dropdown-link"
               onClick={() => setIsProfileOpen(false)}
             >
               Mi Perfil
             </Link>
-
-            <Link
-              to="/logout"
+            <Link 
+              to="/logout" 
               className="dropdown-link"
               onClick={() => setIsProfileOpen(false)}
             >

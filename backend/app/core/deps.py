@@ -22,4 +22,3 @@ def get_current_admin(current_user: Usuario = Depends(get_current_user)):
     if current_user.id_rol != 3:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No tienes permisos de administrador")
     return current_user
-# Todo ese archivo realizado por douglas   
