@@ -117,10 +117,11 @@
   color: indianred;
 }
 
-//se agrega cuando cambia a favorita
-.btn-favorito.esFavorita {
-  color: #ff5a5f;
+.btn-favorito.esFavorita svg {
+  color: #ff5a5f !important;
+  fill: #ff5a5f !important;
 }
+
 
 
 .descripcion {
