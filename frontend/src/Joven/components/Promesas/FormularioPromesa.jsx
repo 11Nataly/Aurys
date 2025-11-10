@@ -8,18 +8,19 @@ const FormularioPromesa = ({ promesaEditar, onGuardar, onCancelar }) => {
     titulo: '',
     descripcion: '',
     frecuencia: '',
-    num_maximo_recaidas: 10
+    fallosPermitidos: 10
   });
   const [errores, setErrores] = useState({});
   const [cargando, setCargando] = useState(false);
 
+  // 🔹 Si estamos editando, precargar los datos
   useEffect(() => {
     if (promesaEditar) {
       setFormData({
         titulo: promesaEditar.titulo || '',
         descripcion: promesaEditar.descripcion || '',
-        frecuencia: promesaEditar.frecuencia || '',
-        num_maximo_recaidas: promesaEditar.num_maximo_recaidas || 1
+        frecuencia: promesaEditar.tipo_frecuencia || '',
+        fallosPermitidos: promesaEditar.num_maximo_recaidas || 1
       });
     }
   }, [promesaEditar]);
@@ -27,9 +28,9 @@ const FormularioPromesa = ({ promesaEditar, onGuardar, onCancelar }) => {
   const validarFormulario = () => {
     const nuevosErrores = {};
     if (!formData.titulo.trim()) nuevosErrores.titulo = 'El título es obligatorio';
-    if (!formData.frecuencia) nuevosErrores.frecuencia = 'Selecciona una frecuencia';
-    if (!formData.num_maximo_recaidas || formData.num_maximo_recaidas < 1)
-      nuevosErrores.num_maximo_recaidas = 'Mínimo 1 fallo permitido';
+    if (!formData.frecuencia) nuevosErrores.frecuencia = 'Debe seleccionar una frecuencia';
+    if (!formData.fallosPermitidos || formData.fallosPermitidos < 1)
+      nuevosErrores.fallosPermitidos = 'Debe permitir al menos 1 fallo';
     setErrores(nuevosErrores);
     return Object.keys(nuevosErrores).length === 0;
   };
@@ -37,51 +38,40 @@ const FormularioPromesa = ({ promesaEditar, onGuardar, onCancelar }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validarFormulario()) return;
-
     setCargando(true);
 
-    // ✅ Obtener el ID del usuario logueado desde localStorage
-    const usuarioId = localStorage.getItem("id_usuario");
-
     const data = {
-      titulo: formData.titulo.trim(),
-      descripcion: formData.descripcion.trim(),
-      frecuencia: formData.frecuencia,
-      num_maximo_recaidas: parseInt(formData.num_maximo_recaidas),
-      usuario_id: usuarioId ? parseInt(usuarioId) : null // ← toma el usuario real del login
+      titulo: formData.titulo,
+      descripcion: formData.descripcion,
+      tipo_frecuencia: formData.frecuencia,
+      num_maximo_recaidas: formData.fallosPermitidos,
+      usuario_id: 1 // ⚠️ temporal, reemplázalo por el ID real del usuario logueado
     };
 
     try {
       let respuesta;
       if (promesaEditar) {
+        // 🔹 Editar
         respuesta = await editarPromesa(promesaEditar.id, data);
+        console.log("Promesa actualizada:", respuesta);
       } else {
+        // 🔹 Crear
         respuesta = await crearPromesa(data);
+        console.log("Promesa creada:", respuesta);
       }
+
       onGuardar(respuesta);
-      onCancelar();
+      onCancelar(); // cerrar el modal o formulario
     } catch (error) {
-      console.error("Error completo:", error);
-      if (error.response) {
-        const datos = error.response.data;
-        const erroresBackend = {};
-        Object.keys(datos).forEach(key => {
-          erroresBackend[key] = Array.isArray(datos[key]) ? datos[key][0] : datos[key];
-        });
-        setErrores(erroresBackend);
-        alert("Error del servidor: " + JSON.stringify(erroresBackend));
-      } else if (error.request) {
-        alert("No se pudo conectar al servidor. ¿Está corriendo en http://localhost:8000?");
-      } else {
-        alert("Error desconocido: " + error.message);
-      }
+      console.error("Error al guardar la promesa:", error);
+      alert("Ocurrió un error al guardar la promesa. Revisa la consola.");
     } finally {
       setCargando(false);
     }
   };
 
   const handleCancelar = () => {
-    setFormData({ titulo: '', descripcion: '', frecuencia: '', num_maximo_recaidas: 10 });
+    setFormData({ titulo: '', descripcion: '', frecuencia: '', fallosPermitidos: 10 });
     setErrores({});
     onCancelar();
   };
@@ -161,7 +151,7 @@ const FormularioPromesa = ({ promesaEditar, onGuardar, onCancelar }) => {
               Cancelar
             </button>
             <button type="submit" className="btn btn-primary" disabled={cargando}>
-              {cargando ? 'Guardando...' : promesaEditar ? 'Guardar' : 'Crear'}
+              {cargando ? 'Guardando...' : promesaEditar ? 'Guardar Cambios' : 'Guardar Promesa'}
             </button>
           </div>
         </form>
