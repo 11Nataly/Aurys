@@ -1,11 +1,34 @@
 import React, { useState } from "react";
 import "./EnviarCorreo.css";
 import { recuperarContrasena } from "../services/recuperarContrasenaService";
+import { FaArrowLeft } from "react-icons/fa";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const EnviarCorreoCard = () => {
+  const location = useLocation(); {/**esto es para lo del boton del volver */}
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     enviarCorreo: "",
   });
+
+  // Lógica para mostrar botón volver
+  const shouldShowBackButton = () => {  {/**esto es para lo del boton del volver */}
+    if (location.pathname === '/joven') return false;
+    if (location.pathname === '/home') return false;
+    if (location.pathname === '/login' || location.pathname === '/register') return false;
+    return true;
+  };
+
+  // Función para volver atrás
+  const handleGoBack = () => {  {/**esto es para lo del boton del volver */}
+    if (location.pathname.startsWith('/joven/') && location.pathname !== '/joven') {
+      navigate('/admin');
+    } else {
+      navigate(-1);
+    }
+  };
+
   const [errors, setErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -62,6 +85,16 @@ const EnviarCorreoCard = () => {
 
   return (
     <div className="recuperar-contrasena-container">
+      {shouldShowBackButton() && (
+          <button 
+            className="back-button"
+            onClick={handleGoBack}
+            aria-label="Volver atrás"
+          >
+            <FaArrowLeft className="back-icon" />
+            <span className="back-text">Volver</span>
+          </button>
+        )}
       <div className="recuperar-contrasena-card">
         <h2 className="recuperar-contrasena-title">Recuperar contraseña</h2>
 
