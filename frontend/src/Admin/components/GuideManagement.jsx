@@ -7,12 +7,17 @@ import {
   eliminarTecnica,
 } from "../../services/tecnicasService";
 import AddGuideModal from "../components/AddGuideModal";
+import Pagination from "../../Joven/components/Pagination/Pagination"; // ✅ LÍNEA 6: Importar componente de paginación
 import "./GuideManagement.css";
 
 export default function GuideManagement() {
   const [tecnicas, setTecnicas] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedTecnica, setSelectedTecnica] = useState(null);
+
+  // ✅ LÍNEA 14-15: Estados para paginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8; // 8 técnicas por página
 
   // 📌 Cargar técnicas
   const fetchTecnicas = async () => {
@@ -30,6 +35,18 @@ export default function GuideManagement() {
   useEffect(() => {
     fetchTecnicas();
   }, []);
+
+  // ✅ LÍNEA 32-36: Calcular técnicas paginadas
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedTecnicas = tecnicas.slice(startIndex, endIndex);
+
+  // ✅ LÍNEA 39-43: Manejador de cambio de página
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    // Scroll suave hacia arriba de la tabla
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // 📌 Crear o editar técnica
   const handleAddGuide = async (formData = {}, videoFile = null) => {
@@ -83,6 +100,9 @@ export default function GuideManagement() {
       await fetchTecnicas();
       setShowModal(false);
       setSelectedTecnica(null);
+      
+      // ✅ LÍNEA 84: Resetear a página 1 después de crear/editar
+      setCurrentPage(1);
     } catch (error) {
       alert("Error al guardar técnica: " + (error.response?.data || error.message || error));
     }
@@ -101,6 +121,11 @@ export default function GuideManagement() {
         await eliminarTecnica(id);
         setTecnicas(tecnicas.filter((t) => t.id !== id));
         alert("Técnica eliminada correctamente");
+        
+        // ✅ LÍNEA 104-107: Ajustar paginación si se elimina la última técnica de la página
+        if (paginatedTecnicas.length === 1 && currentPage > 1) {
+          setCurrentPage(currentPage - 1);
+        }
       } catch (err) {
         console.error("Error eliminando técnica:", err);
         alert("Error al eliminar la técnica: " + (err.response?.data || err.message || err));
@@ -117,6 +142,14 @@ export default function GuideManagement() {
         </button>
       </div>
 
+      {/* ✅ LÍNEA 122-128: Información de paginación */}
+      <div className="gm-table-info">
+        Mostrando {paginatedTecnicas.length} de {tecnicas.length} técnicas
+        {tecnicas.length > itemsPerPage && (
+          <span className="gm-page-info"> - Página {currentPage} de {Math.ceil(tecnicas.length / itemsPerPage)}</span>
+        )}
+      </div>
+
       <table className="gm-table">
         <thead>
           <tr>
@@ -127,7 +160,8 @@ export default function GuideManagement() {
           </tr>
         </thead>
         <tbody>
-          {tecnicas.map((tecnica, index) => (
+          {/* ✅ LÍNEA 140: Usar técnicas paginadas en lugar de todas */}
+          {paginatedTecnicas.map((tecnica, index) => (
             <tr key={tecnica.id ?? `tecnica-${index}`}>
               <td>{tecnica.nombre}</td>
               <td>
@@ -161,6 +195,23 @@ export default function GuideManagement() {
           ))}
         </tbody>
       </table>
+
+      {/* ✅ LÍNEA 167-180: Componente de paginación */}
+      {tecnicas.length > itemsPerPage && (
+        <div className="gm-pagination-container">
+          <Pagination
+            currentPage={currentPage}
+            totalItems={tecnicas.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+            maxVisiblePages={5}
+            className="gm-pagination"
+            showTotal={false} // Ya mostramos la info arriba
+            showPageNumbers={true}
+            showNavigation={true}
+          />
+        </div>
+      )}
 
       <AddGuideModal
         isOpen={showModal}
