@@ -1,20 +1,13 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { restablecerContrasena } from '../services/recuperarContrasenaService';
 import './RecuperarContraseña.css';
 
 const RecuperarContrasenaCard = () => {
-  const { token } = useParams(); // 🔹 Captura el token desde la URL
-  const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     nuevaContrasena: '',
     confirmarContrasena: ''
   });
-
   const [errors, setErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [mensajeError, setMensajeError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,26 +42,21 @@ const RecuperarContrasenaCard = () => {
     return newErrors;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setMensajeError('');
 
     const formErrors = validateForm();
     if (Object.keys(formErrors).length === 0) {
-      try {
-        const response = await restablecerContrasena(token, formData.nuevaContrasena);
-        console.log('Contraseña actualizada:', response);
-        setIsSubmitted(true);
+      console.log('Contraseña actualizada:', formData);
+      setIsSubmitted(true);
 
-        // 🔹 Redirige al login después de 3 segundos
-        setTimeout(() => {
-          navigate('/login');
-        }, 3000);
-
-      } catch (error) {
-        console.error('Error al restablecer contraseña:', error);
-        setMensajeError(error.detail || error.message || 'Ocurrió un error inesperado');
-      }
+      setTimeout(() => {
+        setFormData({
+          nuevaContrasena: '',
+          confirmarContraseña: ''
+        });
+        setIsSubmitted(false);
+      }, 3000);
     } else {
       setErrors(formErrors);
     }
@@ -78,17 +66,15 @@ const RecuperarContrasenaCard = () => {
     <div className="recuperar-contrasena-container">
       <div className="recuperar-contrasena-card">
         <h2 className="recuperar-contrasena-title">Recuperar Contraseña</h2>
-
+        
         {isSubmitted ? (
           <div className="mensaje-exitoso">
             <div className="circulo-exito">✅</div>
             <h3>¡Contraseña actualizada exitosamente!</h3>
-            <p>Serás redirigido al inicio de sesión en unos segundos.</p>
+            <p>Tu contraseña ha sido cambiada correctamente.</p>
           </div>
         ) : (
           <form className="recuperar-contrasena-form" onSubmit={handleSubmit}>
-            {mensajeError && <div className="error-global">{mensajeError}</div>}
-
             <div className="form-group">
               <label htmlFor="nuevaContrasena" className="required-field">
                 Nueva Contraseña

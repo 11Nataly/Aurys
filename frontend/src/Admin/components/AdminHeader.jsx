@@ -1,13 +1,14 @@
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { FaUser, FaBars } from "react-icons/fa";
-import { listarPerfiles } from "../../../services/perfilService";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { FaUser, FaArrowLeft } from "react-icons/fa";
+import { listarPerfiles } from "../../services/perfilService";
 import { jwtDecode } from "jwt-decode";
-import logoaurys from "./logoaurys.png";
-import "./header.css";
+import logoaurys from "../../Joven/components/Header/logoaurys.png";
+import "../../Joven/components/Header/header.css";
 
-// Agregar prop mostrarHamburger con valor por defecto true
-const Header = ({ onToggleSidebar, isSidebarOpen, mostrarHamburger = true }) => {
+const AdminHeader = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [userData, setUserData] = useState(null);
   const profileRef = useRef(null);
@@ -47,17 +48,35 @@ const Header = ({ onToggleSidebar, isSidebarOpen, mostrarHamburger = true }) => 
     };
   }, []);
 
+  // Lógica para mostrar botón volver
+  const shouldShowBackButton = () => {
+    if (location.pathname === '/admin') return false;
+    if (location.pathname === '/home') return false;
+    if (location.pathname === '/login' || location.pathname === '/register') return false;
+    return true;
+  };
+
+  // Función para volver atrás
+  const handleGoBack = () => {
+    if (location.pathname.startsWith('/admin/') && location.pathname !== '/admin') {
+      navigate('/admin');
+    } else {
+      navigate(-1);
+    }
+  };
+
   return (
     <header className="header">
       <div className="header-left">
-        {/* Hamburguesa condicional */}
-        {mostrarHamburger && (
-          <button
-            className={`hamburger-btn ${isSidebarOpen ? "active" : ""}`}
-            onClick={onToggleSidebar}
-            aria-label="Toggle menu"
+        {/* Botón volver condicional */}
+        {shouldShowBackButton() && (
+          <button 
+            className="back-button"
+            onClick={handleGoBack}
+            aria-label="Volver atrás"
           >
-            <FaBars className="hamburger-icon" />
+            <FaArrowLeft className="back-icon" />
+            <span className="back-text">Volver</span>
           </button>
         )}
 
@@ -100,16 +119,16 @@ const Header = ({ onToggleSidebar, isSidebarOpen, mostrarHamburger = true }) => 
 
               <div className="profile-info-text">
                 <span className="profile-name">
-                  {userData?.nombre || "Usuario"}
+                  {userData?.nombre || "Administrador"}
                 </span>
                 <span className="profile-email">
-                  {userData?.correo || "usuario@ejemplo.com"}
+                  {userData?.correo || "admin@ejemplo.com"}
                 </span>
               </div>
             </div>
 
             <Link
-              to="/joven/perfil"
+              to="/admin/perfil"
               className="dropdown-link"
               onClick={() => setIsProfileOpen(false)}
             >
@@ -130,4 +149,4 @@ const Header = ({ onToggleSidebar, isSidebarOpen, mostrarHamburger = true }) => 
   );
 };
 
-export default Header;
+export default AdminHeader;
