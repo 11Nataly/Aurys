@@ -133,7 +133,9 @@
   .pagination-nav {
     order: 1;
   }
+}
 
+@media (max-width: 480px) {
   .pagination-btn {
     min-width: 2rem;
     height: 2rem;
