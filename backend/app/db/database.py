@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 # Cadena de conexión
 
-MARIADB_URL = 'mysql+pymysql://root:natalia@localhost:3307/aurys'
+MARIADB_URL = 'mysql+pymysql://root:admin@localhost:3315/aurys'
 
 
 # Crear el objeto de conexión
