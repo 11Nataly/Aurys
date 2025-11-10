@@ -1,28 +1,32 @@
-// services/recuperarContrasenaService.js
-import api from './api'; // 🔹 Importa la instancia de Axios configurada en api.js
-                        // Esta instancia contiene la URL base del backend y las configuraciones necesarias
-                        // para hacer las peticiones HTTP (como headers o tokens, si existen)
+import api from './api'; 
+// api.js debe tener la configuración base de Axios (por ejemplo: baseURL y headers por defecto)
 
-export const recuperarContrasena = async (correo) => { // 🔹 Exporta una función asíncrona (promesa)
-                                                       // que se encarga de llamar al endpoint de recuperación de contraseña.
-                                                       // Recibe como parámetro el correo del usuario.
-
+/**
+ * Paso 1️⃣ - Enviar correo de recuperación
+ * Llama al endpoint /recuperar-contrasena
+ */
+export const recuperarContrasena = async (correo) => {
   try {
-    const response = await api.post('/recuperar-contrasena', { // 🔹 Realiza una petición HTTP POST al backend
-                                                               // usando Axios a la ruta /recuperar-contrasena
-      correo: correo // 🔹 Este es el cuerpo (body) del POST.
-                     // Se envía un objeto JSON con la propiedad "correo"
-                     // tal como el backend espera según el DTO (CorreoDTO)
-    });
-
-    return response.data; // 🔹 Devuelve solo la parte útil de la respuesta (el contenido del backend),
-                          // normalmente algo como: { msg: "Te hemos enviado un correo para recuperar tu contraseña." }
-
+    const response = await api.post('/recuperar-contrasena', { correo });
+    return response.data; // { msg: "Te hemos enviado un correo para recuperar tu contraseña." }
   } catch (error) {
-    console.error('Error al recuperar contraseña:', error); // 🔹 Muestra en consola el error completo (para depuración)
-    
-    // 🔹 Verifica si el backend envió una respuesta de error (error.response.data),
-    // si no existe, devuelve un mensaje genérico para el frontend.
+    console.error('Error al recuperar contraseña:', error);
     throw error.response?.data || { message: 'Error al enviar el correo' };
+  }
+};
+
+/**
+ * Paso 2️⃣ - Restablecer contraseña usando el token del enlace enviado al correo
+ * Llama al endpoint /restablecer-contrasena/{token}
+ */
+export const restablecerContrasena = async (token, nuevaContrasena) => {
+  try {
+    const response = await api.post(`/restablecer-contrasena/${token}`, {
+      nueva_contrasena: nuevaContrasena,
+    });
+    return response.data; // { msg: "Contraseña restablecida con éxito." }
+  } catch (error) {
+    console.error('Error al restablecer contraseña:', error);
+    throw error.response?.data || { message: 'Error al restablecer la contraseña' };
   }
 };
