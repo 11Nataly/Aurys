@@ -1,37 +1,27 @@
-// src/services/motivacionService.js
 import api from "./api";
 
-//===================================
-//  Listar motivaciones activas del usuario logueado
-//===================================
+// 1. Listar motivaciones activas por usuario
 export const listarMotivaciones = async () => {
   try {
     const usuario_id = localStorage.getItem("id_usuario");
-
     if (!usuario_id) throw new Error("No se encontró id_usuario en localStorage");
-
     const response = await api.get(`/motivaciones/listar/${usuario_id}`);
-    return response.data; // Devuelve las motivaciones activas del backend
+    return response.data;
   } catch (err) {
     console.error("[servicio] listarMotivaciones error:", err.response?.data || err.message);
     throw err.response?.data || { message: "Error al listar motivaciones" };
   }
 };
 
-//===================================
-//  Crear nueva motivación
-//===================================
+// 2. Crear nueva motivación (multipart/form-data)
 export const crearMotivacion = async (motivacionData) => {
   try {
     const formData = new FormData();
     formData.append("titulo", motivacionData.titulo);
     formData.append("descripcion", motivacionData.descripcion);
     formData.append("id_categoria", motivacionData.id_categoria);
-
-    // 🔹 Tomamos usuario automáticamente del localStorage
     const usuario_id = localStorage.getItem("id_usuario");
     formData.append("id_usuario", usuario_id);
-
     if (motivacionData.imagen) {
       if (typeof motivacionData.imagen === "string" && motivacionData.imagen.startsWith("data:")) {
         const blob = await fetch(motivacionData.imagen).then((res) => res.blob());
@@ -40,11 +30,9 @@ export const crearMotivacion = async (motivacionData) => {
         formData.append("imagen", motivacionData.imagen);
       }
     }
-
     const response = await api.post("/motivaciones/agregar", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-
     return response.data;
   } catch (err) {
     console.error("[servicio] crearMotivacion error:", err.response?.data || err.message);
@@ -52,20 +40,16 @@ export const crearMotivacion = async (motivacionData) => {
   }
 };
 
-
-//===================================
-//  Editar motivación (sin imagen)
-//===================================
+// 3. Editar motivación (texto y categoría) - puedes usar FormData o JSON según backend
 export const editarMotivacion = async (motivacion_id, motivacionData) => {
   try {
-    // Solo enviamos los campos necesarios
+    // Usamos JSON para editar texto/categoría
     const payload = {
       titulo: motivacionData.titulo,
       descripcion: motivacionData.descripcion,
       categoria_id: motivacionData.categoria_id,
       usuario_id: localStorage.getItem("id_usuario"),
     };
-
     const response = await api.put(`/motivaciones/${motivacion_id}/editar`, payload);
     return response.data;
   } catch (err) {
@@ -74,37 +58,48 @@ export const editarMotivacion = async (motivacion_id, motivacionData) => {
   }
 };
 
-
-
-
-
-//===================================
-//  Cambiar estado favorita
-//===================================
-export const favoritosMotivacion = async (motivacion_id, favorita) => {
+// 3.1 Editar imagen (multipart/form-data) -> PUT /motivaciones/{id}/editar-imagen
+export const editarImagenMotivacion = async (motivacion_id, archivoImagen) => {
   try {
-    const response = await api.put(
-      `/motivaciones/${motivacion_id}/favorita?favorita=${favorita}`
-    );
+    const formData = new FormData();
+    formData.append("imagen", archivoImagen);
+    const response = await api.put(`/motivaciones/${motivacion_id}/editar-imagen`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
     return response.data;
   } catch (err) {
-    console.error("[servicio] favoritosMotivacion error:", err.response?.data || err.message);
-    throw err.response?.data || { message: "Error al cambiar estado favorito de motivación" };
+    console.error("[servicio] editarImagenMotivacion error:", err.response?.data || err.message);
+    throw err.response?.data || { message: "Error al editar imagen de motivación" };
   }
 };
 
-
-
-//===================================
-//  Cambiar estado (soft delete)
-//===================================
-export const cambiarEstadoMotivacion = async (motivacion_id) => {
+// favoritos, estado y eliminar (mantén tus implementaciones previas)
+export const favoritosMotivacion = async (motivacion_id, favorita) => {
   try {
-    // Siempre se envía estado=false (desactivar)
-    const response = await api.put(`/motivaciones/${motivacion_id}/estado?estado=false`);
+    const response = await api.put(`/motivaciones/${motivacion_id}/favorita?favorita=${favorita}`);
+    return response.data;
+  } catch (err) {
+    console.error("[servicio] favoritosMotivacion error:", err.response?.data || err.message);
+    throw err.response?.data || { message: "Error al cambiar favorita" };
+  }
+};
+
+export const cambiarEstadoMotivacion = async (motivacion_id, estado = false) => {
+  try {
+    const response = await api.put(`/motivaciones/${motivacion_id}/estado?estado=${estado}`);
     return response.data;
   } catch (err) {
     console.error("[servicio] cambiarEstadoMotivacion error:", err.response?.data || err.message);
-    throw err.response?.data || { message: "Error al desactivar motivación" };
+    throw err.response?.data || { message: "Error al cambiar estado de motivación" };
+  }
+};
+
+export const eliminarMotivacion = async (motivacion_id) => {
+  try {
+    const response = await api.delete(`/motivaciones/${motivacion_id}`);
+    return response.data;
+  } catch (err) {
+    console.error("[servicio] eliminarMotivacion error:", err.response?.data || err.message);
+    throw err.response?.data || { message: "Error al eliminar motivación" };
   }
 };

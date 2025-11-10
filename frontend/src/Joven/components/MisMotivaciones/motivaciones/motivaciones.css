@@ -114,12 +114,13 @@
 
 .btn-favorito:hover{
   transform: scale(1.1);
-  color: indianred;
+  color: #ff5a5f;
 }
 
-//se agrega cuando cambia a favorita
-.btn-favorito.esFavorita {
-  color: #ff5a5f;
+//se añade para forzar el svg a colorear el corazón
+.btn-favorito.esFavorita svg {
+  color: #ff5a5f !important;
+  fill: #ff5a5f !important;
 }
 
 
