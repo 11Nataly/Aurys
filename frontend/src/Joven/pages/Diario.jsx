@@ -4,8 +4,8 @@ import EditorDiario from "../components/Diario/EditorDiario";
 import HistorialEntradas from "../components/Diario/HistorialEntradas";
 import AgregarEntrada from "../components/Diario/AgregarEntrada";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
-import Pagination from "../components/Pagination/Pagination"; // ✅ Importamos paginación
-import { obtenerNotasPorUsuario } from "../../services/notasService"; // ✅ Importar conexión backend
+import Pagination from "../components/Pagination/Pagination";
+import { obtenerNotasPorUsuario } from "../../services/notasService";
 import "../../styles/diario.css";
 
 const Diario = () => {
@@ -15,20 +15,21 @@ const Diario = () => {
 
   // 🔹 Estados de paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6; // 5–8 recomendado para listas según guía
+  const itemsPerPage = 6;
 
   // 🔹 Cargar desde backend
+  const cargarNotas = async () => {
+    try {
+      const id_usuario = localStorage.getItem("id_usuario");
+      if (!id_usuario) throw new Error("Usuario no encontrado");
+      const data = await obtenerNotasPorUsuario(id_usuario);
+      setEntradas(data.reverse());
+    } catch (error) {
+      console.error("❌ Error cargando notas:", error);
+    }
+  };
+
   useEffect(() => {
-    const cargarNotas = async () => {
-      try {
-        const id_usuario = localStorage.getItem("id_usuario");
-        if (!id_usuario) throw new Error("Usuario no encontrado");
-        const data = await obtenerNotasPorUsuario(id_usuario);
-        setEntradas(data.reverse());
-      } catch (error) {
-        console.error("❌ Error cargando notas:", error);
-      }
-    };
     cargarNotas();
   }, []);
 
@@ -48,8 +49,28 @@ const Diario = () => {
     if (vistaActual === "historial") setCurrentPage(1);
   }, [vistaActual]);
 
+  // 🔹 Eliminar entrada localmente
   const eliminarEntrada = (id) => {
     setEntradas((prev) => prev.filter((e) => e.id !== id));
+  };
+
+  // ✅ Actualizar automáticamente el historial cuando se agrega una nueva entrada
+  const handleGuardarNuevaEntrada = (nuevaEntrada) => {
+    if (!nuevaEntrada) return;
+    setEntradas((prev) => [nuevaEntrada, ...prev]); // Agrega la nueva entrada al inicio
+    setVistaActual("historial"); // Cambia al historial automáticamente
+    setCurrentPage(1); // Muestra en la primera página
+  };
+
+  // ✅ Actualizar automáticamente el historial cuando se edita una entrada existente
+  const handleActualizarEntradaEditada = (entradaEditada) => {
+    if (!entradaEditada) return;
+    setEntradas((prev) =>
+      prev.map((entrada) =>
+        entrada.id === entradaEditada.id ? entradaEditada : entrada
+      )
+    );
+    setVistaActual("historial"); // Cambia al historial actualizado
   };
 
   const renderVista = () => {
@@ -85,7 +106,11 @@ const Diario = () => {
         return (
           <AgregarEntrada
             entrada={entradaEditando}
-            onGuardar={() => setVistaActual("editor")}
+            onGuardar={
+              entradaEditando
+                ? handleActualizarEntradaEditada // ✅ Edición
+                : handleGuardarNuevaEntrada // ✅ Creación
+            }
             onCancelar={() => setVistaActual("editor")}
           />
         );

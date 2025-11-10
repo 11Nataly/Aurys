@@ -27,17 +27,36 @@ const HistorialEntradas = ({
 
   // 🔹 Guardar cambios de edición
   const handleGuardarEdicion = async (notaEditada) => {
-    try {
-      const notaActualizada = await editarNota(notaEditada.id, notaEditada);
-      alert("Nota actualizada correctamente.");
-
-      setMostrandoEditor(false);
-      setNotaEditando(null);
-    } catch (error) {
-      console.error("Error al guardar la nota editada:", error);
-      alert("No se pudo guardar la edición.");
+  try {
+    // 🔹 Validar ID antes de llamar al backend
+    if (!notaEditada || !notaEditada.id) {
+      console.error("❌ Error: nota sin ID, no se puede editar.");
+      alert("No se puede editar esta entrada porque no tiene un ID válido.");
+      return;
     }
-  };
+
+    // 🔹 Enviar solo los campos que el backend acepta
+    const payload = {
+      titulo: notaEditada.titulo,
+      contenido: notaEditada.contenido,
+    };
+
+    const notaActualizada = await editarNota(notaEditada.id, payload);
+    alert("Nota actualizada correctamente.");
+
+    // 🔹 Actualizar lista local para reflejar cambios inmediatamente
+    setEntradasFiltradas((prev) =>
+      prev.map((n) => (n.id === notaEditada.id ? notaActualizada : n))
+    );
+
+    setMostrandoEditor(false);
+    setNotaEditando(null);
+  } catch (error) {
+    console.error("Error al guardar la nota editada:", error);
+    alert(error?.detail || "No se pudo guardar la edición.");
+  }
+};
+
 
   // 🔹 Mover una entrada a la papelera
   const handleMoverAPapelera = async (id) => {
@@ -124,10 +143,11 @@ const HistorialEntradas = ({
               </button>
             </div>
           ) : (
-            <div className="lista-entradas-compacta">
-              {entradasFiltradas.map((entrada) => (
-                <div key={entrada.id} className="entrada-compacta">
-                  <div className="entrada-cabecera">
+                <div className="lista-entradas-compacta">
+                  {entradasFiltradas.map((entrada, index) => (
+                    <div key={entrada.id ?? `entrada-${index}`} className="entrada-compacta">
+
+                      <div className="entrada-cabecera">
                     <div className="entrada-info">
                       <h3 className="entrada-titulo">{entrada.titulo}</h3>
                       <span className="entrada-fecha">
