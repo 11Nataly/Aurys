@@ -5,24 +5,19 @@ import ListaPromesas from '../components/Promesas/ListaPromesas';
 import GraficoProgreso from '../components/Promesas/GraficoProgreso';
 import ModalConfirmacion from '../components/Promesas/ModalConfirmacion';
 import Breadcrumb from '../components/Breadcrumb/Breadcrumb';
-import Pagination from '../components/Pagination/Pagination';
 import '../../styles/Promesas.css';
 
 const Promesas = () => {
   const [promesas, setPromesas] = useState([]);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [promesaSeleccionada, setPromesaSeleccionada] = useState(null);
-  const [filtroEstado, setFiltroEstado] = useState('activas');
+  const [filtroEstado, setFiltroEstado] = useState('activas'); // 'activas', 'finalizadas'
   const [modalConfirmacion, setModalConfirmacion] = useState({
     mostrar: false,
-    tipo: '',
+    tipo: '', // 'finalizar', 'reactivar'
     promesaId: null,
     titulo: ''
   });
-
-  // ✅ 1. ESTADOS PARA PAGINACIÓN - REDUCIR itemsPerPage PARA VER PAGINACIÓN
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 2; // ✅ Cambiar a 2 para ver paginación con tus 4 promesas
 
   useEffect(() => {
     // Simular carga de datos
@@ -39,53 +34,25 @@ const Promesas = () => {
     }
   }, []);
 
-  // ✅ 2. FILTRAR PROMESAS SEGÚN ESTADO
+  // Filtrar promesas según el estado seleccionado
   const promesasFiltradas = promesas.filter(promesa => {
     if (filtroEstado === 'activas') return promesa.estado === 'activa';
     if (filtroEstado === 'finalizadas') return promesa.estado === 'finalizada';
     return true;
   });
 
-  // ✅ 3. CÁLCULO DE PROMESAS PAGINADAS
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const promesasPaginadas = promesasFiltradas.slice(startIndex, endIndex);
-
-  // ✅ 4. DEBUG: VERIFICAR QUE LA PAGINACIÓN FUNCIONE
-  console.log('🔍 DEBUG PAGINACIÓN:', {
-    totalPromesas: promesas.length,
-    promesasFiltradas: promesasFiltradas.length,
-    promesasPaginadas: promesasPaginadas.length,
-    currentPage,
-    itemsPerPage,
-    startIndex,
-    endIndex,
-    shouldShowPagination: promesasFiltradas.length > itemsPerPage
-  });
-
-  // ✅ 5. MANEJADOR DE CAMBIO DE PÁGINA
-  const handlePageChange = (page) => {
-    console.log('📄 Cambiando a página:', page);
-    setCurrentPage(page);
-  };
-
-  // ✅ 6. RESETEAR PAGINACIÓN AL CAMBIAR FILTRO
-  useEffect(() => {
-    console.log('🔄 Reseteando a página 1 por cambio de filtro:', filtroEstado);
-    setCurrentPage(1);
-  }, [filtroEstado]);
-
-  // ✅ 7. RESETEAR PAGINACIÓN AL CREAR/ELIMINAR PROMESAS
   const handleCrearPromesa = (nuevaPromesa) => {
+
     const fechaFinalizacion = new Date();
-    fechaFinalizacion.setMonth(fechaFinalizacion.getMonth() + 3);
+    fechaFinalizacion.setMonth(fechaFinalizacion.getMonth() + 3); // 3 meses desde hoy
+
 
     const promesa = {
       ...nuevaPromesa,
       id: Date.now(),
       estado: 'activa',
       fechaCreacion: new Date().toISOString().split('T')[0],
-      fechaFinalizacion: fechaFinalizacion.toISOString().split('T')[0],
+      fechaFinalizacion: fechaFinalizacion.toISOString().split('T')[0], // 3 meses en el futuro
       progreso: {
         fallosHoy: 0,
         fallosSemana: 0,
@@ -100,13 +67,12 @@ const Promesas = () => {
     const nuevasPromesas = [...promesas, promesa];
     setPromesas(nuevasPromesas);
     
+    // Si estamos en activas, seleccionar la nueva promesa
     if (filtroEstado === 'activas') {
       setPromesaSeleccionada(promesa);
     }
     
     setMostrarFormulario(false);
-    setCurrentPage(1); // ✅ Resetear paginación
-    console.log('✅ Nueva promesa creada, página resetada a 1');
   };
 
   const handleRegistrarFallo = (promesaId) => {
@@ -164,6 +130,7 @@ const Promesas = () => {
           fechaFinalizacion: new Date().toISOString().split('T')[0]
         };
         
+        // Si la promesa finalizada estaba seleccionada, mantenerla seleccionada pero actualizada
         if (promesaSeleccionada && promesaSeleccionada.id === promesaId) {
           setPromesaSeleccionada(promesaFinalizada);
         }
@@ -185,6 +152,7 @@ const Promesas = () => {
           fechaFinalizacion: '2024-12-31'
         };
         
+        // Si la promesa reactivada estaba seleccionada, actualizarla
         if (promesaSeleccionada && promesaSeleccionada.id === promesaId) {
           setPromesaSeleccionada(promesaReactivada);
         }
@@ -233,11 +201,6 @@ const Promesas = () => {
     if (promesaSeleccionada && promesaSeleccionada.id === promesaId) {
       setPromesaSeleccionada(nuevasPromesas.length > 0 ? nuevasPromesas.find(p => p.estado === filtroEstado.slice(0, -1)) || nuevasPromesas[0] : null);
     }
-    
-    // ✅ Ajustar paginación si es necesario
-    if (promesasPaginadas.length === 1 && currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
   };
 
   return (
@@ -250,6 +213,7 @@ const Promesas = () => {
           ]} 
         />
         
+        {/* 🟣 Encabezado general de la página */}
         <div className="promesas-header">
           <div className="header-titles">
             <h1>Promesas</h1>
@@ -292,21 +256,16 @@ const Promesas = () => {
 
         {/* Layout de Dos Columnas */}
         <div className="promesas-layout">
-          {/* 🟦 Columna izquierda — Panel de promesas CON PAGINACIÓN */}
+          {/* 🟦 Columna izquierda — Panel de promesas */}
           <div className="panel-izquierdo">
             <div className="panel-header">
               <h2>
                 {filtroEstado === 'activas' ? 'Promesas activas' : 'Promesas finalizadas'}
-                {/* ✅ 8. MOSTRAR INFO DE PAGINACIÓN EN EL HEADER */}
-                <span className="paginacion-info-header">
-                  (Página {currentPage} de {Math.ceil(promesasFiltradas.length / itemsPerPage)})
-                </span>
               </h2>
             </div>
             <div className="panel-content">
-              {/* ✅ 9. PASAR SOLO LAS PROMESAS PAGINADAS */}
               <ListaPromesas
-                promesas={promesasPaginadas}
+                promesas={promesasFiltradas}
                 onRegistrarFallo={handleRegistrarFallo}
                 onFinalizarPromesa={mostrarModalFinalizar}
                 onReactivarPromesa={mostrarModalReactivar}
@@ -316,23 +275,6 @@ const Promesas = () => {
                 promesaSeleccionada={promesaSeleccionada}
                 filtroEstado={filtroEstado}
               />
-              
-              {/* ✅ 10. PAGINACIÓN - AHORA DEBERÍA MOSTRARSE CON itemsPerPage = 2 */}
-              {promesasFiltradas.length > itemsPerPage && (
-                <div className="promesas-pagination-container">
-                  <Pagination
-                    currentPage={currentPage}
-                    totalItems={promesasFiltradas.length}
-                    itemsPerPage={itemsPerPage}
-                    onPageChange={handlePageChange}
-                    maxVisiblePages={3}
-                    className="promesas-pagination"
-                    showTotal={true}
-                    showPageNumbers={true}
-                    showNavigation={true}
-                  />
-                </div>
-              )}
             </div>
           </div>
 

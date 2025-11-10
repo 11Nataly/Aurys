@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { listarTecnicas, actualizarEstadoTecnica } from "../../services/tecnicasServicejoven";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
-import Pagination from "../components/Pagination/Pagination"; // ✅ IMPORTAR COMPONENTE DE PAGINACIÓN
 import { FaStar, FaRegStar, FaHeart, FaRegHeart } from "react-icons/fa";
 import "../../styles/afrontamiento.css";
 
@@ -10,15 +9,11 @@ const Afrontamiento = () => {
   const [selected, setSelected] = useState(null);
   const [verMas, setVerMas] = useState(false);
   const [mostrarFavoritos, setMostrarFavoritos] = useState(false);
-  
-  // ✅ ESTADOS PARA PAGINACIÓN
-  const [currentPage, setCurrentPage] = useState(1); // Página actual (empieza en 1)
-  const itemsPerPage = 6; // Número de técnicas a mostrar por página
 
   useEffect(() => {
     const fetchTecnicas = async () => {
       try {
-        const userId = localStorage.getItem("id_usuario");
+        const userId = localStorage.getItem("id_usuario"); // ✅ usar la misma clave
         const data = await listarTecnicas(userId);
         setTecnicas(data);
       } catch (error) {
@@ -27,16 +22,6 @@ const Afrontamiento = () => {
     };
     fetchTecnicas();
   }, []);
-
-  // ✅ FILTRAR TÉCNICAS SEGÚN FAVORITOS
-  const tecnicasFiltradas = mostrarFavoritos
-    ? tecnicas.filter((t) => t.favorita)
-    : tecnicas;
-
-  // ✅ CÁLCULO DE PAGINACIÓN - OBTENER SOLO LAS TÉCNICAS DE LA PÁGINA ACTUAL
-  const startIndex = (currentPage - 1) * itemsPerPage; // Índice inicial (ej: página 2: (2-1)*6 = 6)
-  const endIndex = startIndex + itemsPerPage; // Índice final (ej: 6 + 6 = 12)
-  const paginatedTecnicas = tecnicasFiltradas.slice(startIndex, endIndex); // Cortar array para mostrar solo técnicas de esta página
 
   const abrirModal = (tecnica) => {
     setSelected(tecnica);
@@ -49,7 +34,7 @@ const Afrontamiento = () => {
 
   // ⭐ Calificar técnica
   const handleCalificar = async (id, estrellas) => {
-    const userId = localStorage.getItem("id_usuario");
+    const userId = localStorage.getItem("id_usuario"); // ✅ corregido
     try {
       setTecnicas((prev) =>
         prev.map((t) => (t.id === id ? { ...t, calificacion: estrellas } : t))
@@ -62,34 +47,28 @@ const Afrontamiento = () => {
 
   // ❤️ Marcar o quitar favorito
   const toggleFavorito = async (id) => {
-    const userId = localStorage.getItem("id_usuario");
+    const userId = localStorage.getItem("id_usuario"); // ✅ corregido
     const tecnica = tecnicas.find((t) => t.id === id);
     const nuevoEstado = !tecnica.favorita;
 
     try {
+      // Actualiza visualmente
       setTecnicas((prev) =>
         prev.map((t) =>
           t.id === id ? { ...t, favorita: nuevoEstado } : t
         )
       );
+
+      // ✅ Llama al backend pasando el nuevo estado del favorito
       await actualizarEstadoTecnica(id, userId, null, nuevoEstado);
     } catch (error) {
       console.error("Error al actualizar favorito:", error);
     }
   };
 
-  // ✅ RESETEAR A PÁGINA 1 CUANDO CAMBIE EL FILTRO DE FAVORITOS
-  // Esto evita que el usuario quede en una página que no existe después de filtrar
-  React.useEffect(() => {
-    setCurrentPage(1); // Siempre volver a la primera página al cambiar filtros
-  }, [mostrarFavoritos]);
-
-  // ✅ MANEJADOR DE CAMBIO DE PÁGINA
-  const handlePageChange = (page) => {
-    setCurrentPage(page); // Actualizar la página actual
-    // Scroll suave hacia arriba para mejor experiencia de usuario
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const tecnicasFiltradas = mostrarFavoritos
+    ? tecnicas.filter((t) => t.favorita)
+    : tecnicas;
 
   return (
     <>
@@ -112,9 +91,8 @@ const Afrontamiento = () => {
           </div>
         </div>
 
-        {/* ✅ MOSTRAR SOLO LAS TÉCNICAS PAGINADAS (NO TODAS) */}
         <div className="tecnicas-grid">
-          {paginatedTecnicas.map((tecnica) => (
+          {tecnicasFiltradas.map((tecnica) => (
             <div key={tecnica.id} className="tecnica-card">
               <div className="card-header">
                 <h3 className="tecnica-titulo">{tecnica.nombre}</h3>
@@ -167,20 +145,6 @@ const Afrontamiento = () => {
             </div>
           ))}
         </div>
-
-        {/* ✅ COMPONENTE DE PAGINACIÓN - SE RENDERIZA SOLO SI HAY SUFICIENTES ELEMENTOS */}
-        <Pagination
-          currentPage={currentPage} // Página actual seleccionada
-          totalItems={tecnicasFiltradas.length} // Total de técnicas después del filtro
-          itemsPerPage={itemsPerPage} // Técnicas por página (6)
-          onPageChange={handlePageChange} // Función que se ejecuta al cambiar de página
-          maxVisiblePages={5} // Máximo de números de página visibles en la navegación
-          className="afrontamiento-pagination" // Clase CSS personalizada
-          // Props opcionales con valores por defecto:
-          // showTotal={true} - Muestra "Mostrando X-Y de Z elementos"
-          // showPageNumbers={true} - Muestra los números de página
-          // showNavigation={true} - Muestra botones anterior/siguiente
-        />
 
         {selected && (
           <div className="modal-overlay">
