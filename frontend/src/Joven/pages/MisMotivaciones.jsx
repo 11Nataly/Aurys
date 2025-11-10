@@ -1,3 +1,4 @@
+// frontend/src/Joven/pages/MisMotivaciones.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 import "../components/MisMotivaciones/motivaciones/motivaciones.css";
@@ -9,19 +10,20 @@ import ListaMotivaciones from "../components/MisMotivaciones/motivaciones/ListaM
 import EditarMotivacion from "../components/MisMotivaciones/motivaciones/EditarMotivacion";
 import AgregarMotivacion from "../components/MisMotivaciones/motivaciones/AgregarMotivacion";
 
+// Datos falsos locales
 import motivacionesData from "../fake_data/motivaciones.json";
 import categoriasData from "../fake_data/categorias.json";
 
 const MisMotivaciones = () => {
+  // Asegurar usuario en localStorage
   useEffect(() => {
     if (!localStorage.getItem("id_usuario")) {
       localStorage.setItem("id_usuario", "1");
     }
   }, []);
 
-  const [categorias, setCategorias] = useState(
-    categoriasData.filter((c) => c.activo === 1)
-  );
+  // Estados principales
+  const [categorias] = useState(categoriasData.filter((c) => c.activo === 1));
   const [motivaciones, setMotivaciones] = useState(
     motivacionesData.filter((m) => m.activo === 1)
   );
@@ -31,14 +33,8 @@ const MisMotivaciones = () => {
   const [query, setQuery] = useState("");
   const [mostrarAgregar, setMostrarAgregar] = useState(false);
   const [motivacionEditando, setMotivacionEditando] = useState(null);
-  const [refrescarMotivaciones, setRefrescarMotivaciones] = useState(0); // 👈 nuevo
 
-  // ✅ Este callback se ejecuta cuando ListaCategorias detecta un cambio (crear/eliminar)
-  const handleCategoriasChange = () => {
-    console.log("🔁 Categorías cambiaron, refrescando motivaciones...");
-    setRefrescarMotivaciones((prev) => prev + 1);
-  };
-
+  // Handlers
   const handleAgregarMotivacion = (nueva) => {
     setMotivaciones((prev) => [nueva, ...prev]);
     setMostrarAgregar(false);
@@ -67,8 +63,10 @@ const MisMotivaciones = () => {
     setMotivacionEditando(null);
   };
 
+  // Filtros memorizados
   const motivacionesFiltradas = useMemo(() => {
     let list = [...motivaciones];
+
     if (categoriaSeleccionada) {
       list = list.filter(
         (m) => Number(m.categoria_id) === Number(categoriaSeleccionada)
@@ -92,21 +90,25 @@ const MisMotivaciones = () => {
     return list;
   }, [motivaciones, categoriaSeleccionada, soloFavoritas, query]);
 
+  // Render principal
   return (
     <div className="mm-page">
       <Breadcrumb />
 
       <div className="mm-container">
         <div className="mm-layout">
+          {/* Sidebar de categorías */}
           <aside className="mm-sidebar">
             <ListaCategorias
               initialCategorias={categorias}
               onSelectCategoria={setCategoriaSeleccionada}
-              onCategoriasChange={handleCategoriasChange} // 👈 agregado
             />
           </aside>
 
+          {/* Contenido principal */}
           <main className="mm-main">
+            {/* Toolbar */}
+            {/* Toolbar */}
             <div className="mm-toolbar">
               <div className="mm-toolbar-left">
                 {categoriaSeleccionada ? (
@@ -119,6 +121,7 @@ const MisMotivaciones = () => {
                         )?.nombre
                       }
                     </strong>
+                    {/* 🔹 Botón para limpiar el filtro */}
                     <button
                       className="btn-limpiar-filtro"
                       onClick={() => setCategoriaSeleccionada(null)}
@@ -139,15 +142,36 @@ const MisMotivaciones = () => {
               </div>
             </div>
 
-            {/* 👇 usamos la clave para forzar re-render al cambiar categorías */}
+            {/* Lista de motivaciones */}
             <ListaMotivaciones
-              key={refrescarMotivaciones}
+              initialMotivaciones={motivacionesFiltradas}
+              onEliminar={handleEliminarMotivacion}
+              onToggleFavorita={handleToggleFavorita}
+              onEditar={handleEditarMotivacion}
+              onRequestAgregar={() => setMostrarAgregar(true)}
               query={query}
               setQuery={setQuery}
             />
           </main>
         </div>
       </div>
+
+      {/* Modal Agregar */}
+      {mostrarAgregar && (
+        <AgregarMotivacion
+          onCerrar={() => setMostrarAgregar(false)}
+          onGuardar={handleAgregarMotivacion}
+        />
+      )}
+
+      {/* Modal Editar */}
+      {motivacionEditando && (
+        <EditarMotivacion
+          motivacion={motivacionEditando}
+          onCerrar={() => setMotivacionEditando(null)}
+          onGuardar={handleActualizarMotivacion}
+        />
+      )}
     </div>
   );
 };
