@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+// frontend/src/joven/components/MisMotivaciones/motivaciones/listarMotivaciones.jsx
+import { useEffect, useState, useMemo } from "react";
 import TarjetaMotivacion from "./TarjetaMotivacion";
 import AgregarMotivacion from "./AgregarMotivacion";
-import EditarMotivacion from "./EditarMotivacion";
 import FiltrosMotivaciones from "./FiltrosMotivaciones";
 import "./motivaciones.css";
 

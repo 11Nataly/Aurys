@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import NuevaCategoria from "../categorias/NuevaCategoria";
+import "./AgregarMotivacion.css"; // Reutiliza los mismos estilos
+
 import {
   editarMotivacion,
   editarImagenMotivacion,
@@ -8,6 +10,7 @@ import {
 import { listarCategoriasActivas } from "../../../../services/categoriaService";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import "./AgregarMotivacion.css";
+
 
 const EditarMotivacion = ({ motivacion, onCerrar, onGuardar }) => {
   const [titulo, setTitulo] = useState("");
@@ -157,7 +160,9 @@ const EditarMotivacion = ({ motivacion, onCerrar, onGuardar }) => {
               <select value={categoria} onChange={(e) => setCategoria(e.target.value)}>
                 <option value="">Selecciona categoría</option>
                 {categorias.map((c) => (
-                  <option key={c.id} value={c.id}>{c.nombre}</option>
+                  <option key={c.id} value={c.id}>
+                    {c.nombre}
+                  </option>
                 ))}
               </select>
 
@@ -180,11 +185,34 @@ const EditarMotivacion = ({ motivacion, onCerrar, onGuardar }) => {
               <span style={{ marginLeft: "8px" }}>{favorita ? "Marcar como no favorita" : "Marcar como favorita"}</span>
             </div>
           </div>
+
+          {/* Imagen */}
+          <div className="contenedor-imagen">
+            <input
+              type="file"
+              id="input-imagen"
+              accept="image/*"
+              onChange={handleImagenChange}
+            />
+            <label htmlFor="input-imagen">
+              Arrastra una imagen o haz clic para cambiar
+            </label>
+
+            {imagen && (
+              <div className="vista-previa-imagen">
+                <img src={imagen} alt="Vista previa" />
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="modal-footer">
-          <button className="btn-cancelar" onClick={onCerrar}>Cancelar</button>
-          <button className="btn-guardar" onClick={handleGuardar}>Guardar cambios</button>
+          <button className="btn-cancelar" onClick={onCerrar}>
+            Cancelar
+          </button>
+          <button className="btn-guardar" onClick={handleGuardar}>
+            Guardar cambios
+          </button>
         </div>
 
         {mostrarModalCategoria && <NuevaCategoria onCerrar={() => setMostrarModalCategoria(false)} onGuardar={handleAgregarCategoria} />}

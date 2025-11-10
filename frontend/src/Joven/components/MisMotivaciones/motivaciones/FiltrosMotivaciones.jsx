@@ -1,24 +1,42 @@
-
-
 // frontend/src/Joven/components/MisMotivaciones/motivaciones/FiltrosMotivaciones.jsx
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
+import Fuse from "fuse.js";
 import "./motivaciones.css";
 
 const FiltrosMotivaciones = ({
+  motivaciones = [],
+  onResultados = () => {},
   filtroFavoritas,
   setFiltroFavoritas,
-  query,
-  setQuery,
 }) => {
-  const [busqueda, setBusqueda] = useState(query || "");
+  const [busqueda, setBusqueda] = useState("");
 
-  // 🔹 Actualiza el valor global del buscador con un pequeño retraso (mejor UX)
-  useEffect(() => {
-    const delay = setTimeout(() => {
-      setQuery(busqueda);
-    }, 300);
-    return () => clearTimeout(delay);
-  }, [busqueda, setQuery]);
+  // Configuración de Fuse.js
+  const fuse = useMemo(() => {
+    return new Fuse(motivaciones, {
+      keys: ["titulo", "descripcion"],
+      threshold: 0.4,
+      includeScore: true,
+    });
+  }, [motivaciones]);
+
+  const handleBuscar = (e) => {
+    const valor = e.target.value;
+    setBusqueda(valor);
+
+    if (!valor.trim()) {
+      onResultados(motivaciones);
+      return;
+    }
+
+    try {
+      const resultados = fuse.search(valor).map((res) => res.item);
+      onResultados(resultados);
+    } catch (err) {
+      console.error("Error en búsqueda:", err);
+      onResultados(motivaciones);
+    }
+  };
 
   return (
     <div className="filtros-barra">
@@ -26,11 +44,11 @@ const FiltrosMotivaciones = ({
         type="text"
         placeholder="Buscar motivaciones por título o descripción..."
         value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
+        onChange={handleBuscar}
         className="input-buscar-motivacion"
       />
 
-     <button
+      <button
         className={filtroFavoritas ? "favorito-activo" : "favorito-inactivo"}
         onClick={() => setFiltroFavoritas(!filtroFavoritas)}
       >
