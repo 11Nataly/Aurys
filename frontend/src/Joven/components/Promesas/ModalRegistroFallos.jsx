@@ -1,56 +1,84 @@
 import React, { useState } from 'react';
 import './ModalRegistroFallos.css';
+import { registrarFallo } from '../../../services/fallosService'; // ✅ Importa el servicio backend
 
 const ModalRegistroFallos = ({ promesa, onConfirmar, onCancelar }) => {
   const [cantidad, setCantidad] = useState(1);
+  const [descripcion, setDescripcion] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  // Verificar si la promesa está en período activo
+  // 🧠 Verificar si la promesa está en período activo
   const estaEnPeriodoActivo = () => {
-    if (promesa.estado !== 'activa') return false;
-    
+    if (promesa.estado !== 'activo') return false;
+
     const hoy = new Date();
     const fechaFinal = new Date(promesa.fechaFinalizacion);
     const fechaInicio = new Date(promesa.fechaCreacion);
-    
+
     return hoy >= fechaInicio && hoy <= fechaFinal;
   };
 
   const puedeRegistrarFallo = estaEnPeriodoActivo();
 
-  const handleConfirmar = () => {
-    if (puedeRegistrarFallo) {
-      onConfirmar(cantidad);
+  // 🧩 Lógica de registro (con backend)
+  const handleConfirmar = async () => {
+    if (!puedeRegistrarFallo) return;
+
+    if (!descripcion.trim()) {
+      alert('Por favor, describe brevemente el fallo.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // 🔹 Llamada al backend
+      await registrarFallo({
+        promesa_id: promesa.id,
+        descripcion: descripcion.trim(),
+      });
+
+      alert('✅ Fallo registrado con éxito');
+      if (onConfirmar) onConfirmar(); // Refrescar lista
+    } catch (error) {
+      console.error('Error al registrar el fallo:', error);
+      alert('❌ No se pudo registrar el fallo.');
+    } finally {
+      setLoading(false);
     }
   };
 
   const obtenerMensajeEstado = () => {
     if (!estaEnPeriodoActivo()) {
-      return "Esta promesa ha finalizado su período. No puedes registrar más fallos.";
+      return 'Esta promesa ha finalizado su período. No puedes registrar más fallos.';
     }
-    
+
     if (promesa.frecuencia === 'diaria') {
       const fallosHoy = promesa.progreso.fallosHoy || 0;
       const restantes = promesa.fallosPermitidos - fallosHoy;
-      
+
       if (restantes <= 0) {
-        return "Has alcanzado el límite de fallos permitidos para hoy.";
+        return 'Has alcanzado el límite de fallos permitidos para hoy.';
       }
       return `Puedes registrar hasta ${restantes} fallo(s) más hoy.`;
     }
-    
-    return "¿Estás seguro de que quieres registrar este fallo?";
+
+    return '¿Estás seguro de que quieres registrar este fallo?';
   };
 
   return (
     <div className="modal-registro-overlay">
       <div className="modal-registro">
         <h2>Registrar Fallo</h2>
-        
+
         <div className="modal-content">
           <div className="promesa-info">
             <h3>{promesa.titulo}</h3>
-            <p>Frecuencia: <strong>{promesa.frecuencia}</strong></p>
-            <p>Fallos permitidos: <strong>{promesa.fallosPermitidos}</strong></p>
+            <p>
+              Frecuencia: <strong>{promesa.frecuencia}</strong>
+            </p>
+            <p>
+              Fallos permitidos: <strong>{promesa.fallosPermitidos}</strong>
+            </p>
           </div>
 
           <div className={`estado-alerta ${!puedeRegistrarFallo ? 'inactiva' : ''}`}>
@@ -58,18 +86,31 @@ const ModalRegistroFallos = ({ promesa, onConfirmar, onCancelar }) => {
           </div>
 
           {puedeRegistrarFallo && (
-            <div className="control-cantidad">
-              <label htmlFor="cantidadFallos">Cantidad de fallos:</label>
-              <input
-                type="number"
-                id="cantidadFallos"
-                min="1"
-                max={promesa.fallosPermitidos - (promesa.progreso.fallosHoy || 0)}
-                value={cantidad}
-                onChange={(e) => setCantidad(parseInt(e.target.value) || 1)}
-                disabled={!puedeRegistrarFallo}
-              />
-            </div>
+            <>
+              <div className="control-cantidad">
+                <label htmlFor="cantidadFallos">Cantidad de fallos:</label>
+                <input
+                  type="number"
+                  id="cantidadFallos"
+                  min="1"
+                  max={promesa.fallosPermitidos - (promesa.progreso.fallosHoy || 0)}
+                  value={cantidad}
+                  onChange={(e) => setCantidad(parseInt(e.target.value) || 1)}
+                  disabled={loading}
+                />
+              </div>
+
+              <div className="control-descripcion">
+                <label htmlFor="descripcionFallo">Descripción del fallo:</label>
+                <textarea
+                  id="descripcionFallo"
+                  placeholder="Describe brevemente qué ocurrió..."
+                  value={descripcion}
+                  onChange={(e) => setDescripcion(e.target.value)}
+                  disabled={loading}
+                ></textarea>
+              </div>
+            </>
           )}
 
           <div className="detalle-registro">
@@ -83,21 +124,22 @@ const ModalRegistroFallos = ({ promesa, onConfirmar, onCancelar }) => {
         </div>
 
         <div className="modal-actions">
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="btn btn-secondary"
             onClick={onCancelar}
+            disabled={loading}
           >
             Cancelar
           </button>
-          
-          <button 
-            type="button" 
+
+          <button
+            type="button"
             className={`btn ${puedeRegistrarFallo ? 'btn-primary' : 'btn-disabled'}`}
             onClick={handleConfirmar}
-            disabled={!puedeRegistrarFallo}
+            disabled={!puedeRegistrarFallo || loading}
           >
-            Confirmar Fallo
+            {loading ? 'Registrando...' : 'Confirmar Fallo'}
           </button>
         </div>
       </div>

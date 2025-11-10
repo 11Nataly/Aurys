@@ -77,7 +77,7 @@ const TarjetaPromesa = ({
         <div className="tarjeta-info">
           <span className="frecuencia">{promesa.frecuencia}</span>
           <span className={`estado ${promesa.estado}`}>
-            {promesa.estado === 'activa' ? 'En progreso' : 'Finalizada'}
+            {promesa.estado === 'activo' ? 'En progreso' : 'Finalizada'}
           </span>
         </div>
 
@@ -86,7 +86,7 @@ const TarjetaPromesa = ({
         </div>
 
         <div className="tarjeta-actions">
-          {promesa.estado === 'activa' ? (
+          {promesa.estado === 'activo' ? (
             <>
               <button
                 className="btn btn-registrar"
