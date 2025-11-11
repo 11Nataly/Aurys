@@ -31,66 +31,12 @@ const MisMotivaciones = () => {
   const [query, setQuery] = useState("");
   const [mostrarAgregar, setMostrarAgregar] = useState(false);
   const [motivacionEditando, setMotivacionEditando] = useState(null);
-  const [refrescarMotivaciones, setRefrescarMotivaciones] = useState(0); // 👈 nuevo
+  const [refrescarMotivaciones, setRefrescarMotivaciones] = useState(0);
 
-  // ✅ Este callback se ejecuta cuando ListaCategorias detecta un cambio (crear/eliminar)
   const handleCategoriasChange = () => {
     console.log("🔁 Categorías cambiaron, refrescando motivaciones...");
     setRefrescarMotivaciones((prev) => prev + 1);
   };
-
-  const handleAgregarMotivacion = (nueva) => {
-    setMotivaciones((prev) => [nueva, ...prev]);
-    setMostrarAgregar(false);
-  };
-
-  const handleEliminarMotivacion = (id) => {
-    setMotivaciones((prev) => prev.filter((m) => m.id !== id));
-  };
-
-  const handleToggleFavorita = (id) => {
-    setMotivaciones((prev) =>
-      prev.map((m) =>
-        m.id === id ? { ...m, esFavorita: m.esFavorita ? 0 : 1 } : m
-      )
-    );
-  };
-
-  const handleEditarMotivacion = (motivacion) => {
-    setMotivacionEditando(motivacion);
-  };
-
-  const handleActualizarMotivacion = (motivacionEditada) => {
-    setMotivaciones((prev) =>
-      prev.map((m) => (m.id === motivacionEditada.id ? motivacionEditada : m))
-    );
-    setMotivacionEditando(null);
-  };
-
-  const motivacionesFiltradas = useMemo(() => {
-    let list = [...motivaciones];
-    if (categoriaSeleccionada) {
-      list = list.filter(
-        (m) => Number(m.categoria_id) === Number(categoriaSeleccionada)
-      );
-    }
-    if (soloFavoritas) {
-      list = list.filter(
-        (m) => Number(m.esFavorita) === 1 || m.esFavorita === true
-      );
-    }
-    if (query && query.trim()) {
-      const q = query.toLowerCase();
-      list = list.filter(
-        (m) =>
-          String(m.titulo).toLowerCase().includes(q) ||
-          String(m.descripcion || "").toLowerCase().includes(q)
-      );
-    }
-
-    list.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    return list;
-  }, [motivaciones, categoriaSeleccionada, soloFavoritas, query]);
 
   return (
     <div className="mm-page">
@@ -102,7 +48,7 @@ const MisMotivaciones = () => {
             <ListaCategorias
               initialCategorias={categorias}
               onSelectCategoria={setCategoriaSeleccionada}
-              onCategoriasChange={handleCategoriasChange} // 👈 agregado
+              onCategoriasChange={handleCategoriasChange}
             />
           </aside>
 
@@ -134,16 +80,17 @@ const MisMotivaciones = () => {
 
               <div className="mm-toolbar-right">
                 <span className="mm-count">
-                  {motivacionesFiltradas.length} motivaciones
+                  {motivaciones.length} motivaciones
                 </span>
               </div>
             </div>
 
-            {/* 👇 usamos la clave para forzar re-render al cambiar categorías */}
+            {/* 👇 enviamos la categoría seleccionada */}
             <ListaMotivaciones
               key={refrescarMotivaciones}
               query={query}
               setQuery={setQuery}
+              categoriaSeleccionada={categoriaSeleccionada} // 👈 agregado
             />
           </main>
         </div>

@@ -1,8 +1,18 @@
 // src/Joven/pages/Home.jsx
 import React from "react";
 import "../components/Home/home.css";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const irAlDiario = () => {
+    navigate("/joven/diario"); // 👈 ruta de tu página Diario
+  };
+  
+  const IralTecnica = () => {
+    navigate("/joven/afrontamiento"); // 👈 ruta de tu página Diario
+  };
   return (
     <div className="home-container">
       {/* Carta de bienvenida */}
@@ -21,16 +31,22 @@ const Home = () => {
           <div className="card">
             <div className="card-icon">📔</div>
             <h3>Diario Emocional</h3>
-            <p>Registra tus pensamientos y emociones para llevar un seguimiento de tu bienestar mental.</p>
-            <button>Ir al Diario</button>
+            <p>
+              Registra tus pensamientos y emociones para llevar un seguimiento
+              de tu bienestar mental.
+            </p>
+            <button onClick={irAlDiario}>Ir al Diario</button>
           </div>
 
           {/* Tarjeta Afrontamiento */}
           <div className="card">
             <div className="card-icon">🛡️</div>
             <h3>Técnicas de Afrontamiento</h3>
-            <p>Descubre estrategias efectivas para manejar el estrés y la ansiedad en tu día a día.</p>
-            <button>Ver Técnicas</button>
+            <p>
+              Descubre estrategias efectivas para manejar el estrés y la
+              ansiedad en tu día a día.
+            </p>
+            <button onClick={IralTecnica}>Ir al Tecnica</button>
           </div>
         </div>
       </div>
@@ -41,8 +57,7 @@ const Home = () => {
           <div className="emergency-icon">🆘</div>
           <h2 className="emergency-title">Líneas de Emergencia</h2>
         </div>
-        
-        {/* Tabla de líneas de emergencia */}
+
         <table className="emergency-table-kit minimal-version">
           <thead>
             <tr>
