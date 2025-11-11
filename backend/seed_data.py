@@ -1,4 +1,3 @@
-# seed_massive_data.py
 from datetime import date, timedelta
 import random
 from faker import Faker
@@ -17,7 +16,7 @@ fake = Faker("es_ES")
 def run_massive_seed():
     db = SessionLocal()
     try:
-        print("🌱 Generando datos para pruebas (flujo completo de papelera)...")
+        print("🌱 Generando datos para pruebas (flujo completo)...")
 
         # ======================================================
         # 0️⃣ CREAR ROLES
@@ -26,12 +25,13 @@ def run_massive_seed():
         rol_admin = db.query(Rol).filter(Rol.nombre == "administrador").first()
 
         if not rol_usuario:
-            rol_usuario = Rol(id=1, nombre="usuario")
+            rol_usuario = Rol(nombre="usuario")
             db.add(rol_usuario)
         if not rol_admin:
-            rol_admin = Rol(id=2, nombre="administrador")
+            rol_admin = Rol(nombre="administrador")
             db.add(rol_admin)
         db.commit()
+        print("✅ Roles creados o existentes.")
 
         # ======================================================
         # 1️⃣ ADMINISTRADOR
@@ -42,7 +42,7 @@ def run_massive_seed():
                 nombre="Administrador",
                 correo="admin@aurys.com",
                 contrasena=get_password_hash("Admin123!"),
-                rol_id=2,
+                rol_id=rol_admin.id,
                 activo=True,
             )
             db.add(admin)
@@ -61,6 +61,7 @@ def run_massive_seed():
                     descripcion=fake.paragraph(nb_sentences=2),
                     instruccion=fake.sentence(nb_words=8),
                     duracion_video=random.randint(60, 200),
+                    activo=True
                 ))
             db.commit()
             print("✅ Técnicas de afrontamiento creadas.")
@@ -77,7 +78,7 @@ def run_massive_seed():
                     nombre=f"Usuario {i}",
                     correo=correo,
                     contrasena=get_password_hash("Usuario123!"),
-                    rol_id=1,
+                    rol_id=rol_usuario.id,
                     activo=True,
                 )
                 db.add(user)
@@ -93,9 +94,9 @@ def run_massive_seed():
         for user in usuarios:
             print(f"--- Generando datos para {user.nombre} ---")
 
-            # 🟢 Categorías (3 por usuario)
+            # 🟢 Categorías (2 por usuario)
             categorias = []
-            for i in range(3):
+            for i in range(2):
                 cat = Categoria(
                     usuario_id=user.id,
                     nombre=f"Categoría {i + 1} - {user.nombre}",
@@ -116,6 +117,7 @@ def run_massive_seed():
                         categoria_id=cat.id,
                         usuario_id=user.id,
                         activo=True,
+                        esFavorita=random.choice([True, False]),
                     ))
             db.commit()
 
@@ -132,8 +134,8 @@ def run_massive_seed():
                     cumplida=False,
                 ))
 
-            # 📔 Notas de diario (3 por usuario)
-            for _ in range(3):
+            # 📔 Notas de diario (2 por usuario)
+            for _ in range(2):
                 db.add(NotaDiario(
                     usuario_id=user.id,
                     titulo=fake.sentence(nb_words=3),
@@ -145,12 +147,11 @@ def run_massive_seed():
         # ======================================================
         # ✅ Final
         # ======================================================
-        print("✅ Base de datos lista para probar:")
-        print("   - Eliminar categoría ➜ se desactivan sus motivaciones")
-        print("   - Restaurar categoría ➜ se reactivan sus motivaciones")
+        print("\n✅ Base de datos lista para pruebas:")
         print("   - Usuarios: usuario1@aurys.com ... usuario4@aurys.com")
         print("   - Contraseña: Usuario123!")
         print("   - Admin: admin@aurys.com / Admin123!")
+        print("   - Todas las categorías y motivaciones están activas")
 
     except Exception as e:
         db.rollback()

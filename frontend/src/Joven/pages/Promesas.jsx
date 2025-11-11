@@ -5,6 +5,7 @@ import ListaPromesas from "../components/Promesas/ListaPromesas";
 import GraficoProgreso from "../components/Promesas/GraficoProgreso";
 import ModalConfirmacion from "../components/Promesas/ModalConfirmacion";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
+import Pagination from "../components/Pagination/Pagination"; // Asegúrate de importar Pagination
 import "../../styles/Promesas.css";
 
 import {
@@ -14,7 +15,6 @@ import {
   cambiarEstadoCumplida,
   eliminarPromesa,
 } from "../../services/promesaService";
-import { registrarFallo } from "../../services/fallosService";
 
 const Promesas = () => {
   const [promesas, setPromesas] = useState([]);
@@ -27,6 +27,10 @@ const Promesas = () => {
     promesaId: null,
     titulo: "",
   });
+
+  // ✅ Estado para paginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(2); // Número de elementos por página
 
   // ✅ Obtener el ID del usuario autenticado desde localStorage
   const usuarioId = parseInt(localStorage.getItem("id_usuario"));
@@ -52,11 +56,27 @@ const Promesas = () => {
     cargarPromesas();
   }, [usuarioId]);
 
+  // ✅ Filtrar promesas por estado
   const promesasFiltradas = promesas.filter((p) => {
     const esActiva = p.estado === "activo" || p.estado === "En progreso";
     const esFinalizada = p.estado === "finalizada" || p.estado === "Finalizada";
     return filtroEstado === "activas" ? esActiva : esFinalizada;
   });
+
+  // ✅ Lógica de paginación
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const promesasPaginadas = promesasFiltradas.slice(indexOfFirstItem, indexOfLastItem);
+
+  // ✅ Manejar cambio de página
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // ✅ Resetear página cuando cambie el filtro
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filtroEstado]);
 
   const handleCrearPromesa = async (nuevaPromesa) => {
     try {
@@ -222,7 +242,7 @@ const Promesas = () => {
               </h2>
             </div>
             <div className="panel-content">
-              {/* ✅ 9. PASAR SOLO LAS PROMESAS PAGINADAS */}
+              {/* ✅ Ahora promesasPaginadas está definida */}
               <ListaPromesas
                 promesas={promesasPaginadas}
                 onRegistrarFallo={handleRegistrarFallo}
@@ -249,7 +269,7 @@ const Promesas = () => {
                 filtroEstado={filtroEstado}
               />
               
-              {/* ✅ 10. PAGINACIÓN - AHORA DEBERÍA MOSTRARSE CON itemsPerPage = 2 */}
+              {/* ✅ PAGINACIÓN - Ahora todas las variables están definidas */}
               {promesasFiltradas.length > itemsPerPage && (
                 <div className="promesas-pagination-container">
                   <Pagination
