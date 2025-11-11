@@ -24,7 +24,7 @@ const TarjetaPromesa = ({
       const hoy = promesa.progreso?.fallos_hoy || promesa.progreso?.fallosHoy || 0;
       return `${hoy}/${promesa.num_maximo_recaidas} fallos hoy`;
     } else if (promesa.frecuencia === 'semanal') {
-      const semana = promesa.progreso?.fallos_semana || promesa.progreso?.fallosEstaSemana || 0;
+      const semana = promesa.progreso?.fallos_semana || 0;
       return `${semana}/${promesa.num_maximo_recaidas} fallos esta semana`;
     }
     return `${total} fallos totales`;
@@ -51,7 +51,6 @@ const TarjetaPromesa = ({
         <div className="tarjeta-header">
           <h3>{promesa.titulo}</h3>
           <div className="acciones-tarjeta">
-            {/* Botón Editar */}
             <button
               className="btn-icon"
               onClick={(e) => {
@@ -60,10 +59,8 @@ const TarjetaPromesa = ({
               }}
               title="Editar promesa"
             >
-              ✏️
+              
             </button>
-
-            {/* Botón Eliminar */}
             <button
               className="btn-icon"
               onClick={(e) => {
@@ -72,7 +69,7 @@ const TarjetaPromesa = ({
               }}
               title="Eliminar promesa"
             >
-              🗑️
+              
             </button>
           </div>
         </div>

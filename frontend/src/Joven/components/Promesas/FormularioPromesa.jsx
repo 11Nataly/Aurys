@@ -7,71 +7,89 @@ const FormularioPromesa = ({ promesaEditar, onGuardar, onCancelar }) => {
   const [formData, setFormData] = useState({
     titulo: '',
     descripcion: '',
-    frecuencia: '',
-    fallosPermitidos: 10
+    tipo_frecuencia: '', // ✅ corregido
+    num_maximo_recaidas: 10
   });
+
   const [errores, setErrores] = useState({});
   const [cargando, setCargando] = useState(false);
 
-  // 🔹 Si estamos editando, precargar los datos
+  // Cargar datos cuando se edita
   useEffect(() => {
     if (promesaEditar) {
       setFormData({
         titulo: promesaEditar.titulo || '',
         descripcion: promesaEditar.descripcion || '',
-        frecuencia: promesaEditar.tipo_frecuencia || '',
-        fallosPermitidos: promesaEditar.num_maximo_recaidas || 1
+        tipo_frecuencia: promesaEditar.tipo_frecuencia || '', // ✅ corregido
+        num_maximo_recaidas: promesaEditar.num_maximo_recaidas || 1
       });
     }
   }, [promesaEditar]);
 
+  // Validación del formulario
   const validarFormulario = () => {
     const nuevosErrores = {};
     if (!formData.titulo.trim()) nuevosErrores.titulo = 'El título es obligatorio';
-    if (!formData.frecuencia) nuevosErrores.frecuencia = 'Debe seleccionar una frecuencia';
-    if (!formData.fallosPermitidos || formData.fallosPermitidos < 1)
-      nuevosErrores.fallosPermitidos = 'Debe permitir al menos 1 fallo';
+    if (!formData.tipo_frecuencia) nuevosErrores.tipo_frecuencia = 'Selecciona una frecuencia';
+    if (!formData.num_maximo_recaidas || formData.num_maximo_recaidas < 1)
+      nuevosErrores.num_maximo_recaidas = 'Mínimo 1 fallo permitido';
     setErrores(nuevosErrores);
     return Object.keys(nuevosErrores).length === 0;
   };
 
+  // Enviar al backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validarFormulario()) return;
+
     setCargando(true);
 
+    const usuarioId = localStorage.getItem("id_usuario");
+
     const data = {
-      titulo: formData.titulo,
-      descripcion: formData.descripcion,
-      tipo_frecuencia: formData.frecuencia,
-      num_maximo_recaidas: formData.fallosPermitidos,
-      usuario_id: 1 // ⚠️ temporal, reemplázalo por el ID real del usuario logueado
+      titulo: formData.titulo.trim(),
+      descripcion: formData.descripcion.trim(),
+      tipo_frecuencia: formData.tipo_frecuencia, // ✅ corregido
+      num_maximo_recaidas: parseInt(formData.num_maximo_recaidas),
+      usuario_id: usuarioId ? parseInt(usuarioId) : null
     };
 
     try {
       let respuesta;
       if (promesaEditar) {
-        // 🔹 Editar
         respuesta = await editarPromesa(promesaEditar.id, data);
-        console.log("Promesa actualizada:", respuesta);
       } else {
-        // 🔹 Crear
         respuesta = await crearPromesa(data);
-        console.log("Promesa creada:", respuesta);
       }
-
       onGuardar(respuesta);
-      onCancelar(); // cerrar el modal o formulario
+      onCancelar();
     } catch (error) {
-      console.error("Error al guardar la promesa:", error);
-      alert("Ocurrió un error al guardar la promesa. Revisa la consola.");
+      console.error("Error completo:", error);
+      if (error.response) {
+        const datos = error.response.data;
+        const erroresBackend = {};
+        Object.keys(datos).forEach(key => {
+          erroresBackend[key] = Array.isArray(datos[key]) ? datos[key][0] : datos[key];
+        });
+        setErrores(erroresBackend);
+        alert("Error del servidor: " + JSON.stringify(erroresBackend));
+      } else if (error.request) {
+        alert("No se pudo conectar al servidor. ¿Está corriendo en http://localhost:8000?");
+      } else {
+        alert("Error desconocido: " + error.message);
+      }
     } finally {
       setCargando(false);
     }
   };
 
   const handleCancelar = () => {
-    setFormData({ titulo: '', descripcion: '', frecuencia: '', fallosPermitidos: 10 });
+    setFormData({
+      titulo: '',
+      descripcion: '',
+      tipo_frecuencia: '',
+      num_maximo_recaidas: 10
+    });
     setErrores({});
     onCancelar();
   };
@@ -113,15 +131,17 @@ const FormularioPromesa = ({ promesaEditar, onGuardar, onCancelar }) => {
                   <input
                     type="radio"
                     value={f}
-                    checked={formData.frecuencia === f}
-                    onChange={(e) => setFormData({ ...formData, frecuencia: e.target.value })}
+                    checked={formData.tipo_frecuencia === f}
+                    onChange={(e) => setFormData({ ...formData, tipo_frecuencia: e.target.value })}
                   />
                   <span className="radio-custom"></span>
                   {f.charAt(0).toUpperCase() + f.slice(1)}
                 </label>
               ))}
             </div>
-            {errores.frecuencia && <span className="error-message">{errores.frecuencia}</span>}
+            {errores.tipo_frecuencia && (
+              <span className="error-message">{errores.tipo_frecuencia}</span>
+            )}
           </div>
 
           <div className="form-group">
@@ -132,7 +152,10 @@ const FormularioPromesa = ({ promesaEditar, onGuardar, onCancelar }) => {
               min="1"
               value={formData.num_maximo_recaidas}
               onChange={(e) =>
-                setFormData({ ...formData, num_maximo_recaidas: parseInt(e.target.value) || 1 })
+                setFormData({
+                  ...formData,
+                  num_maximo_recaidas: parseInt(e.target.value) || 1
+                })
               }
               className={errores.num_maximo_recaidas ? 'error' : ''}
             />
@@ -151,7 +174,7 @@ const FormularioPromesa = ({ promesaEditar, onGuardar, onCancelar }) => {
               Cancelar
             </button>
             <button type="submit" className="btn btn-primary" disabled={cargando}>
-              {cargando ? 'Guardando...' : promesaEditar ? 'Guardar Cambios' : 'Guardar Promesa'}
+              {cargando ? 'Guardando...' : promesaEditar ? 'Guardar' : 'Crear'}
             </button>
           </div>
         </form>
