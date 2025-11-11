@@ -1,3 +1,4 @@
+// src/pages/Promesas.jsx
 import React, { useState, useEffect } from "react";
 import FormularioPromesa from "../components/Promesas/FormularioPromesa";
 import ListaPromesas from "../components/Promesas/ListaPromesas";
@@ -6,8 +7,13 @@ import ModalConfirmacion from "../components/Promesas/ModalConfirmacion";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 import "../../styles/Promesas.css";
 
-// ✅ Importamos servicios reales
-import { listarPromesas, crearPromesa, editarPromesa } from "../../services/promesaService";
+import {
+  listarPromesas,
+  crearPromesa,
+  editarPromesa,
+  cambiarEstadoCumplida,
+  eliminarPromesa,
+} from "../../services/promesaService";
 import { registrarFallo } from "../../services/fallosService";
 
 const Promesas = () => {
@@ -22,144 +28,81 @@ const Promesas = () => {
     titulo: "",
   });
 
-  // ✅ Cargar promesas desde el backend al iniciar
+  // ✅ Obtener el ID del usuario autenticado desde localStorage
+  const usuarioId = parseInt(localStorage.getItem("id_usuario"));
+
   useEffect(() => {
     const cargarPromesas = async () => {
       try {
-        const usuarioId = 1; // ⚠️ Ajusta según el usuario logueado
+        if (!usuarioId) {
+          console.error("❌ No se encontró el ID del usuario autenticado");
+          return;
+        }
+
         const data = await listarPromesas(usuarioId);
         setPromesas(data);
-        if (data.length > 0) setPromesaSeleccionada(data[0]);
+
+        if (data.length > 0 && !promesaSeleccionada) {
+          setPromesaSeleccionada(data[0]);
+        }
       } catch (error) {
-        console.error("⚠️ Error al cargar promesas del backend:", error);
+        console.error("Error al cargar promesas:", error);
       }
     };
     cargarPromesas();
-  }, []);
+  }, [usuarioId]);
 
-  // ✅ Filtrar promesas según el estado
-  const promesasFiltradas = promesas.filter((promesa) => {
-    if (filtroEstado === "activas") return promesa.estado === "En progreso" || promesa.estado === "activo";
-    if (filtroEstado === "finalizadas") return promesa.estado === "Finalizada" || promesa.estado === "finalizada";
-    return true;
+  const promesasFiltradas = promesas.filter((p) => {
+    const esActiva = p.estado === "activo" || p.estado === "En progreso";
+    const esFinalizada = p.estado === "finalizada" || p.estado === "Finalizada";
+    return filtroEstado === "activas" ? esActiva : esFinalizada;
   });
 
-  // ✅ Crear promesa nueva (conexión backend)
   const handleCrearPromesa = async (nuevaPromesa) => {
     try {
-      const usuarioId = 1;
-      const promesaData = { ...nuevaPromesa, usuario_id: usuarioId };
-      const response = await crearPromesa(promesaData);
+      const data = { ...nuevaPromesa, usuario_id: usuarioId };
+      const response = await crearPromesa(data);
       setPromesas([...promesas, response]);
-      setMostrarFormulario(false);
       setPromesaSeleccionada(response);
+      setMostrarFormulario(false);
     } catch (error) {
-      console.error("❌ Error al crear promesa:", error);
-      alert("No se pudo crear la promesa");
+      alert("Error al crear la promesa");
     }
   };
 
-  // ✅ Registrar fallo (backend + fallback local)
-  const handleRegistrarFallo = async (promesaId) => {
+  const handleRegistrarFallo = async (promesaId, datosActualizados) => {
+    setPromesas(prev =>
+      prev.map(p => (p.id === promesaId ? { ...p, ...datosActualizados } : p))
+    );
+    if (promesaSeleccionada?.id === promesaId) {
+      setPromesaSeleccionada(prev => ({ ...prev, ...datosActualizados }));
+    }
+  };
+
+  const handleFinalizarPromesa = async (promesaId) => {
     try {
-      const falloData = {
-        promesa_id: promesaId,
-        descripcion: "Fallo registrado desde el frontend",
-      };
-      const response = await registrarFallo(falloData);
-
-      console.log("✅ Fallo registrado:", response);
-
-      // 🔹 Actualizamos promesa en la lista
-      setPromesas((prev) =>
-        prev.map((p) =>
-          p.id === promesaId
-            ? {
-                ...p,
-                progreso: response.progreso,
-                historialFallos: response.historialFallos,
-              }
-            : p
-        )
+      await cambiarEstadoCumplida(promesaId, true);
+      setPromesas(prev =>
+        prev.map(p => (p.id === promesaId ? { ...p, estado: "finalizada" } : p))
       );
-
-      // 🔹 Si la promesa seleccionada es la misma, actualizamos también
-      if (promesaSeleccionada?.id === promesaId) {
-        setPromesaSeleccionada((prev) => ({
-          ...prev,
-          progreso: response.progreso,
-          historialFallos: response.historialFallos,
-        }));
-      }
-
-      alert("Fallo registrado correctamente");
     } catch (error) {
-      console.warn("⚠️ No se pudo registrar el fallo en el backend:", error);
-
-      // 🔸 Fallback local
-      setPromesas((prev) =>
-        prev.map((p) => {
-          if (p.id === promesaId && p.estado === "activo") {
-            const nuevoFallo = {
-              fecha: new Date().toISOString().split("T")[0],
-              hora: new Date().toLocaleTimeString(),
-              cantidad: 1,
-            };
-            const pAct = {
-              ...p,
-              progreso: {
-                ...p.progreso,
-                fallosHoy: (p.progreso?.fallosHoy || 0) + 1,
-                totalFallos: (p.progreso?.totalFallos || 0) + 1,
-              },
-              historialFallos: [...(p.historialFallos || []), nuevoFallo],
-            };
-            if (promesaSeleccionada?.id === promesaId) setPromesaSeleccionada(pAct);
-            return pAct;
-          }
-          return p;
-        })
-      );
+      alert("Error al finalizar");
+    } finally {
+      setModalConfirmacion({ mostrar: false });
     }
   };
 
-  // ✅ Finalizar / reactivar / eliminar promesas
-  const mostrarModalFinalizar = (promesaId, titulo) => {
-    setModalConfirmacion({
-      mostrar: true,
-      tipo: "finalizar",
-      promesaId,
-      titulo: `¿Estás seguro de que quieres finalizar la promesa "${titulo}"?`,
-    });
-  };
-
-  const mostrarModalReactivar = (promesaId, titulo) => {
-    setModalConfirmacion({
-      mostrar: true,
-      tipo: "reactivar",
-      promesaId,
-      titulo: `¿Quieres reactivar la promesa "${titulo}"?`,
-    });
-  };
-
-  const handleFinalizarPromesa = (promesaId) => {
-    setPromesas((prev) =>
-      prev.map((p) =>
-        p.id === promesaId
-          ? { ...p, estado: "finalizada", fechaFinalizacion: new Date().toISOString().split("T")[0] }
-          : p
-      )
-    );
-    setModalConfirmacion({ mostrar: false, tipo: "", promesaId: null, titulo: "" });
-  };
-
-  const handleReactivarPromesa = (promesaId) => {
-    setPromesas((prev) =>
-      prev.map((p) =>
-        p.id === promesaId ? { ...p, estado: "activo", fechaFinalizacion: "2024-12-31" } : p
-      )
-    );
-    setModalConfirmacion({ mostrar: false, tipo: "", promesaId: null, titulo: "" });
+  const handleReactivarPromesa = async (promesaId) => {
+    try {
+      await cambiarEstadoCumplida(promesaId, false);
+      setPromesas(prev =>
+        prev.map(p => (p.id === promesaId ? { ...p, estado: "activo" } : p))
+      );
+    } catch (error) {
+      alert("Error al reactivar");
+    } finally {
+      setModalConfirmacion({ mostrar: false });
+    }
   };
 
   const handleConfirmacionModal = () => {
@@ -168,29 +111,54 @@ const Promesas = () => {
     else if (tipo === "reactivar") handleReactivarPromesa(promesaId);
   };
 
-  const handleCancelarModal = () => {
-    setModalConfirmacion({ mostrar: false, tipo: "", promesaId: null, titulo: "" });
-  };
-
-  const handleEditarPromesa = async (promesaId, datosActualizados) => {
+  const handleEditarPromesa = async (promesaId, datos) => {
     try {
-      const response = await editarPromesa(promesaId, datosActualizados);
-      setPromesas((prev) => prev.map((p) => (p.id === promesaId ? response : p)));
-      if (promesaSeleccionada?.id === promesaId) setPromesaSeleccionada(response);
+      const response = await editarPromesa(promesaId, datos);
+
+      setPromesas(prev =>
+        prev.map(p =>
+          p.id === promesaId
+            ? {
+                ...p,
+                ...response,
+                estado: p.estado || "activa",
+                tipo_frecuencia: response.tipo_frecuencia || p.tipo_frecuencia,
+                num_maximo_recaidas:
+                  response.num_maximo_recaidas ?? p.num_maximo_recaidas,
+              }
+            : p
+        )
+      );
+
+      if (promesaSeleccionada?.id === promesaId) {
+        setPromesaSeleccionada(prev => ({
+          ...prev,
+          ...response,
+          tipo_frecuencia: response.tipo_frecuencia || prev.tipo_frecuencia,
+          num_maximo_recaidas:
+            response.num_maximo_recaidas ?? prev.num_maximo_recaidas,
+        }));
+      }
     } catch (error) {
-      console.error("Error al editar promesa:", error);
+      console.error("Error al editar la promesa:", error);
+      alert("Error al editar");
     }
   };
 
-  const handleEliminarPromesa = (promesaId) => {
-    const nuevasPromesas = promesas.filter((p) => p.id !== promesaId);
-    setPromesas(nuevasPromesas);
-    if (promesaSeleccionada?.id === promesaId) {
-      setPromesaSeleccionada(nuevasPromesas[0] || null);
+  const handleEliminarPromesa = async (promesaId) => {
+    if (!window.confirm("¿Mover a la papelera?")) return;
+    try {
+      await eliminarPromesa(promesaId);
+      const nuevas = promesas.filter(p => p.id !== promesaId);
+      setPromesas(nuevas);
+      if (promesaSeleccionada?.id === promesaId) {
+        setPromesaSeleccionada(nuevas[0] || null);
+      }
+    } catch (error) {
+      alert("Error al eliminar");
     }
   };
 
-  // ✅ Renderizado
   return (
     <div className="promesas-page">
       <div className="promesas-container">
@@ -206,7 +174,10 @@ const Promesas = () => {
             <h1>Promesas</h1>
             <p className="subtitle">Pequeñas promesas, grandes cambios</p>
           </div>
-          <button className="btn-nueva-promesa" onClick={() => setMostrarFormulario(true)}>
+          <button
+            className="btn-nueva-promesa"
+            onClick={() => setMostrarFormulario(true)}
+          >
             + Nueva Promesa
           </button>
         </div>
@@ -221,22 +192,22 @@ const Promesas = () => {
         <div className="filtro-container">
           <div className="filtro-estado">
             <button
-              className={`filtro-btn ${filtroEstado === "activas" ? "active" : ""}`}
+              className={`filtro-btn ${
+                filtroEstado === "activas" ? "active" : ""
+              }`}
               onClick={() => setFiltroEstado("activas")}
             >
-              Promesas activas
-              <span className="contador">
-                ({promesas.filter((p) => p.estado === "En progreso" || p.estado === "activo").length})
-              </span>
+              Activas ({promesas.filter(p => p.estado === "activo").length})
             </button>
             <button
-              className={`filtro-btn ${filtroEstado === "finalizadas" ? "active" : ""}`}
+              className={`filtro-btn ${
+                filtroEstado === "finalizadas" ? "active" : ""
+              }`}
               onClick={() => setFiltroEstado("finalizadas")}
             >
-              Promesas finalizadas
-              <span className="contador">
-                ({promesas.filter((p) => p.estado === "Finalizada" || p.estado === "finalizada").length})
-              </span>
+              Finalizadas ({
+                promesas.filter(p => p.estado === "finalizada").length
+              })
             </button>
           </div>
         </div>
@@ -245,15 +216,31 @@ const Promesas = () => {
           <div className="panel-izquierdo">
             <div className="panel-header">
               <h2>
-                {filtroEstado === "activas" ? "Promesas activas" : "Promesas finalizadas"}
+                {filtroEstado === "activas"
+                  ? "Promesas activas"
+                  : "Promesas finalizadas"}
               </h2>
             </div>
             <div className="panel-content">
               <ListaPromesas
                 promesas={promesasFiltradas}
                 onRegistrarFallo={handleRegistrarFallo}
-                onFinalizarPromesa={mostrarModalFinalizar}
-                onReactivarPromesa={mostrarModalReactivar}
+                onFinalizarPromesa={(id, titulo) =>
+                  setModalConfirmacion({
+                    mostrar: true,
+                    tipo: "finalizar",
+                    promesaId: id,
+                    titulo: `¿Finalizar "${titulo}"?`,
+                  })
+                }
+                onReactivarPromesa={(id, titulo) =>
+                  setModalConfirmacion({
+                    mostrar: true,
+                    tipo: "reactivar",
+                    promesaId: id,
+                    titulo: `¿Reactivar "${titulo}"?`,
+                  })
+                }
                 onEditarPromesa={handleEditarPromesa}
                 onEliminarPromesa={handleEliminarPromesa}
                 onSeleccionarPromesa={setPromesaSeleccionada}
@@ -267,7 +254,9 @@ const Promesas = () => {
             <div className="panel-header">
               <h2>Gráfico de progreso</h2>
               {promesaSeleccionada && (
-                <p className="subtitulo-grafico">{promesaSeleccionada.titulo}</p>
+                <p className="subtitulo-grafico">
+                  {promesaSeleccionada.titulo}
+                </p>
               )}
             </div>
             <div className="panel-content">
@@ -275,7 +264,7 @@ const Promesas = () => {
                 <GraficoProgreso promesa={promesaSeleccionada} />
               ) : (
                 <div className="sin-promesa-seleccionada">
-                  <p>Selecciona una promesa para ver tu progreso</p>
+                  <p>Selecciona una promesa para ver su progreso</p>
                 </div>
               )}
             </div>
@@ -286,7 +275,7 @@ const Promesas = () => {
           <ModalConfirmacion
             titulo={modalConfirmacion.titulo}
             onConfirmar={handleConfirmacionModal}
-            onCancelar={handleCancelarModal}
+            onCancelar={() => setModalConfirmacion({ mostrar: false })}
             tipo={modalConfirmacion.tipo}
           />
         )}

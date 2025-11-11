@@ -1,14 +1,15 @@
+// src/components/Promesas/TarjetaPromesa.jsx
 import React, { useState } from 'react';
 import ModalRegistroFallos from './ModalRegistroFallos';
 import ModalEdicionPromesa from './ModalEdicionPromesa';
 import './TarjetaPromesa.css';
 
-const TarjetaPromesa = ({ 
-  promesa, 
-  onRegistrarFallo, 
+const TarjetaPromesa = ({
+  promesa,
+  onRegistrarFallo,
   onFinalizarPromesa,
   onReactivarPromesa,
-  onEditarPromesa, 
+  onEditarPromesa,
   onEliminarPromesa,
   onSeleccionar,
   isSeleccionada,
@@ -18,12 +19,15 @@ const TarjetaPromesa = ({
   const [mostrarModalEdicion, setMostrarModalEdicion] = useState(false);
 
   const obtenerResumenProgreso = () => {
+    const total = promesa.progreso?.total_fallos || promesa.progreso?.totalFallos || 0;
     if (promesa.frecuencia === 'diaria') {
-      return `${promesa.progreso.fallosHoy || 0}/${promesa.fallosPermitidos} fallos hoy`;
+      const hoy = promesa.progreso?.fallos_hoy || promesa.progreso?.fallosHoy || 0;
+      return `${hoy}/${promesa.num_maximo_recaidas} fallos hoy`;
     } else if (promesa.frecuencia === 'semanal') {
-      return `${promesa.progreso.fallosEstaSemana || 0}/${promesa.fallosPermitidos} fallos esta semana`;
+      const semana = promesa.progreso?.fallos_semana || 0;
+      return `${semana}/${promesa.num_maximo_recaidas} fallos esta semana`;
     }
-    return `${promesa.progreso.totalFallos || 0} fallos totales`;
+    return `${total} fallos totales`;
   };
 
   const handleFinalizar = (e) => {
@@ -38,14 +42,16 @@ const TarjetaPromesa = ({
 
   return (
     <>
-      <div 
-        className={`tarjeta-promesa ${isSeleccionada ? 'seleccionada' : ''} ${promesa.estado === 'finalizada' ? 'finalizada' : ''}`}
+      <div
+        className={`tarjeta-promesa ${isSeleccionada ? 'seleccionada' : ''} ${
+          promesa.estado === 'finalizada' ? 'finalizada' : ''
+        }`}
         onClick={onSeleccionar}
       >
         <div className="tarjeta-header">
           <h3>{promesa.titulo}</h3>
           <div className="acciones-tarjeta">
-            <button 
+            <button
               className="btn-icon"
               onClick={(e) => {
                 e.stopPropagation();
@@ -53,9 +59,9 @@ const TarjetaPromesa = ({
               }}
               title="Editar promesa"
             >
-              ✏️
+              
             </button>
-            <button 
+            <button
               className="btn-icon"
               onClick={(e) => {
                 e.stopPropagation();
@@ -63,7 +69,7 @@ const TarjetaPromesa = ({
               }}
               title="Eliminar promesa"
             >
-              🗑️
+              
             </button>
           </div>
         </div>
@@ -121,8 +127,8 @@ const TarjetaPromesa = ({
       {mostrarModalFallo && (
         <ModalRegistroFallos
           promesa={promesa}
-          onConfirmar={() => {
-            onRegistrarFallo(promesa.id);
+          onConfirmar={(datosActualizados) => {
+            onRegistrarFallo(promesa.id, datosActualizados);
             setMostrarModalFallo(false);
           }}
           onCancelar={() => setMostrarModalFallo(false)}

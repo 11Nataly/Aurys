@@ -1,68 +1,58 @@
-import React, { useState } from 'react';
-import './ModalRegistroFallos.css';
-import { registrarFallo } from '../../../services/fallosService'; // ✅ Importa el servicio backend
+// src/components/Promesas/ModalRegistroFallos.jsx
+import React, { useState } from "react";
+import "./ModalRegistroFallos.css";
+import { registrarFallo } from "../../../services/fallosService";
 
 const ModalRegistroFallos = ({ promesa, onConfirmar, onCancelar }) => {
-  const [cantidad, setCantidad] = useState(1);
-  const [descripcion, setDescripcion] = useState('');
+  const [descripcion, setDescripcion] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 🧠 Verificar si la promesa está en período activo
+  // CORREGIDO: Acepta "activo" o "en progreso"
   const estaEnPeriodoActivo = () => {
-    if (promesa.estado !== 'activo') return false;
+    const estado = promesa.estado?.toLowerCase();
+    if (!estado || !["activo", "en progreso"].includes(estado)) return false;
 
     const hoy = new Date();
-    const fechaFinal = new Date(promesa.fechaFinalizacion);
-    const fechaInicio = new Date(promesa.fechaCreacion);
+    const fechaInicio = new Date(promesa.fecha_creacion || promesa.fechaCreacion);
+    const fechaFinal = promesa.fecha_finalizacion || promesa.fechaFinalizacion;
 
-    return hoy >= fechaInicio && hoy <= fechaFinal;
+    if (!fechaInicio) return false;
+    if (hoy < fechaInicio) return false;
+    if (fechaFinal && hoy > new Date(fechaFinal)) return false;
+
+    return true;
   };
 
   const puedeRegistrarFallo = estaEnPeriodoActivo();
 
-  // 🧩 Lógica de registro (con backend)
   const handleConfirmar = async () => {
     if (!puedeRegistrarFallo) return;
-
     if (!descripcion.trim()) {
-      alert('Por favor, describe brevemente el fallo.');
+      alert("Por favor, describe brevemente el fallo.");
       return;
     }
 
     setLoading(true);
     try {
-      // 🔹 Llamada al backend
-      await registrarFallo({
+      const falloData = {
         promesa_id: promesa.id,
         descripcion: descripcion.trim(),
-      });
+      };
 
-      alert('✅ Fallo registrado con éxito');
-      if (onConfirmar) onConfirmar(); // Refrescar lista
+      const response = await registrarFallo(falloData);
+
+      if (onConfirmar && response) {
+        onConfirmar(response);
+      }
+
+      alert("Fallo registrado correctamente");
+      setDescripcion("");
     } catch (error) {
-      console.error('Error al registrar el fallo:', error);
-      alert('❌ No se pudo registrar el fallo.');
+      console.error("Error al registrar el fallo:", error);
+      alert("No se pudo registrar el fallo. Verifica tu conexión.");
     } finally {
       setLoading(false);
     }
-  };
-
-  const obtenerMensajeEstado = () => {
-    if (!estaEnPeriodoActivo()) {
-      return 'Esta promesa ha finalizado su período. No puedes registrar más fallos.';
-    }
-
-    if (promesa.frecuencia === 'diaria') {
-      const fallosHoy = promesa.progreso.fallosHoy || 0;
-      const restantes = promesa.fallosPermitidos - fallosHoy;
-
-      if (restantes <= 0) {
-        return 'Has alcanzado el límite de fallos permitidos para hoy.';
-      }
-      return `Puedes registrar hasta ${restantes} fallo(s) más hoy.`;
-    }
-
-    return '¿Estás seguro de que quieres registrar este fallo?';
   };
 
   return (
@@ -73,73 +63,51 @@ const ModalRegistroFallos = ({ promesa, onConfirmar, onCancelar }) => {
         <div className="modal-content">
           <div className="promesa-info">
             <h3>{promesa.titulo}</h3>
-            <p>
-              Frecuencia: <strong>{promesa.frecuencia}</strong>
-            </p>
-            <p>
-              Fallos permitidos: <strong>{promesa.fallosPermitidos}</strong>
-            </p>
+            <p>Frecuencia: <strong>{promesa.frecuencia}</strong></p>
+            <p>Fallos permitidos: <strong>{promesa.num_maximo_recaidas ?? "—"}</strong></p>
           </div>
 
-          <div className={`estado-alerta ${!puedeRegistrarFallo ? 'inactiva' : ''}`}>
-            <p>{obtenerMensajeEstado()}</p>
+          <div className={`estado-alerta ${!puedeRegistrarFallo ? "inactiva" : ""}`}>
+            {!puedeRegistrarFallo ? (
+              <p>Esta promesa no está activa. No puedes registrar fallos.</p>
+            ) : (
+              <p>Puedes registrar un nuevo fallo.</p>
+            )}
           </div>
 
           {puedeRegistrarFallo && (
-            <>
-              <div className="control-cantidad">
-                <label htmlFor="cantidadFallos">Cantidad de fallos:</label>
-                <input
-                  type="number"
-                  id="cantidadFallos"
-                  min="1"
-                  max={promesa.fallosPermitidos - (promesa.progreso.fallosHoy || 0)}
-                  value={cantidad}
-                  onChange={(e) => setCantidad(parseInt(e.target.value) || 1)}
-                  disabled={loading}
-                />
-              </div>
-
-              <div className="control-descripcion">
-                <label htmlFor="descripcionFallo">Descripción del fallo:</label>
-                <textarea
-                  id="descripcionFallo"
-                  placeholder="Describe brevemente qué ocurrió..."
-                  value={descripcion}
-                  onChange={(e) => setDescripcion(e.target.value)}
-                  disabled={loading}
-                ></textarea>
-              </div>
-            </>
+            <div className="control-descripcion">
+              <label>Descripción del fallo:</label>
+              <textarea
+                placeholder="Describe qué ocurrió..."
+                value={descripcion}
+                onChange={(e) => setDescripcion(e.target.value)}
+                disabled={loading}
+                rows="3"
+              />
+            </div>
           )}
 
           <div className="detalle-registro">
-            <p>
-              <strong>Fecha:</strong> {new Date().toLocaleDateString()}
-            </p>
-            <p>
-              <strong>Hora:</strong> {new Date().toLocaleTimeString()}
-            </p>
+            <p><strong>Fecha:</strong> {new Date().toLocaleDateString("es-CO")}</p>
+            <p><strong>Hora:</strong> {new Date().toLocaleTimeString("es-CO")}</p>
           </div>
         </div>
 
         <div className="modal-actions">
           <button
-            type="button"
             className="btn btn-secondary"
             onClick={onCancelar}
             disabled={loading}
           >
             Cancelar
           </button>
-
           <button
-            type="button"
-            className={`btn ${puedeRegistrarFallo ? 'btn-primary' : 'btn-disabled'}`}
+            className={`btn ${puedeRegistrarFallo ? "btn-primary" : "btn-disabled"}`}
             onClick={handleConfirmar}
-            disabled={!puedeRegistrarFallo || loading}
+            disabled={!puedeRegistrarFallo || loading || !descripcion.trim()}
           >
-            {loading ? 'Registrando...' : 'Confirmar Fallo'}
+            {loading ? "Registrando..." : "Confirmar"}
           </button>
         </div>
       </div>
