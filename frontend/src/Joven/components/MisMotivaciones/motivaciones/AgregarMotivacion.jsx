@@ -1,19 +1,19 @@
 //Frontend/src/Joven/components/MisMotivaciones/motivaciones/AgregarMotivacion.jsx
 import { useState, useEffect } from "react";
-import NuevaCategoria from "../categorias/NuevaCategoria"; // ✅ Importa el mismo modal que ya usasimport { crearMotivacion } from "../../../../services/motivacionService";
-import { listarCategorias } from "../../../../services/categoriaService"; // si ya tienes este servicio
+import NuevaCategoria from "../categorias/NuevaCategoria"; // ✅ Importa el modal de categoría
 import { crearMotivacion } from "../../../../services/motivacionService";
+import { listarCategorias } from "../../../../services/categoriaService";
 import "./AgregarMotivacion.css";
 
 const AgregarMotivacion = ({ onCerrar, onGuardar }) => {
-   // ==============================
+  // ==============================
   // Estados del formulario
   // ==============================
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [imagen, setImagen] = useState(null); // objeto File o base64 (para backend)
   const [preview, setPreview] = useState(""); // solo para mostrar en pantalla
-  const [mostrarModalCategoria, setMostrarModalCategoria] = useState(false)
+  const [mostrarModalCategoria, setMostrarModalCategoria] = useState(false);
   const [categorias, setCategorias] = useState([]); // ✅ debe ser un array y es la lista del backend
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(""); // id seleccionada
 
@@ -21,22 +21,23 @@ const AgregarMotivacion = ({ onCerrar, onGuardar }) => {
   // Cargar categorías reales del backend
   // ==============================
 
- useEffect(() => {
-  const usuario_id = parseInt(localStorage.getItem("id_usuario")) || 1;
+  useEffect(() => {
+    // Usar el valor predeterminado si no existe el ID o si la conversión falla
+    const usuario_id = parseInt(localStorage.getItem("id_usuario")) || 1; 
 
-  const cargarCategorias = async () => {
-    try {
-      const data = await listarCategorias(usuario_id);
-      setCategorias(data);
-    } catch (error) {
-      console.error("Error cargando categorías:", error);
-    }
-  };
+    const cargarCategorias = async () => {
+      try {
+        const data = await listarCategorias(usuario_id);
+        setCategorias(data);
+      } catch (error) {
+        console.error("Error cargando categorías:", error);
+      }
+    };
 
-  cargarCategorias();
-}, []);
+    cargarCategorias();
+  }, []);
 
-    // ==============================
+  // ==============================
   // Imagen: drag & drop o input
   // ==============================
   const handleImagenChange = (e) => {
@@ -48,30 +49,29 @@ const AgregarMotivacion = ({ onCerrar, onGuardar }) => {
   };
 
   const handleDrop = (e) => {
-  e.preventDefault();
-  const file = e.dataTransfer.files[0];
-  if (file) {
-    setImagen(file);
-    setPreview(URL.createObjectURL(file));
-  }
-};
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      setImagen(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
 
   // ==============================
   // Guardar motivación (BACKEND)
   // ==============================
 
-  const handleGuardar = async() => {
+  const handleGuardar = async () => {
     if (!titulo.trim() || !descripcion.trim() || !categoriaSeleccionada) {
       alert("Completa todos los campos.");
       return;
     }
 
-
     const nuevaMotivacion = {
-      id_usuario: parseInt(localStorage.getItem("id_usuario")),
+      usuario_id: parseInt(localStorage.getItem("id_usuario")),
       titulo,
       descripcion,
-      id_categoria: parseInt(categoriaSeleccionada), // 👈 importante si el backend espera un ID numérico
+      categoria_id: parseInt(categoriaSeleccionada), // 👈 importante si el backend espera un ID numérico
       imagen, // objeto File
     };
 
@@ -85,7 +85,7 @@ const AgregarMotivacion = ({ onCerrar, onGuardar }) => {
     }
   };
 
-    // ==============================
+  // ==============================
   // Nueva categoría (modal interno)
   // ==============================
 
@@ -164,19 +164,15 @@ const AgregarMotivacion = ({ onCerrar, onGuardar }) => {
               Arrastra una imagen o haz clic para subir
             </label>
 
-            {imagen && (
-              <div className="vista-previa-imagen">
-                <img src={imagen} alt="Vista previa" />
-              </div>
-            )}
+            {/* NOTA: Eliminé la duplicidad donde se usaba 'imagen' como src, 
+                ya que 'preview' es el URL de objeto que el navegador necesita. */}
             
             {preview && (
               <div className="vista-previa-imagen">
-                <img src={preview} alt="Vista previa" />
+                {/* Usar 'preview' que contiene el URL creado */}
+                <img src={preview} alt="Vista previa" /> 
               </div>
             )}
-
-
           </div>
         </div>
 
