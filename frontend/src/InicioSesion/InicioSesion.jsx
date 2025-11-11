@@ -18,7 +18,7 @@ export default function InicioSesion() {
 
     try {
       await login(correo, contrasena);
-      // Redirección se maneja dentro de authService
+      // 🔁 Redirección se maneja dentro de authService
     } catch (err) {
       setError("Credenciales incorrectas o error en el servidor");
     }
@@ -48,7 +48,7 @@ export default function InicioSesion() {
               <Mail className="input-icon" />
             </div>
 
-            {/* Campo contraseña con ojo */}
+            {/* Campo contraseña */}
             <div className="input-group">
               <input
                 type={mostrarContrasena ? "text" : "password"}

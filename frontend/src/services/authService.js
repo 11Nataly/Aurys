@@ -5,22 +5,26 @@ export const login = async (correo, contrasena) => {
   try {
     console.log("🔑 Iniciando sesión...");
     const response = await api.post("/auth/login", { correo, contrasena });
+    const data = response.data;
 
-    if (response.data.access_token) {
-      const rol = response.data.nombre_rol || response.data.rol || "usuario";
-      localStorage.setItem("token", response.data.access_token);
-      localStorage.setItem("rol", rol);
-      console.log("✅ Login correcto:", rol);
+    // 🧠 Guardar todos los datos necesarios en localStorage
+    localStorage.setItem("token", data.access_token);
+    localStorage.setItem("id_usuario", data.id); // ✅ Guarda el ID correctamente
+    localStorage.setItem("rol", data.nombre_rol);
 
-      // Redirigir por rol
-      if (rol === "administrador") {
-        window.location.href = "/admin";
-      } else {
-        window.location.href = "/joven/home";
-      }
+    console.log("✅ Login correcto:", {
+      id_usuario: data.id,
+      rol: data.nombre_rol,
+    });
+
+    // 🔀 Redirección según el rol
+    if (data.nombre_rol === "administrador") {
+      window.location.href = "/admin";
+    } else {
+      window.location.href = "/joven/home";
     }
 
-    return response.data; // ✅ devolver datos para el componente
+    return data;
   } catch (error) {
     console.error("❌ Error en login:", error);
     throw error;
@@ -30,9 +34,7 @@ export const login = async (correo, contrasena) => {
 // ✅ REGISTER
 export const register = async (usuarioData) => {
   try {
-    console.log("📝 Registrando usuario:", usuarioData);
     const response = await api.post("/auth/register", usuarioData);
-    console.log("✅ Registro completado:", response.data);
     return response.data;
   } catch (error) {
     console.error("❌ Error en registro:", error);
@@ -43,7 +45,7 @@ export const register = async (usuarioData) => {
 // ✅ LOGOUT
 export const logout = () => {
   console.log("🚪 Cerrando sesión...");
-  ["token", "rol", "id_usuario", "nombre_usuario", "correo_usuario"].forEach((item) =>
+  ["token", "rol", "id_usuario"].forEach((item) =>
     localStorage.removeItem(item)
   );
   window.location.href = "/landing";
