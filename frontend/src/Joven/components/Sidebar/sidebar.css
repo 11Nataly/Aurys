@@ -4,7 +4,7 @@
   --text-color-dark: #000000;
   --bg-color-light: #ffffff;
   --bg-color-dark: #000000;
-  --border-color: #848ddb;
+  --border-color: #2f3ec5;
   --shadow-color: rgba(0, 0, 0, 0.1);
   --sidebar-width: 250px;
   --sidebar-collapsed-width: 80px;
@@ -14,14 +14,14 @@
 .sidebar {
   width: var(--sidebar-width);
   background-color: var(--bg-color-light);
-  height: calc(100vh - 60px);
+  height: calc(100vh - 64px);
   position: fixed;
   left: 0;
-  top: 60px;
+  top: 64px;
   padding: 1rem;
   transition: all var(--transition-speed) ease-in-out;
   overflow: hidden;
-  z-index: 900;
+  z-index: 999;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -32,12 +32,18 @@
 
 .sidebar.closed {
   width: var(--sidebar-collapsed-width);
+  padding: 1rem 0.5rem;
 }
 
+/* NAVEGACIÓN - Sin puntos y con buen espaciado */
 .sidebar-nav ul {
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+.sidebar-nav li {
+  margin: 0.5rem 0;
 }
 
 .nav-item {
@@ -45,52 +51,55 @@
   align-items: center;
   gap: 1.2rem;
   padding: 0.8rem 1rem;
-  margin: 0.5rem 0;
   text-decoration: none;
-  color: var(--text-color-dark);
+  color: var(--text-color-dark); /* Color del texto */
   border-radius: 12px;
   transition: all var(--transition-speed) ease;
   white-space: nowrap;
   overflow: hidden;
+  position: relative;
 }
 
-.nav-item:hover {
-  background-color: rgba(132, 141, 219, 0.2);
-  color: var(--primary-color);
-  transform: translateX(5px);
+.sidebar.closed .nav-item {
+  padding: 0.8rem 0.5rem;
+  justify-content: center;
 }
 
-.nav-item.active {
-  background-color: var(--primary-color);
-  color: var(--text-color-light);
-  box-shadow: 0 4px 10px rgba(72, 64, 194, 0.3);
-}
-
+/* ICONOS - Color primario por defecto */
 .nav-icon {
   font-size: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 40px;
+  flex-shrink: 0;
+  color: var(--primary-color); /* Color #4840c2 para los iconos */
+  transition: color var(--transition-speed) ease;
 }
 
-.nav-label {
-  font-size: 1rem;
-  font-weight: 500;
-  opacity: 1;
-  transform: translateX(0);
-  transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
+/* Estados hover - iconos mantienen color primario */
+.nav-item:hover {
+  background-color: rgba(132, 141, 219, 0.2);
+  color: var(--primary-color);
+  transform: translateX(5px);
 }
 
-.sidebar.closed .nav-label {
-  opacity: 0;
-  transform: translateX(-100%);
-  position: absolute;
-  left: 80px;
-  pointer-events: none;
+.nav-item:hover .nav-icon {
+  color: var(--primary-color); /* Mantener color en hover */
 }
 
-/* Estilos para la sección inferior del sidebar */
+/* Estado active - iconos blancos */
+.nav-item.active {
+  background-color: var(--primary-color);
+  color: var(--text-color-light);
+  box-shadow: 0 4px 10px rgba(72, 64, 194, 0.3);
+}
+
+.nav-item.active .nav-icon {
+  color: var(--text-color-light); /* Iconos blancos cuando está activo */
+}
+
+/* SECCIÓN INFERIOR */
 .sidebar-bottom {
   margin-top: auto;
   padding-top: 1rem;
@@ -102,7 +111,6 @@
   align-items: center;
   gap: 1.2rem;
   padding: 0.8rem 1rem;
-  margin: 0.5rem 0;
   text-decoration: none;
   color: var(--text-color-dark);
   border-radius: 12px;
@@ -111,10 +119,30 @@
   overflow: hidden;
 }
 
+.sidebar.closed .sidebar-bottom .nav-item {
+  padding: 0.8rem 0.5rem;
+  justify-content: center;
+}
+
+/* Iconos de la sección inferior - mismo comportamiento */
+.sidebar-bottom .nav-icon {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  color: var(--primary-color); /* Color primario por defecto */
+  transition: color var(--transition-speed) ease;
+}
+
 .sidebar-bottom .nav-item:hover {
   background-color: rgba(132, 141, 219, 0.2);
   color: var(--primary-color);
   transform: translateX(5px);
+}
+
+.sidebar-bottom .nav-item:hover .nav-icon {
+  color: var(--primary-color); /* Mantener color en hover */
 }
 
 .sidebar-bottom .nav-item.active {
@@ -123,44 +151,34 @@
   box-shadow: 0 4px 10px rgba(72, 64, 194, 0.3);
 }
 
-.sidebar-bottom .nav-icon {
-  font-size: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 40px;
+.sidebar-bottom .nav-item.active .nav-icon {
+  color: var(--text-color-light); /* Iconos blancos cuando está activo */
 }
 
 .sidebar.closed .sidebar-bottom .nav-label {
-  opacity: 0;
-  transform: translateX(-100%);
-  position: absolute;
-  left: 80px;
-  pointer-events: none;
+  display: none;
 }
 
-/* Media Queries para pantallas pequeñas - CORREGIDO */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .sidebar {
     width: 280px;
-    top: 55px;
-    height: calc(100vh - 55px);
+    top: 64px;
+    height: calc(100vh - 64px);
     transition: transform var(--transition-speed) ease-in-out;
     transform: translateX(-100%);
-    z-index: 1000;
+    z-index: 998;
   }
   
   .sidebar.open {
     transform: translateX(0);
   }
   
-  /* En móvil, ignoramos la clase closed para la transformación */
   .sidebar.closed {
     transform: translateX(-100%);
     width: 280px;
   }
 
-  /* Los labels siempre ocultos en móvil cuando sidebar está "cerrado" (transformado) */
   .sidebar:not(.open) .nav-label,
   .sidebar:not(.open) .sidebar-bottom .nav-label {
     opacity: 0;
@@ -168,7 +186,7 @@
   }
 }
 
-/* Para pantallas grandes */
+/* ESCRITORIO */
 @media (min-width: 769px) {
   .sidebar {
     transform: translateX(0) !important;

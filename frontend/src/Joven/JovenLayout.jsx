@@ -15,7 +15,7 @@ import Papelera from "./pages/Papelera";
 import MisMotivaciones from "./pages/MisMotivaciones";
 
 export default function JovenLayout() {
-  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 768);
+  const [sidebarOpen, setSidebarOpen] = useState(true); // Siempre abierto por defecto
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   // 🔒 Validar autenticación
@@ -26,18 +26,33 @@ export default function JovenLayout() {
     return <Navigate to="/landing" replace />;
   }
 
-  // Ajuste responsivo
+  // Ajuste responsivo CORREGIDO
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
-      setSidebarOpen(!mobile);
+      
+      // En móvil: cerrar sidebar por defecto
+      // En desktop: abrir sidebar por defecto
+      if (mobile) {
+        setSidebarOpen(false);
+      } else {
+        setSidebarOpen(true);
+      }
     };
+
+    // Ejecutar al montar el componente
+    handleResize();
+    
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+  const toggleSidebar = () => {
+    console.log("Toggle sidebar:", !sidebarOpen); // Para debug
+    setSidebarOpen(!sidebarOpen);
+  };
+
   const closeSidebar = () => isMobile && setSidebarOpen(false);
 
   return (
@@ -45,7 +60,12 @@ export default function JovenLayout() {
       <Header onToggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
       <div className="layout-body">
         <Sidebar isOpen={sidebarOpen} />
-        {isMobile && sidebarOpen && <div className="sidebar-overlay-mobile" onClick={closeSidebar} />}
+        {isMobile && sidebarOpen && (
+          <div 
+            className="sidebar-overlay-mobile" 
+            onClick={closeSidebar} 
+          />
+        )}
         <div className={`main-content ${!sidebarOpen && !isMobile ? "sidebar-collapsed" : ""}`}>
           <Breadcrumb />
           <main className="page-content">
