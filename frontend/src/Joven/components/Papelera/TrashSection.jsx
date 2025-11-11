@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./TrashSection.css";
+import ModalConfirmacion from "./ModalConfirmacion"; // Importa el modal
 import {
   getTrashItems,
   restoreItem,
@@ -16,6 +17,10 @@ export default function TrashSection() {
     categorias: [],
   });
   const [loading, setLoading] = useState(false);
+  
+  // Estado para el modal
+  const [modalOpen, setModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   const tabs = [
     { key: "promesas", label: "Promesas" },
@@ -38,8 +43,12 @@ export default function TrashSection() {
   const loadTrash = async (tipo) => {
     if (!usuarioId) return;
     setLoading(true);
-    const data = await getTrashItems(usuarioId, tipo);
-    setTrashData((prev) => ({ ...prev, [tipo]: data }));
+    try {
+      const data = await getTrashItems(usuarioId, tipo);
+      setTrashData((prev) => ({ ...prev, [tipo]: data }));
+    } catch (error) {
+      console.error("Error cargando papelera:", error);
+    }
     setLoading(false);
   };
 
@@ -49,23 +58,45 @@ export default function TrashSection() {
 
   // 🔹 Restaurar elemento
   const handleRestore = async (tipo, id) => {
-    await restoreItem(tipo, id);
-    await loadTrash(tipo);
+    try {
+      await restoreItem(tipo, id);
+      await loadTrash(tipo);
+    } catch (error) {
+      console.error("Error restaurando elemento:", error);
+    }
   };
 
-  // 🔹 Eliminar elemento permanentemente
-  const handleDelete = async (tipo, id) => {
-    if (window.confirm("¿Eliminar definitivamente este elemento?")) {
-      await deleteItem(tipo, id);
-      await loadTrash(tipo);
+  // 🔹 Abrir modal de confirmación para eliminar
+  const handleDeleteClick = (tipo, id, titulo) => {
+    setItemToDelete({ tipo, id, titulo });
+    setModalOpen(true);
+  };
+
+  // 🔹 Confirmar eliminación
+  const handleConfirmDelete = async () => {
+    if (itemToDelete) {
+      try {
+        await deleteItem(itemToDelete.tipo, itemToDelete.id);
+        await loadTrash(itemToDelete.tipo);
+      } catch (error) {
+        console.error("Error eliminando elemento:", error);
+      }
     }
+    setModalOpen(false);
+    setItemToDelete(null);
+  };
+
+  // 🔹 Cancelar eliminación
+  const handleCancelDelete = () => {
+    setModalOpen(false);
+    setItemToDelete(null);
   };
 
   const currentItems = trashData[activeTab];
 
   return (
     <div className="container">
-      <h1>Papelera</h1>
+      <h1>🗑️ Papelera</h1>
 
       {/* 🔹 Pestañas */}
       <div className="tabs">
@@ -83,36 +114,56 @@ export default function TrashSection() {
       {/* 🔹 Contenido */}
       <div className="trash-section">
         {loading ? (
-          <p>Cargando...</p>
+          <div className="loading">Cargando...</div>
         ) : currentItems?.length > 0 ? (
           currentItems.map((item) => (
             <div key={item.id} className="trash-item">
-              <div className="item-title">{item.titulo || item.nombre}</div>
+              <div className="item-title">
+                {item.titulo || item.nombre || "Sin título"}
+              </div>
               <div className="item-meta">
                 {item.descripcion && <p>{item.descripcion}</p>}
+                {item.fecha_eliminado && (
+                  <small>Eliminado: {new Date(item.fecha_eliminado).toLocaleDateString()}</small>
+                )}
               </div>
               <div className="item-actions">
                 <button
                   className="btn btn-restore"
                   onClick={() => handleRestore(activeTab, item.id)}
                 >
-                  Restaurar
+                  🔄 Restaurar
                 </button>
                 <button
                   className="btn btn-delete"
-                  onClick={() => handleDelete(activeTab, item.id)}
+                  onClick={() => handleDeleteClick(
+                    activeTab, 
+                    item.id, 
+                    item.titulo || item.nombre
+                  )}
                 >
-                  Eliminar
+                  🗑️ Eliminar
                 </button>
               </div>
             </div>
           ))
         ) : (
-          <p className="empty-category">
-            No hay elementos eliminados en esta sección.
-          </p>
+          <div className="empty-category">
+            No hay elementos eliminados en {tabs.find(tab => tab.key === activeTab)?.label?.toLowerCase()}.
+          </div>
         )}
       </div>
+
+      {/* 🔹 Modal de Confirmación */}
+      <ModalConfirmacion
+        isOpen={modalOpen}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        titulo={`¿Estás seguro de que quieres eliminar definitivamente "${itemToDelete?.titulo || 'este elemento'}"?`}
+        mensaje="Esta acción no se puede deshacer."
+        textoConfirmar="Aceptar"
+        textoCancelar="Cancelar"
+      />
     </div>
   );
 }
