@@ -1,21 +1,25 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
+import { isAuthenticated } from "../services/authService";
 
 export default function PrivateRoute({ rol, children }) {
   const token = localStorage.getItem("token");
-  const userRol = localStorage.getItem("nombre_rol");
+  const userRol = localStorage.getItem("rol");
+  const location = useLocation();
 
-  // Si no hay token, redirigir a login
-  if (!token) {
-    return <Navigate to="/login" replace />;
+  // No autenticado
+  if (!isAuthenticated() || !token) {
+    console.log("🔒 Usuario no autenticado, redirigiendo a /login");
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Si el rol no coincide, redirigir a home
+  // Rol incorrecto
   if (rol && userRol !== rol) {
-    return <Navigate to="/home" replace />;
+    console.warn(`⚠️ Rol incorrecto. Esperado: ${rol}, actual: ${userRol}`);
+    if (userRol === "administrador") return <Navigate to="/admin" replace />;
+    return <Navigate to="/joven/home" replace />;
   }
 
-
-  // Si todo está bien, renderizar el layout y mas
+  // Autorizado
   return children;
 }

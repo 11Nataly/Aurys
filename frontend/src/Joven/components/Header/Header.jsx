@@ -1,16 +1,18 @@
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaUser, FaBars } from "react-icons/fa";
 import { listarPerfiles } from "../../../services/perfilService";
 import { jwtDecode } from "jwt-decode";
 import logoaurys from "./logoaurys.png";
 import "./header.css";
+import { logout } from "../../../services/authService"; // 🔑 Importamos logout
 
 // Agregar prop mostrarHamburger con valor por defecto true
 const Header = ({ onToggleSidebar, isSidebarOpen, mostrarHamburger = true }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [userData, setUserData] = useState(null);
   const profileRef = useRef(null);
+  const navigate = useNavigate();
 
   // Cargar datos del usuario
   useEffect(() => {
@@ -42,10 +44,14 @@ const Header = ({ onToggleSidebar, isSidebarOpen, mostrarHamburger = true }) => 
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // 🔒 Función de cierre de sesión
+  const handleLogout = () => {
+    setIsProfileOpen(false);
+    logout(); // Limpia token, rol y redirige al Landing Page
+  };
 
   return (
     <header className="header">
@@ -84,6 +90,7 @@ const Header = ({ onToggleSidebar, isSidebarOpen, mostrarHamburger = true }) => 
             )}
           </button>
 
+          {/* Menú desplegable */}
           <div className={`profile-dropdown ${isProfileOpen ? "show" : ""}`}>
             <div className="profile-dropdown-info">
               {userData?.foto_perfil ? (
@@ -116,13 +123,23 @@ const Header = ({ onToggleSidebar, isSidebarOpen, mostrarHamburger = true }) => 
               Mi Perfil
             </Link>
 
-            <Link
-              to="/logout"
-              className="dropdown-link"
-              onClick={() => setIsProfileOpen(false)}
+            {/* 🔴 Cerrar sesión seguro */}
+            <button
+              onClick={handleLogout}
+              className="dropdown-link logout-btn"
+              style={{
+                background: "none",
+                border: "none",
+                color: "#dc3545",
+                cursor: "pointer",
+                textAlign: "left",
+                width: "100%",
+                padding: "8px 16px",
+                fontSize: "14px",
+              }}
             >
               Cerrar Sesión
-            </Link>
+            </button>
           </div>
         </div>
       </div>

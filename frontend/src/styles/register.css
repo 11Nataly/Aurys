@@ -1,50 +1,110 @@
-.register-container {
+/* ================================
+   ESTRUCTURA GENERAL
+================================ */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #e9ecef;
+  font-family: "Poppins", sans-serif;
+  color: #000;
+}
+
+.register-page {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  background-image: url("../assets/images/fondo.jpg.jpg");
   min-height: 100vh;
-    background-size: cover;
 }
 
-/* Tarjeta */
+.register-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("../assets/images/fondo.jpg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.register-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(2px);
+  z-index: 0;
+}
+
+/* ================================
+   TARJETA DE REGISTRO
+================================ */
 .register-card {
+  position: relative;
+  z-index: 1;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
-  padding: 2rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  padding: 2.5rem 2rem;
   width: 100%;
   max-width: 400px;
-  margin: 14rem auto;
+  animation: fadeIn 0.6s ease;
+  margin-left: 2rem; /* 👈 Empuja la tarjeta hacia la izquierda */
 }
 
-/* Título */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================================
+   CABECERA (título + subtítulo)
+================================ */
+.register-header {
+  text-align: left;
+  margin-bottom: 1.8rem;
+}
+
 .register-title {
   font-size: 2rem;
   font-weight: bold;
-  color: #333;
-  margin-bottom: 0.9rem;
+  color: #4840c2;
+  margin-bottom: 0.4rem;
 }
 
 .register-subtitle {
-  font-size: 1.1rem;
-  color: #e53935;
-  margin-bottom: 1.2rem;
+  font-size: 1rem;
+  color: #333;
+  margin: 0;
 }
 
-/* Inputs */
+/* ================================
+   FORMULARIO
+================================ */
 .register-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  text-align: left; /* 👈 Asegura que todo el contenido del form esté a la izquierda */
 }
 
 .input-group {
   display: flex;
   align-items: center;
   border: 1px solid #bbb;
-  border-radius: 9999px;
-  padding: 1rem 1rem;
+  border-radius: 50px;
+  padding: 0.8rem 1rem;
+  background: #fff;
+  transition: all 0.3s;
+  position: relative;
+  justify-content: flex-start; /* 👈 Alinea contenido a la izquierda */
+}
+
+.input-group:focus-within {
+  border-color: #4840c2;
+  box-shadow: 0 0 0 2px rgba(72, 64, 194, 0.15);
 }
 
 .input-group input {
@@ -52,53 +112,244 @@
   border: none;
   outline: none;
   font-size: 1rem;
+  background: transparent;
+  color: #000;
+  padding-right: 40px;
+  text-align: left; /* 👈 Texto del input a la izquierda */
+}
+
+.input-group input::placeholder {
+  text-align: left; /* 👈 Placeholder a la izquierda */
 }
 
 .input-icon {
-  color: #888;
-  width: 25px;
-  height: 25px;
-  margin-left: 8px;
+  color: #777;
+  width: 20px;
+  height: 20px;
+  margin-right: 0.5rem; /* 👈 Espacio consistente a la derecha del icono */
 }
 
-/* Botón */
+/* Botón del ojo */
+.eye-btn {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #777;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eye-btn:hover {
+  color: #4840c2;
+}
+
+/* ================================
+   BOTÓN
+================================ */
 .register-button {
-  background: #4341e0;
+  background: #4840c2;
   color: white;
   border: none;
   padding: 1rem;
   border-radius: 999px;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
+  text-align: center; /* 👈 Mantiene el texto del botón centrado */
+  width: 100%; /* 👈 Botón ocupa todo el ancho disponible */
 }
 
 .register-button:hover {
-  background: #3c3ba0;
+  background: #322ca3;
+  transform: translateY(-2px);
 }
 
-/* Mensajes */
-.error-message {
-  color: red;
-  font-size: 0.8rem;
+/* ================================
+   ERROR
+================================ */
+.error-banner {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  padding: 0.8rem;
+  font-size: 0.9rem;
+  text-align: left; /* 👈 Texto de error a la izquierda */
+  margin-bottom: 1rem;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* ================================
+   ALINEACIÓN GENERAL
+================================ */
+.register-card > * {
+  text-align: left; /* 👈 Fuerza alineación izquierda en todos los elementos hijos */
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+  .register-card {
+    margin-left: 1rem; /* 👈 Menor margen en móviles */
+    margin-right: 1rem; /* 👈 Margen derecho para mantener centrado pero desplazado */
+  }
+}
+
+/* Botón personalizado - Cambia el color según tus preferencias */
+.custom-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border: none !important;
+  color: white !important;
+  transition: all 0.3s ease !important;
+}
+
+.custom-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.custom-button:disabled {
+  background: #6c757d !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* Estilos del Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.success-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 0;
+  max-width: 400px;
+  width: 90%;
+  position: relative;
+  animation: slideUp 0.3s ease;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6c757d;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  background: #f8f9fa;
+  color: #495057;
+}
+
+.modal-content {
+  padding: 40px 32px 32px;
   text-align: center;
 }
 
-/* Texto inferior */
-.register-footer {
-  margin-top: 1.5rem;
-  font-size: 1rem;
-  color: #555;
-  text-align: center;
+.modal-icon {
+  color: #28a745;
+  margin-bottom: 16px;
 }
 
-.login-link {
-  color: #1e88e5;
+.modal-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #28a745;
+  margin-bottom: 12px;
+}
+
+.modal-message {
+  color: #6c757d;
+  line-height: 1.5;
+  margin-bottom: 24px;
+  font-size: 16px;
+}
+
+.modal-confirm-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-size: 16px;
   font-weight: 500;
-  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
 }
 
-.login-link:hover {
-  text-decoration: underline;
+.modal-confirm-btn:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Estilos para mensajes de error */
+.error-banner {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  animation: fadeIn 0.5s ease-in;
+}
+
+/* Inputs deshabilitados */
+.input-group input:disabled {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
