@@ -1,34 +1,70 @@
-// src/components/Header/Header.jsx
+// src/LandingPage/components/Header.jsx
 import './Header.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const [menuActive, setMenuActive] = useState(false);
+  const [userStatus, setUserStatus] = useState('No autenticado');
+  const navigate = useNavigate();
+
+  // Verificar estado de autenticación simple
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const rol = localStorage.getItem("rol");
+    
+    if (token && token !== 'undefined' && token !== 'null') {
+      setUserStatus(`Autenticado como: ${rol || 'usuario'}`);
+    } else {
+      setUserStatus('No autenticado');
+    }
+  }, []);
 
   const toggleMenu = () => {
     setMenuActive(!menuActive);
   };
 
+  const handleLoginClick = () => {
+    setMenuActive(false);
+    navigate("/login");
+  };
+
+  const handleRegisterClick = () => {
+    setMenuActive(false);
+    navigate("/register");
+  };
+
+  const handleBenefitsClick = () => {
+    setMenuActive(false);
+    const benefitsSection = document.getElementById('beneficios');
+    if (benefitsSection) {
+      benefitsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <header className="header">
       <div className="header-container">
-        {/* Logo */}
         <div className="logo">
           <h2>Aurys</h2>
+          <small style={{ fontSize: '10px', color: '#666' }}>{userStatus}</small>
         </div>
 
-        {/* Navegación */}
         <nav className={`navigation ${menuActive ? 'active' : ''}`}>
-          <a href="#beneficios">Beneficios</a>
+          <a href="#beneficios" onClick={handleBenefitsClick}>
+            Beneficios
+          </a>
 
-          {/* Botones de autenticación (se adaptan en mobile/desktop) */}
           <div className="auth-buttons">
-            <button className="btn-login">Iniciar Sesión</button>
-            <button className="btn-signup">Crear Cuenta</button>
+            <button className="btn-login" onClick={handleLoginClick}>
+              Iniciar Sesión
+            </button>
+            <button className="btn-signup" onClick={handleRegisterClick}>
+              Crear Cuenta
+            </button>
           </div>
         </nav>
 
-        {/* Botón hamburguesa */}
         <button className="menu-toggle" onClick={toggleMenu}>
           <span></span>
           <span></span>
