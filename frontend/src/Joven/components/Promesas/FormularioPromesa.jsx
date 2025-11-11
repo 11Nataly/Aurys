@@ -7,51 +7,48 @@ const FormularioPromesa = ({ promesaEditar, onGuardar, onCancelar }) => {
   const [formData, setFormData] = useState({
     titulo: '',
     descripcion: '',
-    tipo_frecuencia: '', // ✅ corregido
+    frecuencia: '',
     num_maximo_recaidas: 10
   });
-
   const [errores, setErrores] = useState({});
   const [cargando, setCargando] = useState(false);
 
-  // Cargar datos cuando se edita
   useEffect(() => {
     if (promesaEditar) {
       setFormData({
         titulo: promesaEditar.titulo || '',
         descripcion: promesaEditar.descripcion || '',
-        tipo_frecuencia: promesaEditar.tipo_frecuencia || '', // ✅ corregido
+        frecuencia: promesaEditar.frecuencia || '',
         num_maximo_recaidas: promesaEditar.num_maximo_recaidas || 1
       });
     }
   }, [promesaEditar]);
 
-  // Validación del formulario
   const validarFormulario = () => {
     const nuevosErrores = {};
     if (!formData.titulo.trim()) nuevosErrores.titulo = 'El título es obligatorio';
-    if (!formData.tipo_frecuencia) nuevosErrores.tipo_frecuencia = 'Selecciona una frecuencia';
+    if (!formData.frecuencia) nuevosErrores.frecuencia = 'Selecciona una frecuencia';
     if (!formData.num_maximo_recaidas || formData.num_maximo_recaidas < 1)
       nuevosErrores.num_maximo_recaidas = 'Mínimo 1 fallo permitido';
     setErrores(nuevosErrores);
     return Object.keys(nuevosErrores).length === 0;
   };
 
-  // Enviar al backend
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validarFormulario()) return;
 
     setCargando(true);
 
+    // ✅ Obtener el ID del usuario logueado desde localStorage
     const usuarioId = localStorage.getItem("id_usuario");
 
     const data = {
       titulo: formData.titulo.trim(),
       descripcion: formData.descripcion.trim(),
-      tipo_frecuencia: formData.tipo_frecuencia, // ✅ corregido
+      frecuencia: formData.frecuencia,
       num_maximo_recaidas: parseInt(formData.num_maximo_recaidas),
-      usuario_id: usuarioId ? parseInt(usuarioId) : null
+      usuario_id: usuarioId ? parseInt(usuarioId) : null // ← toma el usuario real del login
     };
 
     try {
@@ -84,12 +81,7 @@ const FormularioPromesa = ({ promesaEditar, onGuardar, onCancelar }) => {
   };
 
   const handleCancelar = () => {
-    setFormData({
-      titulo: '',
-      descripcion: '',
-      tipo_frecuencia: '',
-      num_maximo_recaidas: 10
-    });
+    setFormData({ titulo: '', descripcion: '', frecuencia: '', num_maximo_recaidas: 10 });
     setErrores({});
     onCancelar();
   };
@@ -131,17 +123,15 @@ const FormularioPromesa = ({ promesaEditar, onGuardar, onCancelar }) => {
                   <input
                     type="radio"
                     value={f}
-                    checked={formData.tipo_frecuencia === f}
-                    onChange={(e) => setFormData({ ...formData, tipo_frecuencia: e.target.value })}
+                    checked={formData.frecuencia === f}
+                    onChange={(e) => setFormData({ ...formData, frecuencia: e.target.value })}
                   />
                   <span className="radio-custom"></span>
                   {f.charAt(0).toUpperCase() + f.slice(1)}
                 </label>
               ))}
             </div>
-            {errores.tipo_frecuencia && (
-              <span className="error-message">{errores.tipo_frecuencia}</span>
-            )}
+            {errores.frecuencia && <span className="error-message">{errores.frecuencia}</span>}
           </div>
 
           <div className="form-group">
@@ -152,10 +142,7 @@ const FormularioPromesa = ({ promesaEditar, onGuardar, onCancelar }) => {
               min="1"
               value={formData.num_maximo_recaidas}
               onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  num_maximo_recaidas: parseInt(e.target.value) || 1
-                })
+                setFormData({ ...formData, num_maximo_recaidas: parseInt(e.target.value) || 1 })
               }
               className={errores.num_maximo_recaidas ? 'error' : ''}
             />
