@@ -35,7 +35,7 @@ def enviar_correo_recuperacion(correo: str, db: Session):
 #Token de autentificacion token que se utiliza 
 
     token = generar_token_email(correo)
-    enlace = f"{settings.Settings_Frontend_URL}/ver-recuperar"
+    enlace = f"{settings.Settings_Frontend_URL}/ver-recuperar/{token}"
 
     asunto = "Recuperación de contraseña"
     cuerpo_html = f"""

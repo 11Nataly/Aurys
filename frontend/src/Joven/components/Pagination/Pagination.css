@@ -1,0 +1,265 @@
+/* src/Joven/components/Pagination/Pagination.css */
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  padding: 1rem 0;
+  border-top: 1px solid #e1e5e9;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.pagination-info {
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+.pagination-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.pagination-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  padding: 0 0.5rem;
+  border: 1px solid #dee2e6;
+  background-color: white;
+  color: #007bff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.pagination-btn.active {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+
+.pagination-btn:disabled {
+  color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.pagination-btn:disabled:hover {
+  background-color: white;
+  border-color: #dee2e6;
+}
+
+.pagination-prev,
+.pagination-next {
+  font-weight: bold;
+}
+
+.pagination-ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+/* ✅ Estilos para contenedores específicos de cada componente */
+.um-pagination-container,
+.gm-pagination-container,
+.diario-pagination-container,
+.promesas-pagination-container,
+.afrontamiento-pagination-container {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e1e5e9;
+  display: flex;
+  justify-content: center;
+  background: white;
+}
+
+.um-pagination,
+.gm-pagination,
+.diario-pagination,
+.promesas-pagination,
+.afrontamiento-pagination {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ✅ Estilos para información de tabla/paginación */
+.um-table-info,
+.gm-table-info {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #6c757d;
+  text-align: center;
+}
+
+.um-page-info,
+.gm-page-info {
+  font-weight: 600;
+  color: #495057;
+  margin-left: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pagination {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .pagination-info {
+    order: 2;
+  }
+  
+  .pagination-nav {
+    order: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination-btn {
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0 0.25rem;
+    font-size: 0.75rem;
+  }
+  
+  .pagination-ellipsis {
+    min-width: 2rem;
+    height: 2rem;
+    font-size: 0.75rem;
+  }
+
+  .um-pagination-container,
+  .gm-pagination-container,
+  .diario-pagination-container,
+  .promesas-pagination-container,
+  .afrontamiento-pagination-container {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+  }
+
+  .um-table-info,
+  .gm-table-info {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
+
+  .um-page-info,
+  .gm-page-info {
+    display: block;
+    margin-left: 0;
+    margin-top: 0.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination-nav {
+    gap: 0.125rem;
+  }
+}
+
+/* src/Admin/components/GuideManagement.css - ESTILOS MÍNIMOS */
+
+.gm-container {
+  padding: 2rem;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+.gm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.gm-title {
+  color: #2c3e50;
+  margin: 0;
+}
+
+.gm-add-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.gm-table {
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.gm-table th {
+  background: #2c3e50;
+  color: white;
+  padding: 1rem;
+  text-align: left;
+}
+
+.gm-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.gm-description-cell {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gm-duration {
+  background: #e9ecef;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.gm-action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.gm-action-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.gm-action-btn-warning {
+  background: #ffc107;
+  color: #212529;
+}
+
+.gm-action-btn-danger {
+  background: #dc3545;
+  color: white;
+}

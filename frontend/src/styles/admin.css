@@ -302,3 +302,65 @@
     flex-wrap: wrap;
   }
 }
+
+/* Espaciado entre Header y contenido en Admin */
+.admin-perfil-wrapper {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.admin-perfil-content {
+  padding-top: 80px; /* Compensa la altura del header */
+  padding-left: 25px;
+  padding-right: 25px;
+  min-height: calc(100vh - 80px);
+}
+
+/* Estilos para el botón volver en AdminHeader */
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #4840c2;
+  font-weight: 500;
+  margin-right: 15px;
+}
+
+.back-button:hover {
+  background: #e9ecef;
+  border-color: #4840c2;
+  transform: translateY(-1px);
+}
+
+.back-icon {
+  font-size: 16px;
+}
+
+.back-text {
+  font-size: 14px;
+}
+
+/* Ajuste para el header-left con el botón */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .back-text {
+    display: none;
+  }
+  
+  .back-button {
+    padding: 8px;
+    margin-right: 10px;
+  }
+}

@@ -53,7 +53,6 @@ class MotivacionService:
                 activo=True,
                 esFavorita=False
             )
-# Todo ese archivo realizado por douglas   
             db.add(nueva)
             db.commit()
             db.refresh(nueva)
@@ -78,7 +77,10 @@ class MotivacionService:
 
         db.commit()
         db.refresh(motivacion)
-        return {"message": "Estado de favorita actualizado correctamente", "esFavorita": motivacion.esFavorita}
+        return {
+            "message": "Estado de favorita actualizado correctamente",
+            "esFavorita": motivacion.esFavorita
+        }
 
     # -------------------------------------------------------
     # PUT - Editar texto
@@ -93,8 +95,8 @@ class MotivacionService:
             motivacion.titulo = data.titulo
         if data.descripcion:
             motivacion.descripcion = data.descripcion
-        if data.id_categoria:
-            motivacion.categoria_id = data.id_categoria
+        if getattr(data, "categoria_id", None):
+            motivacion.categoria_id = data.categoria_id
 
         db.commit()
         db.refresh(motivacion)
@@ -109,6 +111,7 @@ class MotivacionService:
         if not motivacion:
             raise HTTPException(status_code=404, detail="Motivación no encontrada")
 
+        # Procesar nueva imagen si se envía
         if imagen:
             if motivacion.imagen:
                 nombre_antiguo = motivacion.imagen.split("/")[-1]
@@ -126,8 +129,8 @@ class MotivacionService:
             motivacion.titulo = data.titulo
         if data.descripcion:
             motivacion.descripcion = data.descripcion
-        if data.id_categoria:
-            motivacion.categoria_id = data.id_categoria
+        if getattr(data, "categoria_id", None):
+            motivacion.categoria_id = data.categoria_id
 
         db.commit()
         db.refresh(motivacion)
@@ -137,7 +140,7 @@ class MotivacionService:
     # PUT - Cambiar estado activo/inactivo
     # -------------------------------------------------------
     @staticmethod
-    def cambiar_estado(db: Session, motivacion_id: int, estado: bool):
+    def cambiar_estado(motivacion_id: int, estado: bool, db: Session):
         motivacion = db.query(Motivacion).filter(Motivacion.id == motivacion_id).first()
         if not motivacion:
             raise HTTPException(status_code=404, detail="Motivación no encontrada")
@@ -145,10 +148,8 @@ class MotivacionService:
         motivacion.activo = estado
         db.commit()
         db.refresh(motivacion)
+
         return motivacion
-
-
-
 
     # -------------------------------------------------------
     # PUT - Actualizar solo la imagen
@@ -162,22 +163,48 @@ class MotivacionService:
         if not imagen:
             raise HTTPException(status_code=400, detail="Debe enviar una imagen para actualizar")
 
-        # Eliminar imagen anterior si existe
         if motivacion.imagen:
             nombre_antiguo = motivacion.imagen.split("/")[-1]
             ruta_antigua = os.path.join(UPLOAD_DIR, nombre_antiguo)
             if os.path.exists(ruta_antigua):
                 os.remove(ruta_antigua)
 
-        # Guardar la nueva imagen
         nombre_nueva = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{imagen.filename}"
         ruta_guardado = os.path.join(UPLOAD_DIR, nombre_nueva)
         with open(ruta_guardado, "wb") as buffer:
             shutil.copyfileobj(imagen.file, buffer)
 
-        # Actualizar URL en base de datos
         motivacion.imagen = f"http://127.0.0.1:8000/static/motivaciones/{nombre_nueva}"
 
         db.commit()
         db.refresh(motivacion)
         return motivacion
+
+    # -------------------------------------------------------
+    # DELETE - Eliminar definitivamente una motivación
+    # -------------------------------------------------------
+    @staticmethod
+    def eliminar_motivacion(db: Session, motivacion_id: int):
+        """
+        Elimina una motivación permanentemente de la base de datos
+        sin eliminar ni afectar su categoría asociada.
+        """
+        motivacion = db.query(Motivacion).filter(Motivacion.id == motivacion_id).first()
+        if not motivacion:
+            raise HTTPException(status_code=404, detail="Motivación no encontrada")
+
+        # 🗑 Eliminar imagen asociada si existe
+        if motivacion.imagen:
+            nombre_archivo = motivacion.imagen.split("/")[-1]
+            ruta_archivo = os.path.join(UPLOAD_DIR, nombre_archivo)
+            if os.path.exists(ruta_archivo):
+                os.remove(ruta_archivo)
+
+        db.delete(motivacion)
+        db.commit()
+
+        return {"mensaje": f"Motivación {motivacion_id} eliminada permanentemente"}
+
+
+# ✅ Instancia global del servicio
+motivacion_service = MotivacionService()

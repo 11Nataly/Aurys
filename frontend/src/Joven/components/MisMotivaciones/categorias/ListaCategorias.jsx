@@ -2,40 +2,42 @@ import { useEffect, useState, useRef } from "react";
 import CategoriaItem from "./CategoriaItem";
 import NuevaCategoria from "./NuevaCategoria";
 import EditarCategoria from "./EditarCategoria";
-import { PencilSquareIcon } from "@heroicons/react/24/outline"; // ✅ nuevo componente
 import "./categorias.css";
 
-const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
+import {
+  crearCategoria,
+  listarCategorias,
+  cambiarEstadoCategoria,
+} from "../../../../services/categoriaService";
+
+const ListaCategorias = ({ initialCategorias = [], onSelectCategoria, onCategoriasChange }) => {
   const [categorias, setCategorias] = useState(initialCategorias);
   const [mostrarModal, setMostrarModal] = useState(false);
-  const [mostrarEditar, setMostrarEditar] = useState(false); // ✅
+  const [categoriaEditando, setCategoriaEditando] = useState(null);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
-  const [categoriaEditando, setCategoriaEditando] = useState(null); // ✅
   const [abierto, setAbierto] = useState(true);
   const [busqueda, setBusqueda] = useState("");
   const [sugerencias, setSugerencias] = useState([]);
   const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
   const inputRef = useRef(null);
 
-  // 🔹 Cargar categorías desde JSON si no hay iniciales
+  // 🔹 Cargar categorías al montar
   useEffect(() => {
-    if (initialCategorias.length === 0) {
-      const cargarDatos = async () => {
-        try {
-          const response = await fetch("/Joven/fake_data/categorias.json");
-          const data = await response.json();
-          setCategorias(data.filter((cat) => cat.activo === 1));
-        } catch (error) {
-          console.error("Error cargando categorías:", error);
-        }
-      };
-      cargarDatos();
-    }
-  }, [initialCategorias]);
+    const usuario_id = parseInt(localStorage.getItem("id_usuario")) || 1;
+    const cargarCategorias = async () => {
+      try {
+        const data = await listarCategorias(usuario_id);
+        setCategorias(data);
+      } catch (error) {
+        console.error("Error cargando categorías:", error);
+      }
+    };
+    cargarCategorias();
+  }, []);
 
-  // 🔹 Actualizar sugerencias cuando cambia la búsqueda
+  // 🔹 Filtro de búsqueda
   useEffect(() => {
-    if (busqueda.trim().length === 0) {
+    if (!busqueda.trim()) {
       setSugerencias([]);
       setMostrarSugerencias(false);
       return;
@@ -58,14 +60,45 @@ const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // 🔹 Acciones
-  const agregarCategoria = (nuevaCategoria) => {
-    setCategorias([...categorias, nuevaCategoria]);
-    setMostrarModal(false);
+  // 🔹 Crear categoría
+  const agregarCategoria = async (categoriaData) => {
+    try {
+      const nuevaCategoria = await crearCategoria(categoriaData);
+
+      if (
+        categorias.some(
+          (c) => c.nombre.toLowerCase() === nuevaCategoria.nombre.toLowerCase()
+        )
+      ) {
+        alert("Ya existe una categoría con ese nombre");
+        return;
+      }
+
+      setCategorias((prev) => [...prev, nuevaCategoria]);
+      setMostrarModal(false);
+      alert("Categoría creada exitosamente");
+
+      // 🔹 Avisar al padre que hubo un cambio
+      if (onCategoriasChange) onCategoriasChange();
+    } catch (error) {
+      console.error("Error al crear categoría:", error);
+      alert("No se pudo crear la categoría");
+    }
   };
 
-  const eliminarCategoria = (id) => {
-    setCategorias(categorias.filter((c) => c.id !== id));
+  // 🔹 Eliminar categoría (cambio de estado)
+  const handleEliminar = async (id) => {
+    try {
+      await cambiarEstadoCategoria(id, false);
+      setCategorias((prev) => prev.filter((cat) => cat.id !== id));
+      console.log("✅ Categoría eliminada visualmente y en backend");
+
+      // 🔹 Avisar al padre que hubo un cambio
+      if (onCategoriasChange) onCategoriasChange();
+    } catch (err) {
+      console.error("⚠️ Error al eliminar categoría:", err);
+      alert(err.response?.data?.detail || "No se pudo eliminar la categoría.");
+    }
   };
 
   const handleSeleccion = (id) => {
@@ -79,18 +112,18 @@ const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
     handleSeleccion(cat.id);
   };
 
-  // ✅ Nueva función: abrir modal de edición
   const handleEditar = (categoria) => {
     setCategoriaEditando(categoria);
   };
 
-  // ✅ Actualizar categoría editada
   const handleGuardarEdicion = (categoriaEditada) => {
     setCategorias((prev) =>
       prev.map((cat) => (cat.id === categoriaEditada.id ? categoriaEditada : cat))
     );
-    setMostrarEditar(false);
     setCategoriaEditando(null);
+
+    // 🔹 Avisar al padre que hubo un cambio
+    if (onCategoriasChange) onCategoriasChange();
   };
 
   return (
@@ -110,7 +143,6 @@ const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
 
       {abierto && (
         <>
-          {/* 🔹 Buscador */}
           <div className="buscador-categorias" ref={inputRef}>
             <input
               type="text"
@@ -145,13 +177,12 @@ const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
             )}
           </div>
 
-          {/* 🔹 Lista de categorías con botón editar */}
           <ul className="lista-categorias">
             {categorias.map((cat) => (
               <CategoriaItem
                 key={cat.id}
                 categoria={cat}
-                onEliminar={eliminarCategoria}
+                onEliminar={() => handleEliminar(cat.id)}
                 onSeleccion={handleSeleccion}
                 onEditar={handleEditar}
                 activa={categoriaSeleccionada === cat.id}
@@ -161,7 +192,6 @@ const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
         </>
       )}
 
-      {/* Modales */}
       {mostrarModal && (
         <NuevaCategoria
           onCerrar={() => setMostrarModal(false)}
@@ -169,7 +199,6 @@ const ListaCategorias = ({ initialCategorias = [], onSelectCategoria }) => {
         />
       )}
 
-      {/* ✅ Modal de editar categoría */}
       {categoriaEditando && (
         <EditarCategoria
           categoria={categoriaEditando}

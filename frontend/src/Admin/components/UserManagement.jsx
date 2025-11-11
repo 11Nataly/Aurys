@@ -1,7 +1,8 @@
-// src/components/UserManagement.jsx
+// src/Admin/components/UserManagement.jsx
 import React, { useState, useEffect } from "react";
 import { listarUsuarios, cambiarEstadoUsuario } from "../../services/usuariosService";
 import ConfirmModal from "./ConfirmModal";
+import Pagination from "../../Joven/components/Pagination/Pagination"; // ✅ LÍNEA 5: Importar componente de paginación
 import "./UserManagement.css";
 
 const UserManagement = () => {
@@ -9,6 +10,10 @@ const UserManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+
+  // ✅ LÍNEA 13-14: Estados para paginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // 10 usuarios por página
 
   // Cargar usuarios al montar el componente
   useEffect(() => {
@@ -46,11 +51,29 @@ const UserManagement = () => {
     }
   };
 
+  // ✅ LÍNEA 47-51: Filtrar usuarios primero por búsqueda
   const filteredUsers = users.filter(
     (user) =>
       user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // ✅ LÍNEA 54-57: Calcular usuarios paginados después del filtro
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
+
+  // ✅ LÍNEA 60-64: Manejador de cambio de página
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    // Scroll suave hacia arriba de la tabla
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // ✅ LÍNEA 67-70: Resetear paginación al buscar
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   return (
     <div className="um-container">
@@ -67,6 +90,14 @@ const UserManagement = () => {
         </div>
       </div>
 
+      {/* ✅ LÍNEA 84: Mostrar información de paginación en la tabla */}
+      <div className="um-table-info">
+        Mostrando {paginatedUsers.length} de {filteredUsers.length} usuarios
+        {filteredUsers.length > itemsPerPage && (
+          <span className="um-page-info"> - Página {currentPage} de {Math.ceil(filteredUsers.length / itemsPerPage)}</span>
+        )}
+      </div>
+
       <table className="um-table">
         <thead>
           <tr>
@@ -78,7 +109,8 @@ const UserManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredUsers.map((user) => (
+          {/* ✅ LÍNEA 100: Usar usuarios paginados en lugar de todos los filtrados */}
+          {paginatedUsers.map((user) => (
             <tr key={user.id}>
               <td>{user.username}</td>
               <td>{user.email}</td>
@@ -111,6 +143,23 @@ const UserManagement = () => {
           ))}
         </tbody>
       </table>
+
+      {/* ✅ LÍNEA 135-148: Componente de paginación */}
+      {filteredUsers.length > itemsPerPage && (
+        <div className="um-pagination-container">
+          <Pagination
+            currentPage={currentPage}
+            totalItems={filteredUsers.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+            maxVisiblePages={5}
+            className="um-pagination"
+            showTotal={false} // Ya mostramos la info arriba
+            showPageNumbers={true}
+            showNavigation={true}
+          />
+        </div>
+      )}
 
       <ConfirmModal
         isOpen={showModal}

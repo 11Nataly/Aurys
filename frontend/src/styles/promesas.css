@@ -257,3 +257,53 @@
     margin-top: 0; /* Reset en móvil */
   }
 }
+
+/* Agregar a src/styles/Promesas.css */
+.promesas-pagination-container {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e1e5e9;
+  display: flex;
+  justify-content: center;
+  background: white;
+  border-radius: 0 0 8px 8px;
+}
+
+.promesas-pagination {
+  width: 100%;
+  justify-content: center;
+}
+
+.paginacion-info-header {
+  font-size: 0.8rem;
+  color: #6c757d;
+  font-weight: normal;
+  margin-left: 0.5rem;
+}
+
+/* Asegurar que el panel izquierdo tenga espacio para la paginación */
+.panel-izquierdo .panel-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 400px; /* Altura mínima para que se vea bien */
+}
+
+/* Estilos para cuando hay paginación */
+.lista-promesas {
+  flex: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .promesas-pagination-container {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+  }
+  
+  .paginacion-info-header {
+    display: block;
+    margin-left: 0;
+    margin-top: 0.25rem;
+  }
+}

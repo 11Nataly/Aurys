@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from app.models.promesa import Promesa
 from app.models.notadiario import NotaDiario
@@ -47,48 +48,67 @@ class PapeleraService:
         ).all()
 
     # ===============================
-    # 🔹 RESTAURAR ELEMENTO (poner activo=True)
+    # 🔹 RESTAURAR ELEMENTO (activo=True)
     # ===============================
     @staticmethod
     def restaurar_elemento(db: Session, tipo: str, id: int):
-        modelo = {
+        modelos = {
             "promesa": Promesa,
             "diario": NotaDiario,
             "motivacion": Motivacion,
             "categoria": Categoria,
-        }.get(tipo)
+        }
 
+        modelo = modelos.get(tipo)
         if not modelo:
-            return None
+            raise HTTPException(status_code=400, detail="Tipo inválido")
 
         elemento = db.query(modelo).filter(modelo.id == id).first()
         if not elemento:
-            return None
+            raise HTTPException(status_code=404, detail=f"{tipo.capitalize()} no encontrada")
 
+        # ✅ Restaurar la categoría y sus motivaciones asociadas
+        if tipo == "categoria":
+            elemento.activo = True
+            db.commit()
+            db.refresh(elemento)
+
+            # Reactivar motivaciones asociadas
+            motivaciones_afectadas = db.query(Motivacion).filter(
+                Motivacion.categoria_id == id
+            ).update({"activo": True})
+            db.commit()
+
+            return {
+                "mensaje": f"Categoría '{elemento.nombre}' restaurada con {motivaciones_afectadas} motivaciones asociadas."
+            }
+
+        # ✅ Para el resto de tipos
         elemento.activo = True
         db.commit()
         db.refresh(elemento)
-        return elemento
+        return {"mensaje": f"{tipo.capitalize()} restaurada correctamente"}
 
     # ===============================
     # 🔹 ELIMINAR DEFINITIVAMENTE
     # ===============================
     @staticmethod
     def eliminar_definitivo(db: Session, tipo: str, id: int):
-        modelo = {
+        modelos = {
             "promesa": Promesa,
             "diario": NotaDiario,
             "motivacion": Motivacion,
             "categoria": Categoria,
-        }.get(tipo)
+        }
 
+        modelo = modelos.get(tipo)
         if not modelo:
-            return None
+            raise HTTPException(status_code=400, detail="Tipo inválido")
 
         elemento = db.query(modelo).filter(modelo.id == id).first()
         if not elemento:
-            return None
+            raise HTTPException(status_code=404, detail=f"{tipo.capitalize()} no encontrada")
 
         db.delete(elemento)
         db.commit()
-        return {"message": f"{tipo.capitalize()} eliminada definitivamente"}
+        return {"mensaje": f"{tipo.capitalize()} eliminada definitivamente"}

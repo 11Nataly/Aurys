@@ -237,3 +237,9 @@
 .retry-btn:hover {
   background: #0056b3;
 }
+
+.admin-perfil-wrapper .perfil-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 20px;
+}

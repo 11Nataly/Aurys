@@ -157,6 +157,11 @@ const Promesas = () => {
     } catch (error) {
       alert("Error al eliminar");
     }
+    
+    // ✅ Ajustar paginación si es necesario
+    if (promesasPaginadas.length === 1 && currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
   return (
@@ -222,8 +227,9 @@ const Promesas = () => {
               </h2>
             </div>
             <div className="panel-content">
+              {/* ✅ 9. PASAR SOLO LAS PROMESAS PAGINADAS */}
               <ListaPromesas
-                promesas={promesasFiltradas}
+                promesas={promesasPaginadas}
                 onRegistrarFallo={handleRegistrarFallo}
                 onFinalizarPromesa={(id, titulo) =>
                   setModalConfirmacion({
@@ -247,6 +253,23 @@ const Promesas = () => {
                 promesaSeleccionada={promesaSeleccionada}
                 filtroEstado={filtroEstado}
               />
+              
+              {/* ✅ 10. PAGINACIÓN - AHORA DEBERÍA MOSTRARSE CON itemsPerPage = 2 */}
+              {promesasFiltradas.length > itemsPerPage && (
+                <div className="promesas-pagination-container">
+                  <Pagination
+                    currentPage={currentPage}
+                    totalItems={promesasFiltradas.length}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={handlePageChange}
+                    maxVisiblePages={3}
+                    className="promesas-pagination"
+                    showTotal={true}
+                    showPageNumbers={true}
+                    showNavigation={true}
+                  />
+                </div>
+              )}
             </div>
           </div>
 

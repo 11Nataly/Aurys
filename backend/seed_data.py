@@ -14,14 +14,13 @@ from app.services.loginRegister_service import get_password_hash
 
 fake = Faker("es_ES")
 
-
 def run_massive_seed():
     db = SessionLocal()
     try:
-        print("🌱 Generando datos masivos...")
+        print("🌱 Generando datos para pruebas (flujo completo de papelera)...")
 
         # ======================================================
-        # 0️⃣ CREAR ROLES (Usuario = 1, Administrador = 2)
+        # 0️⃣ CREAR ROLES
         # ======================================================
         rol_usuario = db.query(Rol).filter(Rol.nombre == "usuario").first()
         rol_admin = db.query(Rol).filter(Rol.nombre == "administrador").first()
@@ -32,18 +31,13 @@ def run_massive_seed():
         if not rol_admin:
             rol_admin = Rol(id=2, nombre="administrador")
             db.add(rol_admin)
-
         db.commit()
-        print("✅ Roles creados o verificados.")
 
         # ======================================================
         # 1️⃣ ADMINISTRADOR
         # ======================================================
-        admin_existente = db.query(Usuario).filter(Usuario.correo == "admin@aurys.com").first()
-        if admin_existente:
-            print("⚠️ Administrador ya existe, se reutilizará.")
-            admin = admin_existente
-        else:
+        admin = db.query(Usuario).filter(Usuario.correo == "admin@aurys.com").first()
+        if not admin:
             admin = Usuario(
                 nombre="Administrador",
                 correo="admin@aurys.com",
@@ -54,136 +48,109 @@ def run_massive_seed():
             db.add(admin)
             db.commit()
             db.refresh(admin)
-            print("✅ Administrador creado (Admin123!).")
+        print("✅ Administrador creado o reutilizado.")
 
         # ======================================================
-        # 2️⃣ TÉCNICAS DE AFRONTAMIENTO DEL ADMINISTRADOR
+        # 2️⃣ TÉCNICAS DE AFRONTAMIENTO
         # ======================================================
-        for _ in range(100):
-            tecnica = TecnicaAfrontamiento(
-                usuario_id=admin.id,
-                nombre=fake.sentence(nb_words=3),
-                descripcion=fake.paragraph(nb_sentences=3),
-                instruccion=fake.sentence(nb_words=10),
-                duracion_video=random.randint(60, 300),
-            )
-            db.add(tecnica)
-        db.commit()
-        print("✅ Técnicas de afrontamiento agregadas al administrador.")
+        if db.query(TecnicaAfrontamiento).count() == 0:
+            for _ in range(10):
+                db.add(TecnicaAfrontamiento(
+                    usuario_id=admin.id,
+                    nombre=fake.sentence(nb_words=3),
+                    descripcion=fake.paragraph(nb_sentences=2),
+                    instruccion=fake.sentence(nb_words=8),
+                    duracion_video=random.randint(60, 200),
+                ))
+            db.commit()
+            print("✅ Técnicas de afrontamiento creadas.")
 
         # ======================================================
-        # 3️⃣ USUARIOS MASIVOS
+        # 3️⃣ CREAR 4 USUARIOS DE PRUEBA
         # ======================================================
         usuarios = []
-
-        for i in range(50):
+        for i in range(1, 5):
             correo = f"usuario{i}@aurys.com"
-            if db.query(Usuario).filter(Usuario.correo == correo).first():
-                continue  # evita duplicados
-
-            user = Usuario(
-                nombre=fake.name(),
-                correo=correo,
-                contrasena=get_password_hash("Usuario123!"),
-                rol_id=1,  # Rol usuario
-                activo=True,
-            )
-            usuarios.append(user)
-
-        db.add_all(usuarios)
-        db.commit()
-        for u in usuarios:
-            db.refresh(u)
-
-        print(f"✅ {len(usuarios)} usuarios creados (contraseña: Usuario123!).")
-
-        # ======================================================
-        # 4️⃣ CREAR DATOS ASOCIADOS POR USUARIO
-        # ======================================================
-        for user in usuarios:
-            # ------------------------------------------------------
-            # Categorías (únicas por usuario)
-            # ------------------------------------------------------
-            categorias = []
-            nombres_usados = set()
-            for _ in range(random.randint(3, 5)):
-                nombre = fake.word().capitalize()
-                # evitar duplicados para el mismo usuario
-                while nombre in nombres_usados:
-                    nombre = fake.word().capitalize()
-                nombres_usados.add(nombre)
-
-                cat = Categoria(
-                    usuario_id=user.id,
-                    nombre=nombre,
+            user = db.query(Usuario).filter(Usuario.correo == correo).first()
+            if not user:
+                user = Usuario(
+                    nombre=f"Usuario {i}",
+                    correo=correo,
+                    contrasena=get_password_hash("Usuario123!"),
+                    rol_id=1,
                     activo=True,
                 )
-                categorias.append(cat)
+                db.add(user)
+                db.commit()
+                db.refresh(user)
+            usuarios.append(user)
 
-            db.add_all(categorias)
+        print("✅ 4 usuarios creados (contraseña: Usuario123!).")
+
+        # ======================================================
+        # 4️⃣ ASOCIAR DATOS A CADA USUARIO
+        # ======================================================
+        for user in usuarios:
+            print(f"--- Generando datos para {user.nombre} ---")
+
+            # 🟢 Categorías (3 por usuario)
+            categorias = []
+            for i in range(3):
+                cat = Categoria(
+                    usuario_id=user.id,
+                    nombre=f"Categoría {i + 1} - {user.nombre}",
+                    activo=True,
+                )
+                db.add(cat)
+                categorias.append(cat)
             db.commit()
             for c in categorias:
                 db.refresh(c)
 
-            # ------------------------------------------------------
-            # Motivaciones
-            # ------------------------------------------------------
-            motivaciones = []
-            for _ in range(random.randint(5, 100)):
-                motivaciones.append(
-                    Motivacion(
-                        titulo=fake.sentence(nb_words=4),
+            # 💬 Motivaciones (2 por categoría)
+            for cat in categorias:
+                for j in range(2):
+                    db.add(Motivacion(
+                        titulo=f"Motivación {j + 1} de {cat.nombre}",
                         descripcion=fake.paragraph(nb_sentences=2),
-                        categoria_id=random.choice(categorias).id,
+                        categoria_id=cat.id,
                         usuario_id=user.id,
                         activo=True,
-                    )
-                )
-            db.add_all(motivaciones)
+                    ))
+            db.commit()
 
-            # ------------------------------------------------------
-            # Promesas (solo valores válidos para tu Enum)
-            # ------------------------------------------------------
-            promesas = []
-            for _ in range(random.randint(2, 40)):
-                promesas.append(
-                    Promesa(
-                        usuario_id=user.id,
-                        titulo=fake.sentence(nb_words=3),
-                        descripcion=fake.paragraph(nb_sentences=2),
-                        tipo_frecuencia=random.choice(["Diario", "Semanal"]),
-                        num_maximo_recaidas=random.randint(1, 5),
-                        fecha_inicio=date.today() - timedelta(days=random.randint(0, 20)),
-                        activo=True,
-                        cumplida=False,
-                    )
-                )
-            db.add_all(promesas)
+            # 📜 Promesas (2 por usuario)
+            for _ in range(2):
+                db.add(Promesa(
+                    usuario_id=user.id,
+                    titulo=fake.sentence(nb_words=3),
+                    descripcion=fake.paragraph(nb_sentences=2),
+                    tipo_frecuencia=random.choice(["Diario", "Semanal"]),
+                    num_maximo_recaidas=random.randint(1, 3),
+                    fecha_inicio=date.today() - timedelta(days=random.randint(0, 10)),
+                    activo=True,
+                    cumplida=False,
+                ))
 
-            # ------------------------------------------------------
-            # Notas de diario
-            # ------------------------------------------------------
-            notas = []
-            for _ in range(random.randint(5, 100)):
-                notas.append(
-                    NotaDiario(
-                        usuario_id=user.id,
-                        titulo=fake.sentence(nb_words=3),
-                        contenido=fake.paragraph(nb_sentences=3),
-                        activo=True,
-                    )
-                )
-            db.add_all(notas)
-
+            # 📔 Notas de diario (3 por usuario)
+            for _ in range(3):
+                db.add(NotaDiario(
+                    usuario_id=user.id,
+                    titulo=fake.sentence(nb_words=3),
+                    contenido=fake.paragraph(nb_sentences=3),
+                    activo=True,
+                ))
             db.commit()
 
         # ======================================================
         # ✅ Final
         # ======================================================
-        print("✅ Datos masivos insertados correctamente.")
-        print("🔑 Contraseñas:")
-        print("   - Administrador: Admin123!")
-        print("   - Usuarios: Usuario123!")
+        print("✅ Base de datos lista para probar:")
+        print("   - Eliminar categoría ➜ se desactivan sus motivaciones")
+        print("   - Restaurar categoría ➜ se reactivan sus motivaciones")
+        print("   - Usuarios: usuario1@aurys.com ... usuario4@aurys.com")
+        print("   - Contraseña: Usuario123!")
+        print("   - Admin: admin@aurys.com / Admin123!")
 
     except Exception as e:
         db.rollback()
