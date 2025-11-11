@@ -126,3 +126,54 @@
     display: none !important;
   }
 }
+
+/* main-layout.css */
+.main-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-body {
+  display: flex;
+  flex: 1;
+  margin-top: 64px; /* Altura del header */
+  position: relative;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 250px; /* Ancho del sidebar abierto */
+  transition: margin-left 0.3s ease-in-out;
+  padding: 1rem;
+  min-height: calc(100vh - 64px - 60px); /* Altura total - header - footer */
+  background-color: #f8f9fa;
+}
+
+/* Cuando el sidebar está colapsado en desktop */
+.main-content.sidebar-collapsed {
+  margin-left: 80px; /* Ancho del sidebar cerrado */
+}
+
+/* En móvil */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0 !important;
+    width: 100%;
+  }
+  
+  .sidebar-overlay-mobile {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+  }
+}
+
+/* Asegurar que el contenido no quede detrás del header */
+.page-content {
+  padding-top: 1rem;
+}
