@@ -1,14 +1,15 @@
+// src/components/Promesas/TarjetaPromesa.jsx
 import React, { useState } from 'react';
 import ModalRegistroFallos from './ModalRegistroFallos';
 import ModalEdicionPromesa from './ModalEdicionPromesa';
 import './TarjetaPromesa.css';
 
-const TarjetaPromesa = ({ 
-  promesa, 
-  onRegistrarFallo, 
+const TarjetaPromesa = ({
+  promesa,
+  onRegistrarFallo,
   onFinalizarPromesa,
   onReactivarPromesa,
-  onEditarPromesa, 
+  onEditarPromesa,
   onEliminarPromesa,
   onSeleccionar,
   isSeleccionada,
@@ -18,12 +19,15 @@ const TarjetaPromesa = ({
   const [mostrarModalEdicion, setMostrarModalEdicion] = useState(false);
 
   const obtenerResumenProgreso = () => {
+    const total = promesa.progreso?.total_fallos || promesa.progreso?.totalFallos || 0;
     if (promesa.frecuencia === 'diaria') {
-      return `${promesa.progreso.fallosHoy || 0}/${promesa.fallosPermitidos} fallos hoy`;
+      const hoy = promesa.progreso?.fallos_hoy || promesa.progreso?.fallosHoy || 0;
+      return `${hoy}/${promesa.num_maximo_recaidas} fallos hoy`;
     } else if (promesa.frecuencia === 'semanal') {
-      return `${promesa.progreso.fallosEstaSemana || 0}/${promesa.fallosPermitidos} fallos esta semana`;
+      const semana = promesa.progreso?.fallos_semana || promesa.progreso?.fallosEstaSemana || 0;
+      return `${semana}/${promesa.num_maximo_recaidas} fallos esta semana`;
     }
-    return `${promesa.progreso.totalFallos || 0} fallos totales`;
+    return `${total} fallos totales`;
   };
 
   const handleFinalizar = (e) => {
@@ -38,14 +42,17 @@ const TarjetaPromesa = ({
 
   return (
     <>
-      <div 
-        className={`tarjeta-promesa ${isSeleccionada ? 'seleccionada' : ''} ${promesa.estado === 'finalizada' ? 'finalizada' : ''}`}
+      <div
+        className={`tarjeta-promesa ${isSeleccionada ? 'seleccionada' : ''} ${
+          promesa.estado === 'finalizada' ? 'finalizada' : ''
+        }`}
         onClick={onSeleccionar}
       >
         <div className="tarjeta-header">
           <h3>{promesa.titulo}</h3>
           <div className="acciones-tarjeta">
-            <button 
+            {/* Botón Editar */}
+            <button
               className="btn-icon"
               onClick={(e) => {
                 e.stopPropagation();
@@ -55,7 +62,9 @@ const TarjetaPromesa = ({
             >
               ✏️
             </button>
-            <button 
+
+            {/* Botón Eliminar */}
+            <button
               className="btn-icon"
               onClick={(e) => {
                 e.stopPropagation();
@@ -77,7 +86,7 @@ const TarjetaPromesa = ({
         <div className="tarjeta-info">
           <span className="frecuencia">{promesa.frecuencia}</span>
           <span className={`estado ${promesa.estado}`}>
-            {promesa.estado === 'activa' ? 'En progreso' : 'Finalizada'}
+            {promesa.estado === 'activo' ? 'En progreso' : 'Finalizada'}
           </span>
         </div>
 
@@ -86,7 +95,7 @@ const TarjetaPromesa = ({
         </div>
 
         <div className="tarjeta-actions">
-          {promesa.estado === 'activa' ? (
+          {promesa.estado === 'activo' ? (
             <>
               <button
                 className="btn btn-registrar"
@@ -118,17 +127,19 @@ const TarjetaPromesa = ({
         </div>
       </div>
 
+      {/* Modal para registrar fallos */}
       {mostrarModalFallo && (
         <ModalRegistroFallos
           promesa={promesa}
-          onConfirmar={() => {
-            onRegistrarFallo(promesa.id);
+          onConfirmar={(datosActualizados) => {
+            onRegistrarFallo(promesa.id, datosActualizados);
             setMostrarModalFallo(false);
           }}
           onCancelar={() => setMostrarModalFallo(false)}
         />
       )}
 
+      {/* Modal para editar promesa */}
       {mostrarModalEdicion && (
         <ModalEdicionPromesa
           promesa={promesa}
