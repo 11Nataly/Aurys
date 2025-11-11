@@ -48,6 +48,23 @@ const AdminHeader = () => {
     };
   }, []);
 
+  // ✅ LÓGICA DE CERRAR SESIÓN - Misma que en JovenLayout
+  const handleLogout = () => {
+    // Limpiar localStorage
+    localStorage.removeItem("token");
+    localStorage.removeItem("rol");
+    localStorage.removeItem("id_usuario");
+    localStorage.removeItem("userData");
+    
+    // Cerrar menú de perfil
+    setIsProfileOpen(false);
+    
+    // Redirigir al landing page
+    navigate("/landing", { replace: true });
+    
+    console.log("✅ Sesión cerrada exitosamente - Admin");
+  };
+
   // Lógica para mostrar botón volver
   const shouldShowBackButton = () => {
     if (location.pathname === '/admin') return false;
@@ -135,13 +152,13 @@ const AdminHeader = () => {
               Mi Perfil
             </Link>
 
-            <Link
-              to="/logout"
-              className="dropdown-link"
-              onClick={() => setIsProfileOpen(false)}
+            {/* ✅ ACTUALIZADO: Usar botón en lugar de Link para cerrar sesión */}
+            <button
+              className="dropdown-link logout-btn"
+              onClick={handleLogout}
             >
               Cerrar Sesión
-            </Link>
+            </button>
           </div>
         </div>
       </div>
