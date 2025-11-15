@@ -48,7 +48,9 @@ Está diseñado para brindar a jóvenes que enfrentan desafíos de ansiedad y de
 2. **Crea y activa un entorno virtual (Windows):**
 
    ```bash
-   python -m venv venv
+   source venv/Scripts/activate
+   ```
+   ```bash
    source venv/Scripts/activate
    ```
 
