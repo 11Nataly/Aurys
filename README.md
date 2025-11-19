@@ -111,7 +111,13 @@ Está diseñado para brindar a jóvenes que enfrentan desafíos de ansiedad y de
    ```
 
    > Haz esto cada vez que haya cambios en los modelos para mantener la base de datos actualizada.
-   >
+5. **Ejecutar seeder para carga de datos:**
+
+   ```bash
+   python seed_data.py
+   ```
+
+   > Haz esto con la base de datos vacia para ingresar datos falsos
 
 ---
 
