@@ -283,3 +283,292 @@
   outline: none;
   box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
 }
+
+/* ================================
+   🌑 Superposición del modal
+   ================================ */
+div.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+
+  /* Animación de fade */
+  opacity: 0;
+  animation: fadeIn 0.35s ease forwards;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+
+/* ================================
+   📦 Contenedor principal del modal
+   ================================ */
+div.modal-confirmacion {
+  background: #ffffff;
+  border-radius: 14px;
+  width: 380px;
+  padding: 28px;
+  border: 1px solid rgba(72,64,194,0.08); /* borde suave */
+  box-shadow: 
+    0 10px 28px rgba(0,0,0,0.22),
+    0 4px 12px rgba(0,0,0,0.10);
+
+  transform: translateY(-20px);
+  animation: slideUp 0.35s ease forwards;
+}
+
+/* Animación modal */
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0px); opacity: 1; }
+}
+
+
+/* ================================
+   ✍️ Cuerpo del mensaje
+   ================================ */
+div.modal-body {
+  padding: 12px 0 22px 0;
+  color: #463ab5;
+  font-size: 17px;
+  text-align: left;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.5;
+
+  /* efecto sutil */
+  letter-spacing: 0.2px;
+}
+
+
+/* ================================
+   🔘 Área de botones
+   ================================ */
+div.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+
+/* ================================
+   🎛 Estilos generales botones
+   ================================ */
+button.btn-acaptar,
+button.btn-cancelar {
+  flex: 1;
+  height: 48px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  min-width: 0;
+
+  letter-spacing: 0.3px;
+}
+
+
+/* ================================
+   🟣 Botón Aceptar
+   ================================ */
+button.btn-acaptar {
+  background: linear-gradient(135deg, #7052e8, #5b3fd5);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 10px rgba(91,63,213,0.3);
+}
+
+button.btn-acaptar:hover {
+  background: linear-gradient(135deg, #7d5cff, #6647e0);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(91,63,213,0.35);
+}
+
+button.btn-acaptar:active {
+  transform: scale(0.98);
+}
+
+
+/* ================================
+   ⚪ Botón Cancelar
+   ================================ */
+button.btn-cancelar {
+  background: white;
+  color: #463ab5;
+  border: 2px solid #463ab5;
+}
+
+button.btn-cancelar:hover {
+  background: rgba(72,64,194,0.08);
+  transform: translateY(-2px);
+}
+
+button.btn-cancelar:active {
+  transform: scale(0.98);
+}
+
+/* ================================
+   🌑 Superposición del modal
+   ================================ */
+div.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+
+  /* Animación de fade */
+  opacity: 0;
+  animation: fadeIn 0.35s ease forwards;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+
+/* ================================
+   📦 Contenedor principal del modal
+   ================================ */
+div.modal-confirmacion {
+  background: #ffffff;
+  border-radius: 14px;
+  width: 380px;
+  padding: 28px;
+  border: 1px solid rgba(72,64,194,0.08); /* borde suave */
+  box-shadow: 
+    0 10px 28px rgba(0,0,0,0.22),
+    0 4px 12px rgba(0,0,0,0.10);
+
+  transform: translateY(-20px);
+  animation: slideUp 0.35s ease forwards;
+}
+
+/* Animación modal */
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0px); opacity: 1; }
+}
+
+
+/* ================================
+   ✍️ Cuerpo del mensaje
+   ================================ */
+div.modal-body {
+  padding: 12px 0 22px 0;
+  color: #463ab5;
+  font-size: 17px;
+  text-align: left;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.5;
+
+  /* efecto sutil */
+  letter-spacing: 0.2px;
+}
+
+
+/* ================================
+   🔘 Área de botones
+   ================================ */
+div.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+
+/* ================================
+   🎛 Estilos generales botones
+   ================================ */
+button.btn-acaptar,
+button.btn-cancelar {
+  flex: 1;
+  height: 48px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  min-width: 0;
+
+  letter-spacing: 0.3px;
+}
+
+
+/* ================================
+   🟣 Botón Aceptar
+   ================================ */
+button.btn-acaptar {
+  background: linear-gradient(135deg, #7052e8, #5b3fd5);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 10px rgba(91,63,213,0.3);
+}
+
+button.btn-acaptar:hover {
+  background: linear-gradient(135deg, #7d5cff, #6647e0);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(91,63,213,0.35);
+}
+
+button.btn-acaptar:active {
+  transform: scale(0.98);
+}
+
+
+/* ================================
+   ⚪ Botón Cancelar
+   ================================ */
+button.btn-cancelar {
+  background: white;
+  color: #463ab5;
+  border: 2px solid #463ab5;
+}
+
+button.btn-cancelar:hover {
+  background: rgba(72,64,194,0.08);
+  transform: translateY(-2px);
+}
+
+button.btn-cancelar:active {
+  transform: scale(0.98);
+}
+
+/* Estilo para modal de éxito con un solo botón */
+.modal-footer:has(button:only-child) {
+  justify-content: center;
+}
+
+.modal-footer:has(button:only-child) .btn-acaptar {
+  min-width: 120px;
+}

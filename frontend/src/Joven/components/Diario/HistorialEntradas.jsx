@@ -14,6 +14,9 @@ const HistorialEntradas = ({
   const [entradasFiltradas, setEntradasFiltradas] = useState([]);
   const [notaEditando, setNotaEditando] = useState(null);
   const [mostrandoEditor, setMostrandoEditor] = useState(false);
+  const [mostrarModalConfirmacion, setMostrarModalConfirmacion] = useState(false);
+  const [mostrarModalExito, setMostrarModalExito] = useState(false);
+  const [idNotaAEliminar, setIdNotaAEliminar] = useState(null);
 
   // 🔹 Inicializar con las entradas paginadas
   useEffect(() => {
@@ -27,49 +30,72 @@ const HistorialEntradas = ({
 
   // 🔹 Guardar cambios de edición
   const handleGuardarEdicion = async (notaEditada) => {
-  try {
-    // 🔹 Validar ID antes de llamar al backend
-    if (!notaEditada || !notaEditada.id) {
-      console.error("❌ Error: nota sin ID, no se puede editar.");
-      alert("No se puede editar esta entrada porque no tiene un ID válido.");
-      return;
+    try {
+      // 🔹 Validar ID antes de llamar al backend
+      if (!notaEditada || !notaEditada.id) {
+        console.error("❌ Error: nota sin ID, no se puede editar.");
+        alert("No se puede editar esta entrada porque no tiene un ID válido.");
+        return;
+      }
+
+      // 🔹 Enviar solo los campos que el backend acepta
+      const payload = {
+        titulo: notaEditada.titulo,
+        contenido: notaEditada.contenido,
+      };
+
+      const notaActualizada = await editarNota(notaEditada.id, payload);
+      alert("Nota actualizada correctamente.");
+
+      // 🔹 Actualizar lista local para reflejar cambios inmediatamente
+      setEntradasFiltradas((prev) =>
+        prev.map((n) => (n.id === notaEditada.id ? notaActualizada : n))
+      );
+
+      setMostrandoEditor(false);
+      setNotaEditando(null);
+    } catch (error) {
+      console.error("Error al guardar la nota editada:", error);
+      alert(error?.detail || "No se pudo guardar la edición.");
     }
+  };
 
-    // 🔹 Enviar solo los campos que el backend acepta
-    const payload = {
-      titulo: notaEditada.titulo,
-      contenido: notaEditada.contenido,
-    };
-
-    const notaActualizada = await editarNota(notaEditada.id, payload);
-    alert("Nota actualizada correctamente.");
-
-    // 🔹 Actualizar lista local para reflejar cambios inmediatamente
-    setEntradasFiltradas((prev) =>
-      prev.map((n) => (n.id === notaEditada.id ? notaActualizada : n))
-    );
-
-    setMostrandoEditor(false);
-    setNotaEditando(null);
-  } catch (error) {
-    console.error("Error al guardar la nota editada:", error);
-    alert(error?.detail || "No se pudo guardar la edición.");
-  }
-};
-
+  // 🔹 Mostrar modal de confirmación
+  const mostrarConfirmacionEliminar = (id) => {
+    setIdNotaAEliminar(id);
+    setMostrarModalConfirmacion(true);
+  };
 
   // 🔹 Mover una entrada a la papelera
   const handleMoverAPapelera = async (id) => {
-    const confirmar = window.confirm("¿Quieres mover esta entrada a la papelera?");
-    if (!confirmar) return;
     try {
       await moverNotaAPapelera(id);
       if (onEliminar) onEliminar(id);
-      alert("Entrada movida a la papelera exitosamente.");
+      setMostrarModalExito(true); // Mostrar modal de éxito en lugar de alert
     } catch (err) {
       console.error("❌ Error moviendo a papelera:", err);
       alert(err?.detail || err?.message || "No se pudo mover la entrada a la papelera.");
     }
+  };
+
+  // 🔹 Confirmar eliminación
+  const confirmarEliminacion = async () => {
+    if (idNotaAEliminar) {
+      await handleMoverAPapelera(idNotaAEliminar);
+    }
+    setMostrarModalConfirmacion(false);
+    setIdNotaAEliminar(null);
+  };
+
+  // 🔹 Cancelar eliminación
+  const cancelarEliminacion = () => {
+    setMostrarModalConfirmacion(false);
+    setIdNotaAEliminar(null);
+  };
+
+  // 🔹 Cerrar modal de éxito
+  const cerrarModalExito = () => {
+    setMostrarModalExito(false);
   };
 
   // 🔹 Alternar expansión de contenido
@@ -143,11 +169,11 @@ const HistorialEntradas = ({
               </button>
             </div>
           ) : (
-                <div className="lista-entradas-compacta">
-                  {entradasFiltradas.map((entrada, index) => (
-                    <div key={entrada.id ?? `entrada-${index}`} className="entrada-compacta">
+            <div className="lista-entradas-compacta">
+              {entradasFiltradas.map((entrada, index) => (
+                <div key={entrada.id ?? `entrada-${index}`} className="entrada-compacta">
 
-                      <div className="entrada-cabecera">
+                  <div className="entrada-cabecera">
                     <div className="entrada-info">
                       <h3 className="entrada-titulo">{entrada.titulo}</h3>
                       <span className="entrada-fecha">
@@ -168,7 +194,7 @@ const HistorialEntradas = ({
                       </button>
                       <button
                         className="btn-eliminar"
-                        onClick={() => handleMoverAPapelera(entrada.id)}
+                        onClick={() => mostrarConfirmacionEliminar(entrada.id)}
                         title="Mover a papelera"
                       >
                         🗑️
@@ -201,6 +227,50 @@ const HistorialEntradas = ({
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+
+          {/* Modal de confirmación */}
+          {mostrarModalConfirmacion && (
+            <div className="modal-overlay">
+              <div className="modal-confirmacion">
+                <div className="modal-body">
+                  <p>¿Quieres mover esta entrada a la papelera?</p>
+                </div>
+                <div className="modal-footer">
+                  <button 
+                    className="btn-acaptar"
+                    onClick={confirmarEliminacion}
+                  >
+                    Acaptar
+                  </button>
+                  <button 
+                    className="btn-cancelar"
+                    onClick={cancelarEliminacion}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Modal de éxito */}
+          {mostrarModalExito && (
+            <div className="modal-overlay">
+              <div className="modal-confirmacion">
+                <div className="modal-body">
+                  <p>Entrada movida a la papelera exitosamente.</p>
+                </div>
+                <div className="modal-footer">
+                  <button 
+                    className="btn-acaptar"
+                    onClick={cerrarModalExito}
+                  >
+                    Aceptar
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </>

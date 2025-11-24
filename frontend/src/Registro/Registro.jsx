@@ -1,30 +1,31 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { User, Mail, Lock, Eye, EyeOff, CheckCircle, X } from "lucide-react";
+import { Link } from "react-router-dom";
+import { User, Mail, Eye, EyeOff } from "lucide-react";
 import { register } from "../services/authService"; 
 import "../styles/register.css";
+import "./RegistroExitoso.css";
 import Footer from "../LandingPage/components/Footer";
 
 export default function Register() {
-  const navigate = useNavigate();
   const [nombre, setNombre] = useState("");
   const [correo, setCorreo] = useState("");
   const [contrasena, setContrasena] = useState("");
   const [mostrarContrasena, setMostrarContrasena] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setSuccess(false);
     setLoading(true);
 
     try {
       const data = await register({ nombre, correo, contrasena });
 
-      // Mostrar modal de éxito
-      setShowSuccessModal(true);
+      // Mostrar mensaje de éxito
+      setSuccess(true);
       
       // Limpiar el formulario
       setNombre("");
@@ -42,23 +43,29 @@ export default function Register() {
     setMostrarContrasena(!mostrarContrasena);
   };
 
-  const closeModal = () => {
-    setShowSuccessModal(false);
-    // Redirigir después de cerrar el modal
-    const userRole = localStorage.getItem("rol") || "usuario";
-    if (userRole === "administrador") {
-      window.location.href = "/admin";
-    } else {
-      window.location.href = "/joven/home";
-    }
-  };
+  // Si el registro fue exitoso, mostramos el componente de éxito
+  if (success) {
+    return (
+      <div className="registro-exitoso-container">
+        <div className="registro-exitoso-card">
+          <div className="registro-exitoso-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <h2 className="registro-exitoso-title">¡Usuario registrado exitosamente!</h2>
+          <p className="registro-exitoso-message">
+            Ahora puedes ingresar a Aurys y utilizar todas sus funcionalidades.
+          </p>
+          <Link to="/login" className="registro-exitoso-button">
+            Iniciar Sesión
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
-  const handleModalBackgroundClick = (e) => {
-    if (e.target === e.currentTarget) {
-      closeModal();
-    }
-  };
-
+  // Si no hay éxito, mostramos el formulario normal
   return (
     <div className="register-page">
       <div className="register-container">
@@ -93,7 +100,7 @@ export default function Register() {
               <Mail className="input-icon" />
             </div>
 
-            {/* Contraseña con ojo */}
+            {/* Contraseña con ojo - SIN ÍCONO DE CANDADO */}
             <div className="input-group">
               <input
                 type={mostrarContrasena ? "text" : "password"}
@@ -103,7 +110,7 @@ export default function Register() {
                 required
                 disabled={loading}
               />
-              <Lock className="input-icon" />
+              {/* EL ÍCONO Lock HA SIDO ELIMINADO */}
               <button
                 type="button"
                 className="eye-btn"
@@ -140,28 +147,6 @@ export default function Register() {
           </div>
         </div>
       </div>
-
-      {/* Modal de éxito */}
-      {showSuccessModal && (
-        <div className="modal-overlay" onClick={handleModalBackgroundClick}>
-          <div className="success-modal">
-            <button className="modal-close-btn" onClick={closeModal}>
-              <X size={20} />
-            </button>
-            <div className="modal-content">
-              <CheckCircle className="modal-icon" size={48} />
-              <h3 className="modal-title">¡Registro Exitoso!</h3>
-              <p className="modal-message">
-                Te has registrado exitosamente. Se ha enviado un correo electrónico 
-                para activar tu cuenta.
-              </p>
-              <button className="modal-confirm-btn" onClick={closeModal}>
-                Continuar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <Footer />
     </div>

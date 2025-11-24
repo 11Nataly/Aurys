@@ -3,8 +3,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-
-  background-image: url('./imagenfondo.jpeg');
+  background-image: url('../assets/images/fondo.jpg.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -43,7 +42,7 @@
 }
 
 .registro-exitoso-button {
-  display: inline-block;
+  display: block;
   background-color: #4840c2;
   color: white;
   padding: 12px 24px;

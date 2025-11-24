@@ -3,9 +3,9 @@ import React, { useState, useEffect } from "react";
 import FormularioPromesa from "../components/Promesas/FormularioPromesa";
 import ListaPromesas from "../components/Promesas/ListaPromesas";
 import GraficoProgreso from "../components/Promesas/GraficoProgreso";
-import ModalConfirmacion from "../components/Promesas/ModalConfirmacion";
+import ModalConfirmacion from "../components/Papelera/ModalConfirmacion"; // ✅ Cambiado a la nueva ubicación
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
-import Pagination from "../components/Pagination/Pagination"; // Asegúrate de importar Pagination
+import Pagination from "../components/Pagination/Pagination";
 import "../../styles/Promesas.css";
 
 import {
@@ -26,6 +26,7 @@ const Promesas = () => {
     tipo: "",
     promesaId: null,
     titulo: "",
+    mensaje: "",
   });
 
   // ✅ Estado para paginación
@@ -125,10 +126,43 @@ const Promesas = () => {
     }
   };
 
+  // ✅ NUEVA FUNCIÓN: Mostrar modal de confirmación para eliminar
+  const mostrarConfirmacionEliminar = (promesaId, titulo) => {
+    setModalConfirmacion({
+      mostrar: true,
+      tipo: "eliminar",
+      promesaId: promesaId,
+      titulo: `¿Mover "${titulo}" a la papelera?`,
+      mensaje: "Esta acción moverá la promesa a la papelera."
+    });
+  };
+
+  // ✅ FUNCIÓN ACTUALIZADA: Manejar eliminación de promesa
+  const handleEliminarPromesa = async (promesaId) => {
+    try {
+      await eliminarPromesa(promesaId);
+      const nuevas = promesas.filter(p => p.id !== promesaId);
+      setPromesas(nuevas);
+      if (promesaSeleccionada?.id === promesaId) {
+        setPromesaSeleccionada(nuevas[0] || null);
+      }
+    } catch (error) {
+      alert("Error al eliminar");
+    } finally {
+      setModalConfirmacion({ mostrar: false });
+    }
+  };
+
+  // ✅ FUNCIÓN ACTUALIZADA: Manejar todas las confirmaciones del modal
   const handleConfirmacionModal = () => {
     const { tipo, promesaId } = modalConfirmacion;
-    if (tipo === "finalizar") handleFinalizarPromesa(promesaId);
-    else if (tipo === "reactivar") handleReactivarPromesa(promesaId);
+    if (tipo === "finalizar") {
+      handleFinalizarPromesa(promesaId);
+    } else if (tipo === "reactivar") {
+      handleReactivarPromesa(promesaId);
+    } else if (tipo === "eliminar") {
+      handleEliminarPromesa(promesaId);
+    }
   };
 
   const handleEditarPromesa = async (promesaId, datos) => {
@@ -162,20 +196,6 @@ const Promesas = () => {
     } catch (error) {
       console.error("Error al editar la promesa:", error);
       alert("Error al editar");
-    }
-  };
-
-  const handleEliminarPromesa = async (promesaId) => {
-    if (!window.confirm("¿Mover a la papelera?")) return;
-    try {
-      await eliminarPromesa(promesaId);
-      const nuevas = promesas.filter(p => p.id !== promesaId);
-      setPromesas(nuevas);
-      if (promesaSeleccionada?.id === promesaId) {
-        setPromesaSeleccionada(nuevas[0] || null);
-      }
-    } catch (error) {
-      alert("Error al eliminar");
     }
   };
 
@@ -242,7 +262,6 @@ const Promesas = () => {
               </h2>
             </div>
             <div className="panel-content">
-              {/* ✅ Ahora promesasPaginadas está definida */}
               <ListaPromesas
                 promesas={promesasPaginadas}
                 onRegistrarFallo={handleRegistrarFallo}
@@ -252,6 +271,7 @@ const Promesas = () => {
                     tipo: "finalizar",
                     promesaId: id,
                     titulo: `¿Finalizar "${titulo}"?`,
+                    mensaje: "La promesa se marcará como completada."
                   })
                 }
                 onReactivarPromesa={(id, titulo) =>
@@ -260,16 +280,18 @@ const Promesas = () => {
                     tipo: "reactivar",
                     promesaId: id,
                     titulo: `¿Reactivar "${titulo}"?`,
+                    mensaje: "La promesa volverá a estar activa."
                   })
                 }
+                // ✅ ACTUALIZADO: Usar la nueva función para eliminar
+                onEliminarPromesa={mostrarConfirmacionEliminar}
                 onEditarPromesa={handleEditarPromesa}
-                onEliminarPromesa={handleEliminarPromesa}
                 onSeleccionarPromesa={setPromesaSeleccionada}
                 promesaSeleccionada={promesaSeleccionada}
                 filtroEstado={filtroEstado}
               />
               
-              {/* ✅ PAGINACIÓN - Ahora todas las variables están definidas */}
+              {/* ✅ PAGINACIÓN */}
               {promesasFiltradas.length > itemsPerPage && (
                 <div className="promesas-pagination-container">
                   <Pagination
@@ -309,12 +331,16 @@ const Promesas = () => {
           </div>
         </div>
 
+        {/* ✅ MODAL CON LOS ESTILOS ESPECÍFICOS */}
         {modalConfirmacion.mostrar && (
           <ModalConfirmacion
+            isOpen={modalConfirmacion.mostrar}
+            onConfirm={handleConfirmacionModal}
+            onCancel={() => setModalConfirmacion({ mostrar: false })}
             titulo={modalConfirmacion.titulo}
-            onConfirmar={handleConfirmacionModal}
-            onCancelar={() => setModalConfirmacion({ mostrar: false })}
-            tipo={modalConfirmacion.tipo}
+            mensaje={modalConfirmacion.mensaje}
+            textoConfirmar="Aceptar"
+            textoCancelar="Cancelar"
           />
         )}
       </div>
