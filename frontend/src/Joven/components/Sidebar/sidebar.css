@@ -4,7 +4,7 @@
   --text-color-dark: #000000;
   --bg-color-light: #ffffff;
   --bg-color-dark: #000000;
-  --border-color: #2f3ec5;
+  --border-color: #4840c2;
   --shadow-color: rgba(0, 0, 0, 0.1);
   --sidebar-width: 250px;
   --sidebar-collapsed-width: 80px;
@@ -52,7 +52,7 @@
   gap: 1.2rem;
   padding: 0.8rem 1rem;
   text-decoration: none;
-  color: var(--text-color-dark); /* Color del texto */
+  color: var(--text-color-dark);
   border-radius: 12px;
   transition: all var(--transition-speed) ease;
   white-space: nowrap;
@@ -73,22 +73,22 @@
   justify-content: center;
   min-width: 40px;
   flex-shrink: 0;
-  color: var(--primary-color); /* Color #4840c2 para los iconos */
+  color: var(--primary-color);
   transition: color var(--transition-speed) ease;
 }
 
-/* Estados hover - iconos mantienen color primario */
+/* Estados hover - usando #6549d9 para hover */
 .nav-item:hover {
-  background-color: rgba(132, 141, 219, 0.2);
-  color: var(--primary-color);
+  background-color: #6549d9;
+  color: var(--text-color-light);
   transform: translateX(5px);
 }
 
 .nav-item:hover .nav-icon {
-  color: var(--primary-color); /* Mantener color en hover */
+  color: var(--text-color-light);
 }
 
-/* Estado active - iconos blancos */
+/* Estado active - usando color primario */
 .nav-item.active {
   background-color: var(--primary-color);
   color: var(--text-color-light);
@@ -96,14 +96,14 @@
 }
 
 .nav-item.active .nav-icon {
-  color: var(--text-color-light); /* Iconos blancos cuando está activo */
+  color: var(--text-color-light);
 }
 
 /* SECCIÓN INFERIOR */
 .sidebar-bottom {
   margin-top: auto;
   padding-top: 1rem;
-  border-top: 1px solid rgba(132, 141, 219, 0.3);
+  border-top: 1px solid #6549d9;
 }
 
 .sidebar-bottom .nav-item {
@@ -131,18 +131,18 @@
   align-items: center;
   justify-content: center;
   min-width: 40px;
-  color: var(--primary-color); /* Color primario por defecto */
+  color: var(--primary-color);
   transition: color var(--transition-speed) ease;
 }
 
 .sidebar-bottom .nav-item:hover {
-  background-color: rgba(132, 141, 219, 0.2);
-  color: var(--primary-color);
+  background-color: #6549d9;
+  color: var(--text-color-light);
   transform: translateX(5px);
 }
 
 .sidebar-bottom .nav-item:hover .nav-icon {
-  color: var(--primary-color); /* Mantener color en hover */
+  color: var(--text-color-light);
 }
 
 .sidebar-bottom .nav-item.active {
@@ -152,7 +152,7 @@
 }
 
 .sidebar-bottom .nav-item.active .nav-icon {
-  color: var(--text-color-light); /* Iconos blancos cuando está activo */
+  color: var(--text-color-light);
 }
 
 .sidebar.closed .sidebar-bottom .nav-label {

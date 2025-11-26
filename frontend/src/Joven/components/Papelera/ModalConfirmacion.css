@@ -1,182 +1,182 @@
-/* src/components/Papelera/ModalConfirmacion.css */
+/* ================================
+   🌑 Superposición del modal
+   ================================ */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.55);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
-  animation: fadeIn 0.2s ease-out;
+  z-index: 9999;
+
+  /* Animación de fade */
+  opacity: 0;
+  animation: fadeIn 0.35s ease forwards;
 }
 
-.modal-content {
+/* Animación */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+
+/* ================================
+   📦 Contenedor principal del modal
+   ================================ */
+.modal-confirmacion {
   background: #ffffff;
-  border-radius: 16px;
-  padding: 0;
-  width: 90%;
-  max-width: 450px;
-  box-shadow: 0 10px 30px rgba(72, 64, 194, 0.2);
-  animation: slideIn 0.2s ease-out;
-  border: 2px solid #4840c2;
-  overflow: hidden;
+  border-radius: 14px;
+  width: 380px;
+  padding: 28px;
+  border: 1px solid rgba(72,64,194,0.08); /* borde suave */
+  box-shadow: 
+    0 10px 28px rgba(0,0,0,0.22),
+    0 4px 12px rgba(0,0,0,0.10);
+
+  transform: translateY(-20px);
+  animation: slideUp 0.35s ease forwards;
 }
 
-.modal-header {
-  padding: 1.5rem 1.5rem 1rem;
-  border-bottom: 1px solid #f0f0f0;
-  background: linear-gradient(135deg, #4840c2, #6a61e8);
+/* Animación modal */
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0px); opacity: 1; }
 }
 
-.modal-title {
-  color: #ffffff;
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin: 0;
-  text-align: center;
-}
 
+/* ================================
+   ✍️ Cuerpo del mensaje
+   ================================ */
 .modal-body {
-  padding: 2rem 1.5rem;
-  text-align: center;
-  background: #ffffff;
-}
-
-.modal-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  color: #4840c2;
-}
-
-.modal-message {
-  color: #000000;
-  font-size: 1.1rem;
+  padding: 12px 0 22px 0;
+  color: #463ab5;
+  font-size: 17px;
+  text-align: left;
   font-weight: 500;
-  margin: 0 0 0.5rem 0;
-  line-height: 1.4;
+  margin: 0;
+  line-height: 1.5;
+
+  /* efecto sutil */
+  letter-spacing: 0.2px;
 }
 
 .modal-submessage {
   color: #666;
-  font-size: 0.95rem;
-  margin: 0;
+  font-size: 14px;
+  margin-top: 8px;
+  font-weight: 400;
   line-height: 1.4;
 }
 
-.modal-actions {
+
+/* ================================
+   🔘 Área de botones
+   ================================ */
+.modal-footer {
   display: flex;
-  gap: 1rem;
-  padding: 1.5rem;
-  background: #f8f9fa;
-  border-top: 1px solid #e9ecef;
-  border-radius: 0 0 14px 14px;
+  justify-content: space-between;
+  gap: 14px;
 }
 
-.modal-btn {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 10px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 100px;
+
+/* ================================
+   🎛 Estilos generales botones
+   ================================ */
+.btn-acaptar,
+.btn-cancelar {
   flex: 1;
+  height: 48px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  min-width: 0;
+
+  letter-spacing: 0.3px;
 }
 
-.modal-btn-cancel {
-  background: #ffffff;
-  color: #4840c2;
-  border: 2px solid #4840c2;
+
+/* ================================
+   🟣 Botón Aceptar
+   ================================ */
+.btn-acaptar {
+  background: linear-gradient(135deg, #7052e8, #5b3fd5);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 10px rgba(91,63,213,0.3);
 }
 
-.modal-btn-cancel:hover {
-  background: #f8f9fa;
+.btn-acaptar:hover {
+  background: linear-gradient(135deg, #7d5cff, #6647e0);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(72, 64, 194, 0.2);
-  border-color: #6a61e8;
-  color: #6a61e8;
+  box-shadow: 0 6px 14px rgba(91,63,213,0.35);
 }
 
-.modal-btn-confirm {
-  background: #4840c2;
-  color: #ffffff;
-  border: 2px solid #4840c2;
+.btn-acaptar:active {
+  transform: scale(0.98);
 }
 
-.modal-btn-confirm:hover {
-  background: #6a61e8;
-  border-color: #6a61e8;
+
+/* ================================
+   ⚪ Botón Cancelar
+   ================================ */
+.btn-cancelar {
+  background: white;
+  color: #463ab5;
+  border: 2px solid #463ab5;
+}
+
+.btn-cancelar:hover {
+  background: rgba(72,64,194,0.08);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(106, 97, 232, 0.3);
 }
 
-/* Animaciones */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.btn-cancelar:active {
+  transform: scale(0.98);
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* Efectos de pulso para el botón de confirmar */
-.modal-btn-confirm:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(106, 97, 232, 0.4);
-}
-
-.modal-btn-cancel:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(72, 64, 194, 0.2);
-}
-
-/* Responsive */
+/* ================================
+   📱 Responsive
+   ================================ */
 @media (max-width: 480px) {
-  .modal-content {
-    width: 95%;
+  .modal-confirmacion {
+    width: 90%;
     margin: 1rem;
-    border-radius: 14px;
-  }
-  
-  .modal-actions {
-    flex-direction: column;
-    gap: 0.75rem;
-    border-radius: 0 0 12px 12px;
-  }
-  
-  .modal-btn {
-    width: 100%;
-    border-radius: 8px;
-  }
-  
-  .modal-header {
-    padding: 1.25rem 1.25rem 0.75rem;
-    border-radius: 14px 14px 0 0;
+    padding: 24px;
+    border-radius: 12px;
   }
   
   .modal-body {
-    padding: 1.5rem 1.25rem;
+    font-size: 16px;
+    padding: 8px 0 18px 0;
+  }
+  
+  .modal-footer {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .btn-acaptar,
+  .btn-cancelar {
+    height: 44px;
+    font-size: 14px;
+    border-radius: 25px;
   }
 }
 
-/* Efecto de profundidad */
-.modal-content::before {
+/* Efecto de profundidad adicional */
+.modal-confirmacion::before {
   content: '';
   position: absolute;
   top: 0;
@@ -184,5 +184,5 @@
   right: 0;
   height: 4px;
   background: linear-gradient(90deg, #4840c2, #6a61e8, #4840c2);
-  border-radius: 16px 16px 0 0;
+  border-radius: 14px 14px 0 0;
 }

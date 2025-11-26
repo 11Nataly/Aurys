@@ -59,7 +59,10 @@ const EmergencyKit = ({ minimal = false }) => {
   return (
     <div className="emergency-kit full-version">
       <div className="emergency-header">
-        <h1 className="titulo">Kit de emergencia</h1>
+        <div className="titulo">
+          <h1>Kit de emergencia</h1>
+          <p>Tus herramientas en caso de emergencia</p>
+        </div>
         <div className="emergency-buttons">
           <button className="custom-button" 
           onClick={handleMisMotivacionesClick}>

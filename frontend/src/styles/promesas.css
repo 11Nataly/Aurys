@@ -1,7 +1,9 @@
 .promesas-page {
-  background: linear-gradient(135deg, #ffffff 0%, #f9f9fc 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
   min-height: 100vh;
   padding: 20px 0;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  
 }
 
 .promesas-container {
@@ -17,7 +19,7 @@
   align-items: flex-start;
   margin-bottom: 30px;
   padding-bottom: 20px;
-  border-bottom: 2px solid #e9ecef;
+  border-bottom: 2px solid #d8e0e7;
   gap: 20px; /* Espacio entre título y botón */
 }
 
@@ -33,7 +35,7 @@
 }
 
 .subtitle {
-  color: #000000;
+  color: #6549d9;
   font-size: 1.2rem;
   margin: 0;
   font-style: italic;

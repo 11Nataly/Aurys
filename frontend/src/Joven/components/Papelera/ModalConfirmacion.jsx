@@ -15,26 +15,21 @@ const ModalConfirmacion = ({
 
   return (
     <div className="modal-overlay" onClick={onCancel}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h3 className="modal-title">Confirmar eliminación</h3>
-        </div>
-        
+      <div className="modal-confirmacion" onClick={(e) => e.stopPropagation()}>
         <div className="modal-body">
-          <div className="modal-icon">⚠️</div>
-          <p className="modal-message">{titulo}</p>
-          <p className="modal-submessage">{mensaje}</p>
+          <p>{titulo}</p>
+          {mensaje && <p className="modal-submessage">{mensaje}</p>}
         </div>
         
-        <div className="modal-actions">
+        <div className="modal-footer">
           <button 
-            className="modal-btn modal-btn-cancel"
+            className="btn-cancelar"
             onClick={onCancel}
           >
             {textoCancelar}
           </button>
           <button 
-            className="modal-btn modal-btn-confirm"
+            className="btn-acaptar"
             onClick={onConfirm}
           >
             {textoConfirmar}
