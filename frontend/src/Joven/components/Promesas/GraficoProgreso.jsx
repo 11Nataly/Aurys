@@ -56,7 +56,7 @@ const GraficoProgreso = ({ promesa }) => {
         return numA - numB;
       });
   };
-
+  
   const datos = prepararDatos();
 
   const CustomTooltip = ({ active, payload, label }) => {
