@@ -1,4 +1,5 @@
 # tests/selenium/test_login.py
+# Importaciones
 import pytest
 import requests
 import json
@@ -10,6 +11,7 @@ from config import BackendConfig
 
 config = BackendConfig()
 
+# Preparación del entorno para cada prueba
 class TestFastAPILogin:
     """Pruebas simplificadas para login de FastAPI"""
     
@@ -26,6 +28,7 @@ class TestFastAPILogin:
         self.screenshots_dir = config.SCREENSHOTS_DIR
         print(f"📸 Screenshots se guardarán en: {self.screenshots_dir}")
     
+    # cerrar el navegador y limpiar
     def teardown_method(self):
         """Limpieza después de cada prueba"""
         self.driver.quit()
@@ -48,6 +51,7 @@ class TestFastAPILogin:
             return None
     
     # ========== PRUEBA 1: BACKEND ACTIVO ==========
+    # pagina swagger
     def test_backend_running(self):
         """Verifica que el backend esté corriendo"""
         print("\n1️⃣ Verificando backend...")
@@ -66,6 +70,7 @@ class TestFastAPILogin:
             print("❌ FastAPI no detectado")
     
     # ========== PRUEBA 2: ENDPOINT LOGIN FUNCIONAL ==========
+    # probar endpoint sin navegador
     def test_login_endpoint_works(self):
         """Prueba el endpoint POST /auth/login - CORREGIDO"""
         print("\n2️⃣ Probando endpoint /auth/login...")
@@ -173,6 +178,7 @@ class TestFastAPILogin:
         print(f"   📊 {passed}/{len(test_cases)} validaciones correctas")
     
     # ========== PRUEBA 5: INTERFAZ HTML ==========
+    # prueba integración back-front basica
     def test_simple_interface(self):
         """Prueba con interfaz HTML simple"""
         print("\n5️⃣ Probando con interfaz HTML...")

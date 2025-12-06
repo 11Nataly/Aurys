@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Script principal para ejecutar todas las pruebas de login
 """
@@ -10,6 +9,8 @@ import time
 import webbrowser
 from datetime import datetime
 
+
+
 def run_login_tests():
     """Ejecuta todas las pruebas de login"""
     
@@ -17,6 +18,7 @@ def run_login_tests():
     print("="*70)
     
     # Verificar directorio actual
+    # o cambiar dir si es necesario
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
     
@@ -63,6 +65,7 @@ def run_login_tests():
         return 1
     
     # Mostrar configuración actual
+    # antes de correr
     print("\n🔧 CONFIGURACIÓN ACTUAL:")
     try:
         sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -123,6 +126,8 @@ def run_login_tests():
         os.chdir(original_dir)
         return 0
     
+
+    #=== PREPRAR PYTEST ===
     # Generar timestamp para el reporte
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     report_file = f"tests/reports/login_test_report_{timestamp}.html"
@@ -151,6 +156,7 @@ def run_login_tests():
     
     start_time = time.time()
     
+    #=== CORRER PYTEST ===
     try:
         # Ejecutar pruebas
         result = subprocess.run(cmd, check=False)
