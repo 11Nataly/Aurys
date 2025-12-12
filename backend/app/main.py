@@ -81,21 +81,48 @@ app.include_router(papelera_controller.router)
 # ==========================================================
 # 🧹 LIMPIEZA AUTOMÁTICA DE DATOS INACTIVOS
 # ==========================================================
+# --------------------------------------------------------------------------
+# 🧹 LIMPIEZA AUTOMÁTICA DE DATOS INACTIVOS - Integración en Eventos de FastAPI
+# --------------------------------------------------------------------------
+
 scheduler = BackgroundScheduler()
 
 def ejecutar_limpieza():
     db = SessionLocal()
     try:
+        # Aquí puedes añadir logging si deseas ver cuándo se ejecuta
+        # print("INFO: Ejecutando limpieza de datos inactivos...")
         limpiar_datos_inactivos(db)
     finally:
         db.close()
 
-scheduler.add_job(ejecutar_limpieza, "cron", hour=3, minute=0)
-scheduler.start()
+
+@app.on_event("startup")
+def startup_event():
+    """
+    Se ejecuta cuando la aplicación ha terminado de arrancar.
+    Aquí inicializamos y arrancamos el scheduler.
+    """
+    global scheduler
+    
+    # 1. Añadir el trabajo
+    # Definición de la tarea programada: Cada día a las 3:00 AM
+    scheduler.add_job(ejecutar_limpieza, "cron", hour=3, minute=0, id="limpieza_diaria")
+    
+    # 2. Arrancar el scheduler
+    scheduler.start()
+    print("INFO: APScheduler iniciado y la tarea de limpieza programada para las 3:00 AM.")
+
 
 @app.on_event("shutdown")
 def shutdown_event():
-    scheduler.shutdown()
+    """
+    Se ejecuta cuando la aplicación está a punto de cerrarse.
+    Aseguramos que el scheduler se detenga limpiamente.
+    """
+    if scheduler.running:
+        scheduler.shutdown(wait=False)
+        print("INFO: APScheduler detenido.")
 
 # ==========================================================
 # 🧪 Ruta de prueba
