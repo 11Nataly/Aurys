@@ -1,3 +1,4 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -6,13 +7,12 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Cadena de conexión
-
-MARIADB_URL = 'mysql+pymysql://root:admin@localhost:3315/aurys'
-
+# Cadena de conexión desde variable de entorno (para producción en Railway)
+# Fallback para desarrollo local
+DATABASE_URL = os.getenv("DATABASE_URL", "mysql+pymysql://root:admin@localhost:3315/aurys")
 
 # Crear el objeto de conexión
-engine = create_engine(MARIADB_URL)
+engine = create_engine(DATABASE_URL)
 
 # Crear una fábrica de sesiones
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
