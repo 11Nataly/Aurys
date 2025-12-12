@@ -8,7 +8,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app.db.base import Base
-from app.db.database import DATABASE_URL
+from app.db.database import MARIADB_URL
 from app.models import (
     rol,
     usuario,
@@ -34,7 +34,7 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 
 # Asegurar que Alembic use la URL de conexión de nuestra app
-config.set_main_option("sqlalchemy.url", DATABASE_URL)
+config.set_main_option("sqlalchemy.url", MARIADB_URL)
 
 
 def run_migrations_offline() -> None:
