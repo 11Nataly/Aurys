@@ -1,8 +1,7 @@
-# app/main.py
-# Realizado por Douglas — ajustado para servir archivos estáticos correctamente ✅
+import os # Importar os para crear directorios
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles  # ✅ Para servir archivos estáticos
+from fastapi.staticfiles import StaticFiles
 
 from app.controllers import (
     usuario_controller,
@@ -31,23 +30,34 @@ from app.test.cleanup_service import limpiar_datos_inactivos
 app = FastAPI(title="Motivaciones API", version="1.0")
 
 # ==========================================================
-# 🌐 Middleware CORS
+# 📂 Archivos estáticos - Creación de directorio (Similar al ejemplo)
+# ==========================================================
+# Crear el directorio 'app/static/terapias' si no existe, como en el 'backend/main.py'
+# Aunque no tienes un router de 'terapia', es buena práctica si esa estructura es estándar.
+os.makedirs("app/static/terapias", exist_ok=True)
+# Si necesitas un directorio similar a 'uploads', puedes crearlo también si no existe.
+# os.makedirs("uploads", exist_ok=True) 
+
+# ==========================================================
+# 🌐 Middleware CORS - Ajustado a 'allow_credentials=False' (Similar al ejemplo)
 # ==========================================================
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Cambia a ["http://localhost:5173"] si deseas restringirlo
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False, 
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # ==========================================================
-# 📂 Archivos estáticos
+# 📂 Archivos estáticos - Montaje de directorios
 # ==========================================================
 # ✅ Para las imágenes de perfil
+# Nota: La estructura del ejemplo solo monta '/static'. Mantendremos tu montaje de '/uploads'
+# si lo necesitas, pero ajustamos el montaje de '/static' a coincidir con el ejemplo.
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
-# ✅ Para las imágenes de motivaciones
+# ✅ Para las imágenes de motivaciones (Coincide con la estructura del ejemplo)
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 # ==========================================================
