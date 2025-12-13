@@ -29,8 +29,10 @@ jobs:
 
       - name: Install dependencies
         working-directory: frontend
+        env:
+          npm_config_optional: true
         run: npm ci   # o `npm ci` si ya tienes package-lock.json
-
+        
       - name: Build
         working-directory: frontend
         env:
