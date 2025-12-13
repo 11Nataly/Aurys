@@ -11,6 +11,10 @@ logger = logging.getLogger(__name__)
 # Fallback para desarrollo local
 MARIADB_URL = os.getenv("MARIADB_URL", "mysql+pymysql://root:admin@localhost:3315/aurys")
 
+# Forzar driver PyMySQL si Railway entrega mysql://...
+if MARIADB_URL and MARIADB_URL.startswith("mysql://"):
+    MARIADB_URL = MARIADB_URL.replace("mysql://", "mysql+pymysql://", 1)
+
 # Crear el objeto de conexión
 engine = create_engine(MARIADB_URL)
 
@@ -32,4 +36,3 @@ def get_db():
     finally:
         if db:
             db.close()
-    # Todo ese archivo realizado por douglas   
