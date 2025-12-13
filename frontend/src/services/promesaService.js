@@ -1,7 +1,5 @@
 // src/services/promesaService.js
-import axios from "axios";
-
-const API_URL = "http://localhost:8000/promesas";
+import api from './api'; 
 
 export const listarPromesas = async (usuarioId) => {
   const response = await axios.get(`${API_URL}/listar/${usuarioId}`);

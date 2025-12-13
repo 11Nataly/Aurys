@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000", //backend corre aquí # Todo ese archivo realizado por douglas   
+  baseURL: import.meta.env.VITE_API_BASE_URL, //backend corre aquí # Todo ese archivo realizado por douglas   
   headers: {
     "Content-Type": "application/json",
   
