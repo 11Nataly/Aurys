@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const backendURL = "http://127.0.0.1:8000"; // Cambia si quieres
+const backendURL = "https://aurys-production.up.railway.app"; // Cambia si quieres
 
 export default function LoginRegister() {
   const [loginUsuario, setLoginUsuario] = useState('');

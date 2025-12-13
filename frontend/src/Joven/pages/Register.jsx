@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import "../assets/styles.css";
 
 // Se ha corregido la URL del backend para usar "localhost" en lugar de "127.0.0.1"
-const backendURL = "http://localhost:8000";
+const backendURL = "https://aurys-production.up.railway.app";
 
 export default function Register() {
   // Estados para los campos del formulario

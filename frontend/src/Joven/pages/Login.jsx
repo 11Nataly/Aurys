@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import "../assets/LoginRegister.css"; // Asegúrate de que la ruta sea correcta
 
-const backendURL = "http://localhost:8000";
+const backendURL = "https://aurys-production.up.railway.app";
 
 export default function Login() {
   // Estados para los campos del formulario

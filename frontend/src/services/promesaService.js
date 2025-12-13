@@ -1,39 +1,67 @@
 // src/services/promesaService.js
-import api from './api'; 
+import api from "./api";
 
+/**
+ * Listar promesas activas del usuario
+ * GET /promesas/listar/{usuario_id}
+ */
 export const listarPromesas = async (usuarioId) => {
-  const response = await axios.get(`${API_URL}/listar/${usuarioId}`);
-  return response.data;
+  const { data } = await api.get(`/promesas/listar/${usuarioId}`);
+  return data;
 };
 
+/**
+ * Crear una nueva promesa
+ * POST /promesas/agregar
+ */
 export const crearPromesa = async (promesaData) => {
-  const response = await axios.post(`${API_URL}/agregar`, promesaData, {
-    headers: { "Content-Type": "application/json" },
-  });
-  return response.data;
+  const { data } = await api.post(`/promesas/agregar`, promesaData);
+  return data;
 };
 
+/**
+ * Editar una promesa
+ * PUT /promesas/{promesa_id}
+ */
 export const editarPromesa = async (promesaId, datosActualizados) => {
-  const response = await axios.put(`${API_URL}/${promesaId}`, datosActualizados, {
-    headers: { "Content-Type": "application/json" },
-  });
-  return response.data;
+  const { data } = await api.put(
+    `/promesas/${promesaId}`,
+    datosActualizados
+  );
+  return data;
 };
 
+/**
+ * Marcar promesa como cumplida o no cumplida
+ * PUT /promesas/{promesa_id}/cumplida
+ */
 export const cambiarEstadoCumplida = async (promesaId, cumplida) => {
-  const response = await axios.put(`${API_URL}/${promesaId}/cumplida`, null, {
-    params: { cumplida },
-  });
-  return response.data;
+  const { data } = await api.put(
+    `/promesas/${promesaId}/cumplida`,
+    null,
+    {
+      params: { cumplida },
+    }
+  );
+  return data;
 };
 
-export const moverAPapelera = async (promesaId, activo) => {
-  const response = await axios.put(`${API_URL}/${promesaId}/papelera`, { activo }, {
-    headers: { "Content-Type": "application/json" },
-  });
-  return response.data;
+/**
+ * Mover promesa a papelera
+ * PUT /promesas/{promesa_id}/papelera
+ */
+export const moverAPapelera = async (promesaId) => {
+  const { data } = await api.put(
+    `/promesas/${promesaId}/papelera`
+  );
+  return data;
 };
 
+/**
+ * Eliminar promesa definitivamente
+ * DELETE /promesas/{promesa_id}
+ */
 export const eliminarPromesa = async (promesaId) => {
-  return await moverAPapelera(promesaId, false);
+  const { data } = await api.delete(`/promesas/${promesaId}`);
+  return data;
 };
