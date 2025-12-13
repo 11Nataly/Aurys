@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    background-image: url('./imagenfondo.jpeg');
+    background-image: url("../assets/images/fondo.jpg.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
